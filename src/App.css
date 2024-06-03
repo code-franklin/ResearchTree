@@ -1,0 +1,89 @@
+@font-face {
+    font-family: "InterRegular";
+    font-weight: 400;
+    src: url(Fonts/Inter-Regular.ttf);
+  }
+
+@font-face {
+    font-family: "JakartaBold";
+    font-weight: 400;
+    src: url(Fonts/PlusJakartaSans-Bold.ttf);
+  }
+
+* {
+
+ 
+}
+
+body {
+    background-color: #1E1E1E ;
+}
+
+.charts {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+  margin-top: 20px;
+  margin-right: 100px;
+  background-color: transparent;
+  border: 1px solid rgb(73, 73, 73);
+  border-radius: 8px;
+  padding-right: 20px;
+  padding-left: 20px;
+}
+.chart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  
+  
+}
+.piecharts {
+  
+  position: relative;
+  right: 70px;
+  top: 10px;
+ 
+  padding: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border: 1px solid rgb(73, 73, 73);
+  border-radius: 8px;
+  
+}
+
+.linecharts {
+  
+  width: 97%;
+
+  border: 1px solid rgb(73, 73, 73);
+  border-radius: 8px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 20px;
+}
+
+
+.chart-container {
+  position: relative;
+}
+
+.chart-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: white;
+  z-index: 10;
+}
+
+.chart-header h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.chart-header p {
+  margin: 0;
+  font-size: 14px;
+}

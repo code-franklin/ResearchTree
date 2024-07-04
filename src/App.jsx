@@ -2,7 +2,8 @@ import { useState } from "react";
 import "./App.css";
 import Sidebar from "./Components/Sidebar/sidebar";
 import Chart from "./Components/Charts/Chart";
-import Project from "./Components/Charts/Projects"
+
+
 function App() {
   const [selectedItem, setSelectedItem] = useState('Home');
 
@@ -14,9 +15,9 @@ function App() {
            <Chart/>
           </div>
         );
-      case 'ViewActivities':
+      case 'MyManuscript':
         return <div>
-         <Project />
+        
         </div>;
 
       case 'ProfileSettings':

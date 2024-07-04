@@ -1,27 +1,38 @@
 import React from 'react'
-import { BarCharts } from './BarCharts'
-import { Pie } from './dataPychart'
+import { BarChart } from './BarCharts'
+import { VariablePieChart } from './Piechart'
 import { LineChart } from './linechart'
 
-import '../../App.css'
+import "./ViewAnalytics.css";
+
 const Chart = () => {
   return (
    <>
-   <div className="chart ">
-    
-   <BarCharts />
-   <div className='piecharts'>
-   <Pie/></div> 
+
+
+   <div className="chart-1">
+   <div className="bar-charts">
+            <BarChart />
+      </div>
+
+      <div className="piechart-container">
+            <VariablePieChart/>
+      </div> 
+      
    
    </div>
 
-   <div className='linecharts'>
-   <LineChart/>
+   
+   
+   
+   <div className='chart-2'>
+   
    </div>
-   
+
+
+
+
    </>
-   
-    
   )
 }
 

@@ -1,197 +1,56 @@
-import React from "react";
-import {
-  G2,
-  Chart,
-  Tooltip,
-  Interval,
-  StackedColumnChart,
-  Axis
-} from "bizcharts";
+import React from 'react';
+import { Chart, Interval, Tooltip, Axis, Legend } from 'bizcharts';
+import './BarCharts.css'; // Make sure to create this file and add the styles
 
 const data = [
-  {
-    year: '1991',
-    value: 3,
-    type: 'Lon',
-  },
-  {
-    year: '1992',
-    value: 4,
-    type: 'Lon',
-  },
-  {
-    year: '1993',
-    value: 7,
-    type: 'Lon',
-  },
-  {
-    year: '1994',
-    value: 0.5,
-    type: 'Lon',
-  },
-  {
-    year: '1995',
-    value: 4.9,
-    type: 'Lon',
-  },
-  {
-    year: '1996',
-    value: 6,
-    type: 'Lon',
-  },
-  {
-    year: '1997',
-    value: 7,
-    type: 'Lon',
-  },
-  {
-    year: '1998',
-    value: 9,
-    type: 'Lon',
-  },
-  {
-    year: '1999',
-    value: 0.5,
-    type: 'Lon',
-  },
-  {
-    year: '1991',
-    value: 0.3,
-    type: 'Bor',
-  },
-  {
-    year: '1992',
-    value: 4,
-    type: 'Bor',
-  },
-  {
-    year: '1993',
-    value: 0.5,
-    type: 'Bor',
-  },
-  {
-    year: '1994',
-    value: 5,
-    type: 'Bor',
-  },
-  {
-    year: '1995',
-    value: 4.9,
-    type: 'Bor',
-  },
-  {
-    year: '1996',
-    value: 6,
-    type: 'Bor',
-  },
-  {
-    year: '1997',
-    value: 0.5,
-    type: 'Bor',
-  },
-  {
-    year: '1998',
-    value: 9,
-    type: 'Bor',
-  },
-  {
-    year: '1999',
-    value: 13,
-    type: 'Bor',
-  },
-  {
-    year: '1991',
-    value: 1,
-    type: 'Wiz',
-  },
-  {
-    year: '1992',
-    value: 2,
-    type: 'Wiz',
-  },
-  {
-    year: '1993',
-    value: 5,
-    type: 'Wiz',
-  },
-  {
-    year: '1994',
-    value: 4,
-    type: 'Wiz',
-  },
-  {
-    year: '1995',
-    value: 15,
-    type: 'Wiz',
-  },
-  {
-    year: '1996',
-    value: 2,
-    type: 'Wiz',
-  },
-  {
-    year: '1997',
-    value: 10,
-    type: 'Wiz',
-  },
-  {
-    year: '1998',
-    value: 12,
-    type: 'Wiz',
-  },
-  {
-    year: '1999',
-    value: 3,
-    type: 'Wiz',
-  },
+  { category: 'AI', value: 150 },
+  { category: 'Internet of Things (IoT)', value: 150 },
+  { category: 'Mobile App', value: 50 },
+  { category: 'Web Application', value: 250 },
+  { category: 'Machine Learning', value: 120 },
+  { category: 'CyberSecurity', value: 20 },
+  { category: 'Government', value: 120 },
+  { category: 'Block Chain', value: 170 },
+  { category: 'Community', value: 120 },
+  { category: 'Business', value: 190 }
 ];
 
-const gradientColors = {
-  Lon: 'l(90) 0:#8F00FF 1:#0066FF',
-  Bor: 'l(90) 0:#0066FF 1:#8F00FF',
-  Wiz: 'l(90) 0:#8F00FF 1:#0066FF',
-};
+export const BarChart = () => {
+  // Create a copy of data to modify
+  const sortedData = [...data];
 
-const opt = {
-  autoFit: true,
-  data,
-  xField: 'year',
-  yField: 'value',
-  yAxis: {
-    min: 0,
-  },
-  xAxis: {
-    formatter: (item, index, record) => {
-      console.log('item', item, index, record);
-      return item !== '1993' ? item : '特殊';
-    }
-  },
-  stackField: 'type',
-  color: ({ type }) => gradientColors[type],
-  label: {
-    visible: true,
-    position: 'middle'
-  },
-  title: {
-    visible: true,
-    text: 'Progress Activity',
-    style: { fill: '#FFFFFF' }, // Change title color to white
-    className: 'custom-title'
-  },
-  description: {
-    visible: true,
-    text: 'Monitor every year',
-    style: { fill: '#FFFFFF' }, // Change description color to white
+  // Find the index of 'Machine Learning'
+  const mlIndex = sortedData.findIndex(item => item.category === 'Machine Learning');
 
+  // Move 'Machine Learning' to the middle of the array
+  if (mlIndex > 0) {
+    const mlItem = sortedData.splice(mlIndex, 1)[0];
+    const middleIndex = Math.floor(sortedData.length / 2);
+    sortedData.splice(middleIndex, 0, mlItem);
   }
-};
 
-export const BarCharts = () => {
   return (
-    <div className="charts">
-      <StackedColumnChart {...opt}>
-      </StackedColumnChart>
-      
+    <div className="p-5 mr-5 rounded-lg shadow-custom-shadow bg-[#1E1E1E] border border-[#4B4B4B]">
+      <h2 className="text-green-500 text-xl mb-4">Top 10 Trending Manuscript</h2>
+      <Chart height={300} width={900} autoFit data={sortedData} interactions={['active-region']} >
+        <Axis name="value" visible={true} />
+        <Axis name="category" label={null} visible={true} />
+        <Legend position="right" />
+        <Tooltip shared />
+        <Interval
+          position="category*value"
+          color={['category', category => {
+            switch (category) {
+              case 'Machine Learning':
+                return 'l(270) 0:#00FFC2 1:#0BF677'; // Gradient for 'Machine Learning'
+              default:
+                return 'l(270) 0:#00FFC2 1:#0BF677'; // Generic gradient for other categories
+            }
+          }]}
+        />
+      </Chart>
     </div>
   );
-}
+};
+
+export default BarChart;

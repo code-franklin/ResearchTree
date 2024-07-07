@@ -2,7 +2,9 @@ import { useState } from "react";
 import "./App.css";
 import Sidebar from "./Components/Sidebar/sidebar";
 import Chart from "./Components/Charts/Chart";
+import Header from "./Components/Header/Header";
 
+import ExploreManuscript from './Components/SearchingManuscript/ArticleList'
 
 function App() {
   const [selectedItem, setSelectedItem] = useState('Home');
@@ -12,12 +14,19 @@ function App() {
       case 'ViewAnalytics':
         return (
           <div className="hero">
+             <Header/>
            <Chart/>
+          
           </div>
         );
       case 'MyManuscript':
         return <div>
         
+        </div>;
+
+      case 'ExploreManuscript':
+        return <div>
+        <ExploreManuscript />
         </div>;
 
       case 'ProfileSettings':

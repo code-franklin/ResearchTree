@@ -93,8 +93,8 @@ button {
     padding: 10px 0px 10px 10px;
     gap: 12px;
     border-radius: 10px 10px 10px 10px;
+    background: linear-gradient(93.82deg, #0BF677 -18.64%, #079774 35.17%);
 
-    background: linear-gradient(220deg, #0BF677 35%, #0BF677 100%);
   animation-name: glow;
   animation-duration: 2s;
   animation-iteration-count: infinite;
@@ -104,7 +104,7 @@ button {
 }
 
 .upload-btn:hover {
-    box-shadow: 0px 0px 20px #0BF677, 0 0 20px #0BF677, 0 0 0px #0BF677, 0 0 0px #0BF677;
+    box-shadow: 0px 0px 5px #0BF677, 0 0 5px #0BF677, 0 0 0px #0BF677, 0 0 0px #0BF677;
 }
 
 

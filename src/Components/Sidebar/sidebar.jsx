@@ -16,7 +16,7 @@ const Sidebar = ({ onSelect }) => {
       <img className="ml-[40px]" src="./src/assets/logo.png"/>
         <span className="text-[21px] font-semibold">Franklin Mayad </span>
         
-        <p className="font-light">Student</p>
+        <p className="font-light text-[#4B4B4B]">Student</p>
         </div>
        
         </div>
@@ -30,9 +30,9 @@ const Sidebar = ({ onSelect }) => {
 
         <button 
           className="myManuscript mx-10 whitespace-nowrap
-                     focus:font-semibold focus:text-[#1E1E1E]
-                     focus:ml-[4rem] focus:bg-gradient-to-r from-[#0BF677] to-[#0BF677] 
-                     hover:font-medium hover:ml-[4rem] hover:bg-gradient-to-r from-[#0BF677] to-[#0BF677]
+                     focus:font-semibold 
+                     focus:ml-[4rem] focus:bg-gradient-to-r from-[#0BF677] to-[#079774] 
+                     hover:font-medium hover:ml-[4rem] hover:bg-gradient-to-r from-[#0BF677] to-[#079774]
                      text-white px-2 "
           onClick={() => onSelect('MyManuscript')}
         >
@@ -42,11 +42,11 @@ const Sidebar = ({ onSelect }) => {
 
         <button 
           className="exploreManuscript mx-10 whitespace-nowrap
-                     focus:font-semibold focus:text-[#1E1E1E]
-                     hover:mr-auto focus:mr-auto focus:ml-[4rem]  focus:bg-gradient-to-r from-[#0BF677] to-[#0BF677] 
-                     hover:font-medium hover:ml-[4rem] hover:bg-gradient-to-r from-[#0BF677] to-[#0BF677]
+                     focus:font-semibold 
+                     hover:mr-auto focus:mr-auto focus:ml-[4rem] focus:bg-gradient-to-r from-[#0BF677] to-[#079774] 
+                     hover:font-medium hover:ml-[4rem] hover:bg-gradient-to-r from-[#0BF677] to-[#079774]
                      text-white px-2 "
-          onClick={() => onSelect('MyManuscript')}
+          onClick={() => onSelect('ExploreManuscript')}
         >
         <img className="inline-block mr-2 mb-1" src="./src/assets/Calendar.png"/>
           Explore Manuscripts
@@ -56,10 +56,10 @@ const Sidebar = ({ onSelect }) => {
 
         <button 
           className="viewAnalytics mx-10 
-                     focus:font-semibold focus:text-[#1E1E1E]
+                     focus:font-semibold 
                      hover:ml-[4rem]
-                     focus:ml-[4rem] focus:bg-gradient-to-r from-[#0BF677] to-[#0BF677]
-                     hover:font-medium hover:bg-gradient-to-r from-[#0BF677] to-[#0BF677
+                     focus:ml-[4rem] focus:bg-gradient-to-r from-[#0BF677] to-[#079774] 
+                     hover:font-medium hover:bg-gradient-to-r from-[#0BF677] to-[#079774]
                      
                      text-white  px-2 "
           onClick={() => onSelect('ViewAnalytics')}
@@ -73,9 +73,9 @@ const Sidebar = ({ onSelect }) => {
 
         <button 
           className="revision mx-10 whitespace-nowrap
-                     focus:font-semibold focus:text-[#1E1E1E]
-                     focus:ml-[4rem] focus:bg-gradient-to-r from-[#0BF677] to-[#0BF677] 
-                     hover:font-medium hover:ml-[4rem] hover:bg-gradient-to-r from-[#0BF677] to-[#0BF677 
+                     focus:font-semibold 
+                     focus:ml-[4rem] focus:bg-gradient-to-r from-[#0BF677] to-[#079774] 
+                     hover:font-medium hover:ml-[4rem] hover:bg-gradient-to-r from-[#0BF677] to-[#079774]
                      text-white px-2 "
           onClick={() => onSelect('MyManuscript')}
         >
@@ -85,9 +85,9 @@ const Sidebar = ({ onSelect }) => {
 
         <button 
           className="revision mx-10 whitespace-nowrap
-                     focus:font-semibold focus:text-[#1E1E1E]
-                     focus:ml-[4rem] focus:bg-gradient-to-r from-[#0BF677] to-[#0BF677] 
-                     hover:font-medium hover:ml-[4rem] hover:bg-gradient-to-r from-[#0BF677] to-[#0BF677 
+                     focus:font-semibold 
+                     focus:ml-[4rem] focus:bg-gradient-to-r from-[#0BF677] to-[#079774] 
+                     hover:font-medium hover:ml-[4rem] hover:bg-gradient-to-r from-[#0BF677] to-[#079774]
                      text-white px-2 "
           onClick={() => onSelect('MyManuscript')}
         >

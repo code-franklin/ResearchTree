@@ -3,6 +3,7 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import variablePie from 'highcharts/modules/variable-pie';
 import "./PieChart.css";
+
 // Initialize the variable pie module
 variablePie(Highcharts);
 
@@ -17,14 +18,14 @@ export const VariablePieChart = () => {
             spacingTop: 20, // Top padding
             spacingLeft: 10, // Left padding
             spacingRight: 10, // Right padding
-            height: 500, // Set height
+            height: 510, // Set height
             width: 420, // Set width
         },
         title: {
-            text: 'Pie Chart',
+            text: 'Total Manuscript',
             className: 'highcharts-custom-title',
             style: {
-                color: '#FFFFFF' // Set title text color to white
+                color: '#0BF677' // Set title text color to white
             },
         },
         legend: {
@@ -41,6 +42,8 @@ export const VariablePieChart = () => {
             zMin: 0,
             showInLegend: true,
             className: 'highcharts-custom-series',
+            borderColor: 'none', // Remove border color
+            borderWidth: 0, // Remove border width
             dataLabels: {
                 className: 'highcharts-custom-data-label',
             },
@@ -48,12 +51,12 @@ export const VariablePieChart = () => {
                 name: 'Spain',
                 y: 300,
                 z: 92.9,
-                color: '#FFC300' // Customize color for Spain
+                color: '#FF4444' // Customize color for Spain
             }, {
                 name: 'France',
-                y: 30,
+                y: 50   ,
                 z: 118.7,
-                color: '#FF5733' // Customize color for France
+                color: '#0BF677' // Customize color for France
             }, {
                 name: 'Poland',
                 y: 20,
@@ -63,12 +66,12 @@ export const VariablePieChart = () => {
                 name: 'Czech Republic',
                 y: 372,
                 z: 137.5,
-                color: '#900C3F' // Customize color for Czech Republic
+                color: '#272827' // Customize color for Czech Republic
             }, {
                 name: 'Italy',
-                y: 177,
+                y: 200,
                 z: 201.8,
-                color: '#646464' // Customize color for Italy
+                color: '#0BF677' // Customize color for Italy
             }]
         }]
     };

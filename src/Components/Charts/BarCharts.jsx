@@ -31,14 +31,15 @@ export const BarChart = () => {
 
   return (
     <div className="p-5 mr-5 rounded-lg shadow-custom-shadow bg-[#1E1E1E] border border-[#4B4B4B]">
-      <h2 className="text-green-500 text-xl mb-4">Top 10 Trending Manuscript</h2>
+      <h2 className="text-[#0BF677] text-xl mb-4">Top 10 Trending Manuscript</h2>
       <Chart height={300} width={900} autoFit data={sortedData} interactions={['active-region']} >
         <Axis name="value" visible={true} />
         <Axis name="category" label={null} visible={true} />
-        <Legend position="right" />
+        <Legend position="right" offsetY={-30} /> {/* Adjusted offsetY to move the legend up */}
         <Tooltip shared />
         <Interval
           position="category*value"
+          size={50} // Adjust this value to make the bars thicker
           color={['category', category => {
             switch (category) {
               case 'Machine Learning':

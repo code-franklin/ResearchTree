@@ -1,7 +1,7 @@
 import React from 'react'
 import { BarChart } from './BarCharts'
 import { VariablePieChart } from './Piechart'
-import { LineChart } from './linechart'
+
 
 import "./ViewAnalytics.css";
 
@@ -19,10 +19,10 @@ const Chart = () => {
             <VariablePieChart/>
       </div> 
       
+      
    
    </div>
 
-   
    
    
    <div className='chart-2'>

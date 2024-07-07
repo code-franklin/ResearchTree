@@ -1,7 +1,1 @@
-# sidebar_reactTailwind
-sidebar using react js tailwind css
-
-Vite + React + tailwind
-
-1) npm i
-2) npm run dev
+![cover](https://github.com/code-franklin/ResearchTree/assets/115203318/da7459fa-4584-4f69-8f2a-c157fd9c7103)

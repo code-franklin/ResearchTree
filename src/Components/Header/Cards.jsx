@@ -8,12 +8,18 @@ const Cards = () => {
         <div className="view-analytics">
        
             <div className="cards-container">
+                
 
 <div className="year-container">ViewAnalytics
 
-    
+
+
+<img className="tooltop inline-block mr-2 " src="./src/assets/notification.png"/>
+<img className="tooltop2 inline-block mr-2 " src="./src/assets/docxtemplate.png"/>
         
+
 </div>
+
     
                 <div className="card">
                     <div className="card-icon-1">

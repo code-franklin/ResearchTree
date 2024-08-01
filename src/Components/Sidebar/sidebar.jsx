@@ -77,7 +77,7 @@ const Sidebar = ({ onSelect }) => {
                      focus:ml-[4rem] focus:bg-gradient-to-r from-[#0BF677] to-[#079774] 
                      hover:font-medium hover:ml-[4rem] hover:bg-gradient-to-r from-[#0BF677] to-[#079774]
                      text-white px-2 "
-          onClick={() => onSelect('MyManuscript')}
+          onClick={() => onSelect('Revision')}
         >
         <img className="inline-block mr-2 mb-1" src="./src/assets/Calendar.png"/>
           Revision
@@ -89,7 +89,7 @@ const Sidebar = ({ onSelect }) => {
                      focus:ml-[4rem] focus:bg-gradient-to-r from-[#0BF677] to-[#079774] 
                      hover:font-medium hover:ml-[4rem] hover:bg-gradient-to-r from-[#0BF677] to-[#079774]
                      text-white px-2 "
-          onClick={() => onSelect('MyManuscript')}
+          onClick={() => onSelect('ProfileSetting')}
         >
         <img className="inline-block mr-2 mb-1" src="./src/assets/Folder.png"/>
           Profile Settings

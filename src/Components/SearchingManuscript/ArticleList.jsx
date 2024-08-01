@@ -1,4 +1,3 @@
-// src/App.js
 import React from 'react';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
@@ -44,22 +43,22 @@ const articles = [
 
 const ArticleList = () => {
   return (
-    <div className="min-h-screen  text-white p-6 ml-[300px]">
-      <header className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Manuscript</h1>
-        <div className="flex items-center space-x-4">
-          <i className="fas fa-bell text-white text-xl"></i>
-          <i className="fas fa-file-alt text-white text-xl"></i>
+    <div className="min-h-screen text-white p-6 ml-[300px]">
+      <header className="flex justify-between items-center mb-0">
+        <h1 className="text-3xl font-bold mb-7">Manuscript</h1>
+        <div className="flex items-center space-x-2 mr-[20px] ">
+          <img className="inline-block mr-2 mb-0" src="./src/assets/notification.png" alt="Notification" />
+          <img className="inline-block mr-2 mb-0" src="./src/assets/docxtemplate.png" alt="Doc Template" />
         </div>
       </header>
       <div className="flex justify-between items-center mb-6">
         <div className="relative flex items-center w-3/4">
           <input
             type="text"
-            className="w-full bg-gray-800 text-white p-3 rounded-l-lg focus:outline-none"
-            placeholder="Search"
+            className="w-[1012px] h-[59px] bg-[#222222] text-white p-7  rounded-[65px] focus:outline-none"
+            placeholder="     Search"
           />
-          <div className="absolute right-0 flex items-center bg-gray-800 p-3 rounded-r-lg">
+          <div className="absolute h-[59px]  right-0 flex items-center bg-[#222222] p-5 mr-8 rounded-[65px]">
             <span className="mr-2">Category</span>
             <svg
               className="w-4 h-4"
@@ -83,7 +82,7 @@ const ArticleList = () => {
           {articles.map((article, index) => (
             <div
               key={index}
-              className={`p-4 mb-4 rounded-lg ${article.highlight ? 'bg-green-600' : 'bg-gray-800'}`}
+              className={`p-4 mb-4 cursor-pointer rounded-lg hover:bg-gradient-to-r from-[#00D160] to-[#079774]  transition duration-300 ease-in-out`}
             >
               <h2 className="text-xl font-bold mb-2">{article.title}</h2>
               <p className="text-sm mb-2">{article.authors}</p>
@@ -94,7 +93,7 @@ const ArticleList = () => {
             </div>
           ))}
         </div>
-        <div className="w-1/4 text-right p-4">
+        <div className="w-1/4 fixed text-right p-4 ml-[800px] mb-[50px]">
           <p className="text-red-500 mb-2 cursor-pointer">Any time</p>
           <p className="text-green-500 mb-2 cursor-pointer">Since 2024</p>
           <p className="text-green-500 mb-2 cursor-pointer">Since 2023</p>

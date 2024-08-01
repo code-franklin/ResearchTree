@@ -1,7 +1,7 @@
 import React from 'react'
 import { BarChart } from './BarCharts'
 import { VariablePieChart } from './Piechart'
-
+import { ThesisChart } from './LineChart'
 
 import "./ViewAnalytics.css";
 
@@ -17,8 +17,10 @@ const Chart = () => {
 
       <div className="piechart-container">
             <VariablePieChart/>
+            <ThesisChart/>
       </div> 
       
+     
       
    
    </div>
@@ -26,7 +28,7 @@ const Chart = () => {
    
    
    <div className='chart-2'>
-   
+  
    </div>
 
 

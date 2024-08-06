@@ -1,41 +1,26 @@
 import React from 'react'
 import { BarChart } from './BarCharts'
-import { VariablePieChart } from './Piechart'
-import { ThesisChart } from './LineChart'
-
+import { PieChart } from './Piechart'
+import { LineChart } from './LineChart'
+import { Cards } from './Cards'
 import "./ViewAnalytics.css";
 
 const Chart = () => {
   return (
-   <>
-
-
+   <div className="h-[2000px]">
+    
    <div className="chart-1">
    <div className="bar-charts">
             <BarChart />
-      </div>
-
-      <div className="piechart-container">
-            <VariablePieChart/>
-            <ThesisChart/>
-      </div> 
-      
-     
-      
-   
+            <Cards/>
    </div>
-
    
-   
-   <div className='chart-2'>
-  
+  <div className="chart-2">
+         
+  </div> 
    </div>
-
-
-
-
-   </>
+   </div>
   )
 }
 
-export default Chart
+export default Chart;

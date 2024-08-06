@@ -1,6 +1,6 @@
 import React from 'react';
 import { Chart, Interval, Tooltip, Axis, Legend } from 'bizcharts';
-import './BarCharts.css'; // Make sure to create this file and add the styles
+import './BarCharts.css'; // Ensure this file contains the necessary styles
 
 const data = [
   { category: 'AI', value: 150 },

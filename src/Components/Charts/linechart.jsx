@@ -15,7 +15,7 @@ const scale = {
   year: { range: [0, 1] },
 };
 
-export const ThesisChart = () => {
+export const LineChart = () => {
   return (
     <div className="linechart">
       <Chart height={300} width={900} data={data} scale={scale} autoFit>

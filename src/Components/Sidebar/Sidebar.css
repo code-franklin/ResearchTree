@@ -1,9 +1,15 @@
+
+.sidebar {
+    box-shadow: 2px 4px 101px 0px #00000040;
+    z-index: 2;
+}
+
 .myName {
     font-family: "JakartaBold";
     white-space: nowrap;
 }
 
-button {
+.exploreManuscript, .myManuscript, .viewAnalytics, .revision{
     transition: all 0.10s;
 }
 

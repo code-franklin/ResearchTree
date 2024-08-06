@@ -1,16 +1,10 @@
 .chart-1 {
    display: flex;
-   margin-left: 310px;
+   margin-left: 340px;
 }
-
 
 .bar-charts {
-    width: 70%;
-    margin-top: 215px;
+    width: 68.3%;
+    margin-top: 285px;
 }
 
-.piechart-container {
-    
-    
-    margin-top: 87px;  
-}

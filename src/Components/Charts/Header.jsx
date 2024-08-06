@@ -4,7 +4,6 @@ import YearDropdown from './YearDropdown';
 function Header() {
     return (
         <div className="App">
-          
             <Cards />
         </div>
     );

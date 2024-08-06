@@ -46,8 +46,6 @@ function sidebarfunction() {
     }
   };
 
-  
-
   return (
     
     <div className="flex">

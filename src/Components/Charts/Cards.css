@@ -8,15 +8,16 @@
 }
 
 .tooltop {
+    
     position: absolute;
-    left: 1200px;
-    bottom: 1px;
+    left: 1184px;
+    bottom: 18px;
 }
 
 .tooltop2 {
     position: absolute;
-    left: 1280px;
-    bottom: 1px;
+    left: 1245px;
+    bottom: 18px;
 }
 .year-container {
     position: absolute;

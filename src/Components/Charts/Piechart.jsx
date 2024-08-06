@@ -8,7 +8,7 @@ import "./PieChart.css";
 variablePie(Highcharts);
 
 // Define the VariablePieChart component
-export const VariablePieChart = () => {
+export const PieChart = () => {
     const options = {
         chart: {
             type: 'variablepie',
@@ -86,4 +86,4 @@ export const VariablePieChart = () => {
     );
 };
 
-export default VariablePieChart;
+export default PieChart;

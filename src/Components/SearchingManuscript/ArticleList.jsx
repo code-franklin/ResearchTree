@@ -97,7 +97,7 @@ const ArticleList = () => {
 </div>
   
       <header className="header justify-between items-center fixed">
-        <h1 className="text-3xl font-bold mt-[20px] ml-2 ">Manuscript</h1>
+        <h1 className="text-[38px] font-bold mt-[20px] ml-2 ">Manuscript</h1>
         <div className="items-center space-x-2 mr-[20px] mt-[25px] ">
         
           <input
@@ -109,7 +109,7 @@ const ArticleList = () => {
             
         </div>
       </header>
-      <div className="flex justify-between items-center mb-[100px]">
+      <div className="flex justify-between items-center mb-[120px]">
         <div className="relative flex items-center w-3/4">
          
          

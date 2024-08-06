@@ -13,10 +13,11 @@ const Chart = () => {
    <div className="bar-charts">
             <BarChart />
             <Cards/>
+           
    </div>
-   
+
   <div className="chart-2">
-         
+  <PieChart/>
   </div> 
    </div>
    </div>

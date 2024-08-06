@@ -32,7 +32,7 @@ const Sidebar = ({ onSelect }) => {
                      text-white px-2 "
           
         >
-        <img className="inline-block mr-2 mb-1" src="./src/assets/Calendar.png"/>
+        <img className="inline-block mr-2 mb-1" src="./src/assets/my-manuscript.png"/>
           My Manuscript
         </Link>
 
@@ -45,7 +45,7 @@ const Sidebar = ({ onSelect }) => {
                      text-white px-2 "
          
         >
-        <img className="inline-block mr-2 mb-1" src="./src/assets/Calendar.png"/>
+        <img className="inline-block mr-2 mb-1" src="./src/assets/explore-manuscript.png"/>
           Explore Manuscript
         </Link>
 

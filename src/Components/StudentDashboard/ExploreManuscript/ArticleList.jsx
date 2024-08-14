@@ -132,9 +132,9 @@ const ArticleList = () => {
       
       <div className="ml-[600px]">
       <h1 className="text-[38px] font-bold mt-[20px] ml-2 ">Manuscript</h1>
-      <div className="absolute z-10"> 
+     <br></br>
       <CategoryComponent />
-      </div>
+    
      <div>
      <ConfigProvider
           theme={{

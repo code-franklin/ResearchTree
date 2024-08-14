@@ -89,39 +89,16 @@ export default class Animations {
   /*
    ** Animate radius of a circle element
    */
-  animateMarker(el, from, to, speed, easing, cb) {
-    if (!from) from = 0
-
+  animateMarker(el, speed, easing, cb) {
     el.attr({
-      r: from,
-      width: from,
-      height: from,
+      opacity: 0,
     })
       .animate(speed, easing)
       .attr({
-        r: to,
-        width: to.width,
-        height: to.height,
+        opacity: 1,
       })
       .afterAll(() => {
         cb()
-      })
-  }
-
-  /*
-   ** Animate radius and position of a circle element
-   */
-  animateCircle(el, from, to, speed, easing) {
-    el.attr({
-      r: from.r,
-      cx: from.cx,
-      cy: from.cy,
-    })
-      .animate(speed, easing)
-      .attr({
-        r: to.r,
-        cx: to.cx,
-        cy: to.cy,
       })
   }
 

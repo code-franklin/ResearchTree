@@ -1,0 +1,119 @@
+
+.sidebar {
+    box-shadow: 2px 4px 101px 0px #00000040;
+    z-index: 2;
+}
+
+.myName {
+    font-family: "JakartaBold";
+    white-space: nowrap;
+}
+
+.exploreManuscript, .myManuscript, .viewAnalytics, .revision{
+    transition: all 0.10s;
+}
+
+
+
+.viewAnalytics:hover {
+    
+    width: 216px;
+    height: 30px;
+    padding: 0px, 17px, 0px, 17px;
+    gap: 5px;
+    border-radius: 5px;
+    
+}
+
+.viewAnalytics:focus {
+
+    width: 216px;
+    height: 30px;
+    padding: 0px, 17px, 0px, 17px;
+    gap: 5px;
+    border-radius: 5px;
+    
+}
+
+.myManuscript:hover {
+    width: 216px;
+    height: 30px;
+    gap: 5px;
+    padding: 0px, 17px, 0px, 17px;
+    border-radius: 5px;
+    
+}
+
+.myManuscript:focus{
+    width: 216px;
+    height: 30px;
+    gap: 5px;
+    padding: 0px, 17px, 0px, 17px;
+    border-radius: 5px;
+    
+}
+
+.exploreManuscript:hover {
+    height: 30px;
+    gap: 5px;
+    padding: 0px, 17px, 0px, 17px;
+    border-radius: 5px;
+}
+
+.exploreManuscript:focus {
+    height: 30px;
+    gap: 5px;
+    padding: 0px, 17px, 0px, 17px;
+    border-radius: 5px;
+}
+
+.revision:hover {
+    
+    
+    width: 216px;
+    height: 30px;
+    padding: 0px, 17px, 0px, 17px;
+    gap: 5px;
+    border-radius: 5px;
+}
+
+.revision:focus {
+    
+    width: 216px;
+    height: 30px;
+    padding: 0px, 17px, 0px, 17px;
+    gap: 5px;
+    border-radius: 5px;
+}
+
+.divider {
+    margin-top: 20px;
+    margin: 20px;
+    border: 1px rgb(37, 37, 37) solid;
+
+}
+
+.upload-btn {
+    
+
+    padding: 10px 0px 10px 10px;
+    gap: 12px;
+    border-radius: 10px 10px 10px 10px;
+    background: linear-gradient(93.82deg, #0BF677 -18.64%, #079774 35.17%);
+
+  animation-name: glow;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+    
+
+}
+
+.upload-btn:hover {
+    box-shadow: 0px 0px 5px #0BF677, 0 0 5px #0BF677, 0 0 0px #0BF677, 0 0 0px #0BF677;
+}
+
+
+
+
+

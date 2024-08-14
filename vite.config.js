@@ -7,4 +7,10 @@ export default defineConfig({
   server: {
     // port: 8001,
   },
+  build: {
+    sourcemap: true, // Enable source maps
+  },
+  esbuild: {
+    sourcemap: true, // Enable source maps for esbuild
+  },
 });

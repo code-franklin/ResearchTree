@@ -1,3 +1,5 @@
+import { Fullscreen } from "@mui/icons-material";
+import { PageMode } from "@react-pdf-viewer/core";
 import {
   Document,
   Page,
@@ -10,6 +12,8 @@ import {
 
 // Create styles
 const styles = StyleSheet.create({
+  
+  
   document: {
     backgroundColor: "red",
     

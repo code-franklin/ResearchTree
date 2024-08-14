@@ -1,18 +1,23 @@
 import React from 'react';
 import './Manuscript.css';
 
+
+
+
+
 const ResearchCard = () => {
   return (
     <div className="headerCard">
 
 
-<div className="ml-[320px]  border border-[#4B4B4B] bg-[#1E1E1E] p-[40px] pl-[100px] rounded-lg shadow-lg text-white">
+<div className="ml-[320px]  border border-[#4B4B4B] bg-[#1E1E1E] p-[40px] pl-[80px] rounded-lg shadow-lg text-white">
+    
       <div className="flex  items-center mb-4 ">
-        <span className="bg-red-500 text-white px-2 py-1 mr-2">Research Title</span>
-        <span className="bg-red-500 text-white px-2 py-1  mr-2">Pending Upload</span>
-          <span className="bg-red-500 text-white px-2 py-1 mr-4 ">Revise</span>
-        <div>
-          
+        <span className="bg-[#868686] text-white px-2 py-0 mr-2">Research Title</span>
+        <span className="bg-[#1E1E] text-white px-2 py-0  mr-2">BSIT</span>
+        <div className="absolute ml-[920px] ">
+
+ 
         </div>
       </div>
       <h1 className="text-2xl font-bold mb-2">

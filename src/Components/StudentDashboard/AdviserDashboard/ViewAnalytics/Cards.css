@@ -1,18 +1,13 @@
-.view-analytics {
-    color: white;
-    background-color: #1E1E1E;
-    padding: 20px;
-    border-radius: 8px;
-}
+/*
 .Tooltop {
     display: flex;
 }
-.year-container {
+.ADyear-container {
     position: absolute;
     display: flex;
     bottom: 178px;
     left: 1184px;
-    width: 20%;
+    width: 14%;
 }
 
 .cards-container {
@@ -20,22 +15,24 @@
     gap: 17px;
     position: absolute;
     top:160px;
-    left: 340px;
+    left: 350px;
+    color: white;
 }
 
-.card {
+.ADcard {
     background-color: #1E1E1E;
     padding: 20px;
     border-radius: 8px;
     border: solid #4B4B4B 1px;
-    width: 305px;
+    width: 319px;
     height: 110px;
+    margin-left: 10px;
 }
 
 .card-icon-1 {
     position: absolute;
-    left: 235px;
-    bottom: 43px;
+    left: 275px;
+    bottom: 62px;
     
 }
 .card-icon-2 {
@@ -80,3 +77,4 @@
     margin-left: 100px;
     font-weight: 700;
 }
+*/

@@ -1,5 +1,5 @@
 import React from 'react';
-import './Cards.css';
+import './STDCards.css';
 
 
 import Box from '@mui/material/Box';
@@ -32,8 +32,8 @@ export const Cards = () => {
                 <div className="year-container"> 
                     <Dropdown />
                     <span className="absolute left-[-1174px] mt-[30px] text-[40px] font-bold">View Analytics</span>
-                   <div className="Tooltop">
-                     <div className="mt-[12px]">
+                   <div className="Tooltop w-[100%]">
+                     <div className="mt-[12px] ">
                             <Tooltip title="Notification" arrow>
                            <img className="tooltip cursor-pointer w-[auto] inline-block mr-2" src="./src/assets/notification.png" />
                             </Tooltip>
@@ -57,7 +57,7 @@ export const Cards = () => {
                 </div>
 
                 <div className="card">
-                    <div className="card-icon-1">
+                    <div className="card-icon-1 absolute top-0 left-[240px]">
                         <img className="" src="./src/assets/star.png" />
                     </div>
                     <div className="card-content">

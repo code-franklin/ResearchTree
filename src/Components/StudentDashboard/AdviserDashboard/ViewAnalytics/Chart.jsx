@@ -2,8 +2,10 @@ import React from 'react'
 import { BarChart } from './BarCharts'
 import { PieChart } from './Piechart'
 import { LineChart } from './LineChart'
-import { Cards } from './STDCards'
-import "./STDViewAnalytics.css";
+import { Cards } from './Cards'
+
+
+import "./ViewAnalytics.css";
 
 
 
@@ -15,12 +17,15 @@ const Chart = () => {
    <div className="bar-charts">
   
             <BarChart />
+         
             <Cards/>
            
    </div>
 
   <div className="chart-2">
+     
   <PieChart/>
+
   </div> 
    </div>
    </div>

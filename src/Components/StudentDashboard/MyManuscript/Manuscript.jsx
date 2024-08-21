@@ -2,9 +2,6 @@ import React from 'react';
 import './Manuscript.css';
 
 
-
-
-
 const ResearchCard = () => {
   return (
     <div className="headerCard">
@@ -15,9 +12,7 @@ const ResearchCard = () => {
       <div className="flex  items-center mb-4 ">
         <span className="bg-[#868686] text-white px-2 py-0 mr-2">Research Title</span>
         <span className="bg-[#1E1E] text-white px-2 py-0  mr-2">BSIT</span>
-        <div className="absolute ml-[920px] ">
-
- 
+        <div className="absolute ml-[920px] "> 
         </div>
       </div>
       <h1 className="text-2xl font-bold mb-2">

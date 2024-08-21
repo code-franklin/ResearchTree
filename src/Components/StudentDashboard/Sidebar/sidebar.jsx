@@ -30,7 +30,7 @@ const Sidebar = ({ onSelect }) => {
           className="myManuscript mx-10 whitespace-nowrap
                      focus:font-semibold 
                      focus:ml-[4rem] focus:bg-gradient-to-r from-[#0BF677] to-[#079774] 
-                     hover:font-medium hover:ml-[4rem] hover:bg-gradient-to-r from-[#0BF677] to-[#079774]
+                     hover:font-medium hover:ml-[4rem] 
                      text-white px-2 "
           
         >
@@ -43,7 +43,7 @@ const Sidebar = ({ onSelect }) => {
                      
                      focus:font-semibold 
                      hover:mr-auto focus:mr-auto focus:ml-[4rem] focus:bg-gradient-to-r from-[#0BF677] to-[#079774] 
-                     hover:font-medium hover:ml-[4rem] hover:bg-gradient-to-r from-[#0BF677] to-[#079774]
+                     hover:font-medium hover:ml-[4rem] 
                      text-white px-2 "
          
         >
@@ -58,7 +58,7 @@ const Sidebar = ({ onSelect }) => {
                      focus:font-semibold 
                      hover:ml-[4rem]
                      focus:ml-[4rem] focus:bg-gradient-to-r from-[#0BF677] to-[#079774] 
-                     hover:font-medium hover:bg-gradient-to-r from-[#0BF677] to-[#079774]
+                     hover:font-medium 
                      
                      text-white  px-2 "
      
@@ -74,7 +74,7 @@ const Sidebar = ({ onSelect }) => {
           className="revision mx-10 
                      focus:font-semibold 
                      focus:ml-[4rem] focus:bg-gradient-to-r from-[#0BF677] to-[#079774] 
-                     hover:font-medium hover:ml-[4rem] hover:bg-gradient-to-r from-[#0BF677] to-[#079774]
+                     hover:font-medium hover:ml-[4rem] 
                      text-white px-2 "
           
         >

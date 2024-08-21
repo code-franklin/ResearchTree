@@ -13,6 +13,7 @@ import ExploreManuscript from './Components/StudentDashboard/ExploreManuscript/A
 import ViewAnalytics from './Components/StudentDashboard/ViewAnalytics/Chart';
 
 
+import AdviserAnalytics from './Components/StudentDashboard/AdviserDashboard/ViewAnalytics/Chart'
 function App() {
 
   
@@ -31,6 +32,8 @@ function App() {
           <Route path="/ExploreManuscript" element={<ExploreManuscript/>} />
           <Route path="/ViewAnalytics" element={<ViewAnalytics/>} />
           <Route path="/LoginAuth" element={<LoginAuth/>} />
+
+          <Route path="/AdviserVA" element={<AdviserAnalytics/>} />
 
        
           

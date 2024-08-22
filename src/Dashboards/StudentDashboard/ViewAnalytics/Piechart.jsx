@@ -2,7 +2,7 @@ import React from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import variablePie from 'highcharts/modules/variable-pie';
-import "./PieChart.css";
+import "./Styles/pieChart.css"
 
 // Initialize the variable pie module
 variablePie(Highcharts);
@@ -14,19 +14,18 @@ export const PieChart = () => {
             type: 'variablepie',
             className: 'highcharts-custom-chart',
             backgroundColor: '#1E1E1E', // Set background color directly here
-            spacingBottom: 10, // Bottom padding
-            spacingTop: 0, // Top padding
-            spacingLeft: 0, // Left padding
-            spacingRight: 0, // Right padding
-            height: 385, // Set height
+            spacingBottom: 15, // Bottom padding
+            spacingTop: 20, // Top padding
+            spacingLeft: 10, // Left padding
+            spacingRight: 10, // Right padding
+            height: 510, // Set height
             width: 420, // Set width
-        
         },
         title: {
             text: 'Total Manuscript',
             className: 'highcharts-custom-title',
             style: {
-                color: '#1E1E1E' // Set title text color to white
+                color: '#0BF677' // Set title text color to white
             },
         },
         legend: {

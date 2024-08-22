@@ -1,5 +1,5 @@
 import React from 'react';
-import './Manuscript.css';
+import './Styles/descriptions.css';
 
 
 const ResearchCard = () => {

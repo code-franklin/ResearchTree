@@ -1,10 +1,11 @@
 import React from 'react';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import './Article.css';
+import './Styles/article.css';
+import { ConfigProvider } from 'antd';
+
+
 import Box from '@mui/material/Box';
 import Tooltip from '@mui/material/Tooltip'
-
-
 import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
@@ -12,10 +13,9 @@ import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
 
 import SearchBar from './Search'
-import { ConfigProvider } from 'antd';
-
-
 import CategoryComponent from './Categories'
+
+
 const articles = [
   {
     title: 'Exploring the Impact of Artificial Intelligence on Healthcare: A Comprehensive Analysis of Adoption, Challenges, and Future Directions',

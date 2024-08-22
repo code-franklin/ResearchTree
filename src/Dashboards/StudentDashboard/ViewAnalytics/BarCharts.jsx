@@ -1,6 +1,6 @@
 import React from 'react';
 import { Chart, Interval, Tooltip, Axis, Legend } from 'bizcharts';
-import './BarCharts.css'; // Ensure this file contains the necessary styles
+import './Styles/barChart.css'; // Ensure this file contains the necessary styles
 
 const data = [
   { category: 'AI', value: 150 },
@@ -30,14 +30,9 @@ export const BarChart = () => {
   }
 
   return (
-    <div className="p-5 mr-5 mt-1.5 rounded-lg shadow-custom-shadow bg-[#1E1E1E] border border-[#4B4B4B]">
+    <div className="p-5 mr-5 rounded-lg shadow-custom-shadow bg-[#1E1E1E] border border-[#4B4B4B]">
       <h2 className="text-[#0BF677] text-xl mb-4">Top 10 Trending Manuscript</h2>
-      <Chart 
-            height={300} 
-            width={900} 
-            autoFit data={sortedData} 
-            interactions={['active-region']} >
-            
+      <Chart height={300} width={900} autoFit data={sortedData} interactions={['active-region']} >
         <Axis name="value" visible={true} />
         <Axis name="category" label={null} visible={true} />
         <Legend 

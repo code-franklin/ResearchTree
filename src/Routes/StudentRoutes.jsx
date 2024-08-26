@@ -6,17 +6,17 @@ import MyManuscript from '../Dashboards/StudentDashboard/MyManuscript/MyManuscri
 import ExploreManuscript from '../Dashboards/StudentDashboard/ExploreManuscript/Articles'
 import ViewAnalytics from '../Dashboards/StudentDashboard/ViewAnalytics/ViewAnalyticsComponent'
 
-
+import Sidebar from '../Components/Sidebar/sidebar'
 function StudentRoutes() {
   return (
     <>
-     
+       <Sidebar/>
       
               <Routes>
                 <Route path="/" element={<ViewAnalytics/>} />
-                <Route path="/MyManuscript" element={<MyManuscript/>} />
-                <Route path="/ExploreManuscript" element={<ExploreManuscript/>} />
-                <Route path="/ViewAnalytics" element={<ViewAnalytics/>} />
+                <Route path="StudentDashboard/MyManuscript" element={<MyManuscript/>} />
+                <Route path="StudentDashboard/ExploreManuscript" element={<ExploreManuscript/>} />
+                <Route path="StudentDashboard/ViewAnalytics" element={<ViewAnalytics/>} />
       
               </Routes>
           

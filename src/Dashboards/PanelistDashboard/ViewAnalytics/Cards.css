@@ -1,19 +1,13 @@
-.view-analytics {
-    color: white;
-    background-color: #1E1E1E;
-    padding: 20px;
-    border-radius: 8px;
-}
+
 .Tooltop {
     display: flex;
-   
 }
 .year-container {
     position: absolute;
     display: flex;
     bottom: 178px;
-    left: 1184px;
-    width: 20%;
+    left: 1174px;
+    width: 14%;
 }
 
 .cards-container {
@@ -21,7 +15,8 @@
     gap: 17px;
     position: absolute;
     top:160px;
-    left: 340px;
+    left: 350px;
+    color: white;
 }
 
 .card {
@@ -29,14 +24,15 @@
     padding: 20px;
     border-radius: 8px;
     border: solid #4B4B4B 1px;
-    width: 296px;
+    width: 319px;
     height: 110px;
-    
+    margin-left: 10px;
 }
 
 .card-icon-1 {
     position: absolute;
-   
+    left: 275px;
+    bottom: 62px;
     
 }
 .card-icon-2 {

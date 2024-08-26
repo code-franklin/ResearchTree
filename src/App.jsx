@@ -4,28 +4,25 @@ import './App.css';
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { Container, CssBaseline } from "@mui/material";
 
-
-import Sidebar from './Components/Sidebar/sidebar'
-
-
-
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import StudentRoutes from './Routes/StudentRoutes';
+import AdviserRoutes from './Routes/AdviserRoutes';
+import PanelistRoutes from './Routes/PanelistRoutes';
 
 
-
-
-function MyManuscriptComponent() {
+function App() {
 
   
   return (
     <div className="App">
         <Router>
-             <Sidebar/>
+           
       <Routes>
         
-        <Route path="/" element={<StudentRoutes/>} />
+        <Route path="/StudentDashboard/*" element={<StudentRoutes/>} />
+        <Route path="/AdviserDashboard/*" element={<AdviserRoutes/>} />
+        <Route path="/PanelistDashboard/*" element={<PanelistRoutes/>} />
        
       </Routes>
     </Router>
@@ -34,4 +31,4 @@ function MyManuscriptComponent() {
 }
 
 
-export default MyManuscriptComponent;
+export default App;

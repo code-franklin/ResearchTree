@@ -1,0 +1,23 @@
+export const fakeData = [
+  { id: '1', firstName: 'John', lastName: 'Doe', email: 'john.doe@example.com', state: 'California' },
+  { id: '2', firstName: 'Jane', lastName: 'Smith', email: 'jane.smith@example.com', state: 'Texas' },
+  { id: '3', firstName: 'Alice', lastName: 'Johnson', email: 'alice.johnson@example.com', state: 'New York' },
+  { id: '4', firstName: 'Bob', lastName: 'Brown', email: 'bob.brown@example.com', state: 'Florida' },
+  { id: '5', firstName: 'Charlie', lastName: 'Davis', email: 'charlie.davis@example.com', state: 'Illinois' },
+  { id: '6', firstName: 'David', lastName: 'Wilson', email: 'david.wilson@example.com', state: 'Ohio' },
+  { id: '7', firstName: 'Emily', lastName: 'Martinez', email: 'emily.martinez@example.com', state: 'Georgia' },
+  { id: '8', firstName: 'Frank', lastName: 'Anderson', email: 'frank.anderson@example.com', state: 'Michigan' },
+  { id: '9', firstName: 'Grace', lastName: 'Taylor', email: 'grace.taylor@example.com', state: 'Pennsylvania' },
+  { id: '10', firstName: 'Hank', lastName: 'Thomas', email: 'hank.thomas@example.com', state: 'Arizona' },
+  { id: '11', firstName: 'Ivy', lastName: 'Moore', email: 'ivy.moore@example.com', state: 'Washington' },
+  { id: '12', firstName: 'Jack', lastName: 'Jackson', email: 'jack.jackson@example.com', state: 'Colorado' },
+  { id: '13', firstName: 'Kathy', lastName: 'White', email: 'kathy.white@example.com', state: 'Oregon' },
+  { id: '14', firstName: 'Leo', lastName: 'Harris', email: 'leo.harris@example.com', state: 'North Carolina' },
+  { id: '15', firstName: 'Mia', lastName: 'Clark', email: 'mia.clark@example.com', state: 'New Jersey' },
+  { id: '16', firstName: 'Nina', lastName: 'Lewis', email: 'nina.lewis@example.com', state: 'Missouri' },
+  { id: '17', firstName: 'Oscar', lastName: 'Walker', email: 'oscar.walker@example.com', state: 'Minnesota' },
+  { id: '18', firstName: 'Paul', lastName: 'Hall', email: 'paul.hall@example.com', state: 'Wisconsin' },
+  { id: '19', firstName: 'Quinn', lastName: 'Allen', email: 'quinn.allen@example.com', state: 'Indiana' },
+  { id: '20', firstName: 'Rachel', lastName: 'Young', email: 'rachel.young@example.com', state: 'Tennessee' },
+];
+

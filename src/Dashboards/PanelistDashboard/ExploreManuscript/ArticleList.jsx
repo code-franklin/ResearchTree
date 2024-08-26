@@ -1,11 +1,10 @@
 import React from 'react';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import './Styles/article.css';
-import { ConfigProvider } from 'antd';
-
-
+import './Article.css';
 import Box from '@mui/material/Box';
 import Tooltip from '@mui/material/Tooltip'
+
+
 import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
@@ -13,9 +12,10 @@ import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
 
 import SearchBar from './Search'
+import { ConfigProvider } from 'antd';
+
+
 import CategoryComponent from './Categories'
-
-
 const articles = [
   {
     title: 'Exploring the Impact of Artificial Intelligence on Healthcare: A Comprehensive Analysis of Adoption, Challenges, and Future Directions',
@@ -121,8 +121,7 @@ const ArticleList = () => {
 <div className="topcomponent fixed">
   
 <Tooltip title="Notification" arrow><img className="inline-block cursor-pointer  mr-2 mb-0" src="/src/assets/notification.png" alt="Notification" /></Tooltip>
-<Tooltip title="Download Thesis Format" arrow><img onClick={handleClick} className="inline-block cursor-pointer mr-2 mb-0" src="/src/assets/docxtemplate.png" alt="Doc Template" /></Tooltip>
-<Tooltip title="Title Proposals" arrow><img className="inline-block cursor-pointer  mr-2 mb-0" src="/src/assets/title-proposals-icon.png" alt="Title Proposals" /></Tooltip>
+
 </div>
   
       <header className="header justify-between items-center fixed">

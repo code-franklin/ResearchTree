@@ -11,7 +11,7 @@ const Sidebar = ({ onSelect }) => {
     <div className="sidebar z-1 h-screen w-[313px] bg-[#1E1E1E] text-white flex flex-col fixed">
 
         <div>
-        <img className="" src="./src/assets/rstreelogo.png"/>
+        <img className="" src="/src/assets/rstreelogo.png"/>
         </div>
         
       <div className='flex ml-[9px] '>
@@ -34,7 +34,7 @@ const Sidebar = ({ onSelect }) => {
                      text-white px-2 "
           
         >
-        <img className="inline-block mr-2 mb-1" src="./src/assets/my-manuscript.png"/>
+        <img className="inline-block mr-2 mb-1" src="/src/assets/my-manuscript.png"/>
           My Manuscript
         </Link>
 
@@ -47,7 +47,7 @@ const Sidebar = ({ onSelect }) => {
                      text-white px-2 "
          
         >
-        <img className="inline-block mr-2 mb-1" src="./src/assets/explore-manuscript.png"/>
+        <img className="inline-block mr-2 mb-1" src="/src/assets/explore-manuscript.png"/>
           Explore Manuscript
         </Link>
 
@@ -64,7 +64,7 @@ const Sidebar = ({ onSelect }) => {
      
         >
          
-          <img className="inline-block mr-2 mb-1" src="./src/assets/User.png"/>
+          <img className="inline-block mr-2 mb-1" src="/src/assets/User.png"/>
           <span className="text">View Analytics</span>
           
           
@@ -78,7 +78,7 @@ const Sidebar = ({ onSelect }) => {
                      text-white px-2 "
           
         >
-        <img className="inline-block mr-2 mb-1" src="./src/assets/revision-icon.png"/>
+        <img className="inline-block mr-2 mb-1" src="/src/assets/revision-icon.png"/>
           Revision
         </Link>
 
@@ -88,7 +88,7 @@ const Sidebar = ({ onSelect }) => {
         
       </div>
 
-      <button className="upload-btn w-[230px] h-[50px]  mt-[320px] ml-[36px] text-[20px]"> Upload<img className="inline-block ml-2 mb-1" src="./src/assets/import-icon.png"/></button>
+      <button className="upload-btn w-[230px] h-[50px]  mt-[320px] ml-[36px] text-[20px]"> Upload<img className="inline-block ml-2 mb-1" src="/src/assets/import-icon.png"/></button>
      
     </div>
   );

@@ -1,9 +1,4 @@
-.view-analytics {
-    color: white;
-    background-color: #1E1E1E;
-    padding: 20px;
-    border-radius: 8px;
-}
+
 .Tooltop {
     display: flex;
    
@@ -16,20 +11,20 @@
     width: 20%;
 }
 
-.cards-container {
+.stats-container {
     display: flex;
     gap: 17px;
     position: absolute;
     top:160px;
-    left: 340px;
+    left: 350px;
 }
 
-.card {
+.box {
     background-color: #1E1E1E;
     padding: 20px;
     border-radius: 8px;
     border: solid #4B4B4B 1px;
-    width: 296px;
+    width: 302px;
     height: 110px;
     
 }

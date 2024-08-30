@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import UserAvatar from './Avatar'
 
 
-const Sidebar = ({ onSelect }) => {
+const Sidebar = () => {
   
   return (
     <div className="sidebar z-1 h-screen w-[313px] bg-[#1E1E1E] text-white flex flex-col fixed">

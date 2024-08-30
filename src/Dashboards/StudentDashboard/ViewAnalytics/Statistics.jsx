@@ -1,110 +1,45 @@
 import React from 'react';
-import './Styles/statistics.css';
-
-
-import Box from '@mui/material/Box';
-
-import Badge from '@mui/material/Badge';
-import Tooltip from '@mui/material/Tooltip';
-import Dropdown from './Year';
-import Alert from '@mui/material/Alert';
-import IconButton from '@mui/material/IconButton';
-import Collapse from '@mui/material/Collapse';
-import Button from '@mui/material/Button';
-import CloseIcon from '@mui/icons-material/Close';
+import './Styles/stats.css';
 
 export const Cards = () => {
-    const [open, setOpen] = React.useState(false); // Start with the alert closed
-
-    // Function to handle the button click
-    const handleClick = () => {
-        setOpen(true); // Open the alert when the button is clicked
-
-        // Automatically close the alert after 3 seconds
-        setTimeout(() => {
-            setOpen(false);
-        }, 3000); // 3000 milliseconds = 3 seconds
-    };
+   
 
     return (
-        <div className="view-analytics">
-            <div className="cards-container">
-                <div className="year-container"> 
-                    <Dropdown />
-                    <span className="absolute left-[-1174px] mt-[30px] text-[40px] font-bold">View Analytics</span>
-                   <div className="Tooltop w-[100%]">
-                     <div className="mt-[12px] ">
-                            <Tooltip title="Notification" arrow>
-                           <img className="tooltip cursor-pointer w-[auto] inline-block mr-2" src="/src/assets/notification.png" />
-                            </Tooltip>
-                        </div>
-                       
-                        <div className="mt-[12px]"  onClick={handleClick}>
-                       
-                            <Tooltip title="Download Thesis Format" arrow>
-                                <img className="tooltip2 cursor-pointer inline-block mr-2" src="/src/assets/docxtemplate.png" />
-                            </Tooltip>
-                        
+       <>
+        <div className="stats-container">
+                
 
-                        </div>
-                       
-                        <div className="mt-[12px]">
-                            <Tooltip title="Title Proposals" arrow>
-                                <img className="tooltip3 cursor-pointer inline-block mr-2 mt-[2px]" src="/src/assets/title-proposals-icon.png" />
-                            </Tooltip>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="card">
-                    <div className="card-icon-1 absolute top-0 left-[240px]">
+                <div className="box">
+                    <div className="card-icon-1 absolute top-0 left-[234px]">
                         <img className="" src="/src/assets/star.png" />
                     </div>
                     <div className="card-content">
                         <p className="card-title">Trending Manuscript</p>
-                        <p className="card-value-1">Machine Learning</p>
+                        <p className="card-value-1 text-white">Machine Learning</p>
                     </div>
                 </div>
-                <div className="card">
-                    <div className="card-icon-2">
+                <div className="box">
+                    <div className="card-icon-2 left-[570px]">
                         <img className="" src="/src/assets/Check.png" />
                     </div>
                     <div className="card-content">
                         <p className="card-title">Total Manuscript</p>
-                        <p className="card-value-2">2,504</p>
+                        <p className="card-value-2 text-white">2,504</p>
                     </div>
                 </div>
-                <div className="card">
-                    <div className="card-icon-3">
+                <div className="box">
+                    <div className="card-icon-3 left-[885px]">
                         <img className="" src="/src/assets/Trophy.png" />
                     </div>
                     <div className="card-content">
                         <p className="card-title">Best Thesis</p>
-                        <p className="card-value-3">300</p>
+                        <p className="card-value-3 text-white">300</p>
                     </div>
                 </div>
             </div>
             
-            <Box sx={{ position: 'fixed', top: 45, left: 1200, width: '16%', zIndex: 9999 }}>
-                <Collapse in={open}>
-                    <Alert
-                        action={
-                            <IconButton
-                                aria-label="close"
-                                color="inherit"
-                                size="small"
-                                onClick={() => setOpen(false)} // Close the alert when the close button is clicked
-                            >
-                                <CloseIcon fontSize="inherit" />
-                            </IconButton>
-                        }
-                        sx={{ mb: 2, color: 'white', backgroundColor: 'green' }}
-                    >
-                        Download Complete
-                    </Alert>
-                </Collapse>
-            </Box>
-        </div>
+       </>
+           
     );
 };
 

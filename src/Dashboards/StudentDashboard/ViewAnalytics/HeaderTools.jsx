@@ -1,34 +1,54 @@
-import React from 'react';
-import Tooltip from '@mui/material/Tooltip';
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+import { height } from '@mui/system';
 
 
-function Tools() {
+import TextArea from './TitleProposals/TextArea'
+import GenerateButton from './TitleProposals/Generate'
+
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 720,
+  height: 720,
+  color: "white",
+  bgcolor: '#1E1E1E',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
+
+export default function BasicModal() {
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   return (
-   
-   <div className="Tooltop w-[100%]">
-     <div className="mt-[12px] ">
-            <Tooltip title="Notification" arrow>
-           <img className="tooltip cursor-pointer w-[auto] inline-block mr-2" src="/src/assets/notification.png" />
-            </Tooltip>
-        </div>
-       
-        <div className="mt-[12px]" >
-       
-            <Tooltip title="Download Thesis Format" arrow>
-                <img className="tooltip2 cursor-pointer inline-block mr-2" src="/src/assets/docxtemplate.png" />
-            </Tooltip>
-        
-
-        </div>
-       
-        <div className="mt-[12px]">
-            <Tooltip title="Title Proposals" arrow>
-                <img className="tooltip3 cursor-pointer inline-block mr-2 mt-[2px]" src="/src/assets/title-proposals-icon.png" />
-            </Tooltip>
-        </div>
+    <div>
+      <img onClick={handleOpen} className="tooltip3 cursor-pointer inline-block mr-2 mt-[2px]" src="/src/assets/title-proposals-icon.png" />
+    
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+        <img src="/src/assets/title-proposals-logo.png"></img>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Title Proposals
+          </Typography>
+          
+          <TextArea/>
+         <GenerateButton/>
+        </Box>
+      </Modal>
     </div>
-
-  )
+  );
 }
-
-export default Tools

@@ -3,6 +3,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import './Styles/article.css';
 import { ConfigProvider } from 'antd';
 
+import { Link } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import Tooltip from '@mui/material/Tooltip'
@@ -11,92 +12,25 @@ import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
 import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
-
+import { articles } from '../../../constant/ArticleList/ArticleList';
 import SearchBar from './Search'
 import CategoryComponent from './Categories'
 
 
-const articles = [
-  {
-    title: 'Exploring the Impact of Artificial Intelligence on Healthcare: A Comprehensive Analysis of Adoption, Challenges, and Future Directions',
-    authors: 'Franklin Mayad, Daniel De Torres, Lada Milera',
-    dateUploaded: 'October 23 2023',
-    datePublished: 'October 23 2023',
-    highlight: true,
-  },
+const ArticleDate = [{
+  title: 'Any time'
+},
+{
+  title: 'Since 2024'
+},
+{
+  title: 'Since 2023'
+},
+{
+  title: 'Since 2022'
+},
+]
 
-  {
-    title: 'Understanding the Role of Blockchain Technology in Supply Chain Management: Opportunities, Challenges, and Implementation Strategies',
-    authors: 'Franklin Mayad, Daniel De Torres, Lada Milera',
-    dateUploaded: 'October 23 2023',
-    datePublished: 'October 23 2023',
-  },
-
-  {
-    title: 'Examining the Effects of Social Media Usage on Mental Health: A Longitudinal Study among Adolescents and Young Adults',
-    authors: 'Franklin Mayad, Daniel De Torres, Lada Milera',
-    dateUploaded: 'October 23 2023',
-    datePublished: 'October 23 2023',
-  },
-
-  {
-    title: 'Exploring the Impact of Artificial Intelligence on Healthcare: A Comprehensive Analysis of Adoption, Challenges, and Future Directions',
-    authors: 'Franklin Mayad, Daniel De Torres, Lada Milera',
-    dateUploaded: 'October 23 2023',
-    datePublished: 'October 23 2023',
-    highlight: true,
-  },
-
-  {
-    title: 'Investigating Sustainable Energy Solutions for Urban Environments: Integration of Renewable Resources and Smart Grid Technologies',
-    authors: 'Franklin Mayad, Daniel De Torres, Lada Milera',
-    dateUploaded: 'October 23 2023',
-    datePublished: 'October 23 2023',
-  },
-
-  {
-    title: 'The Influence of Cultural Factors on Consumer Behavior: A Cross-Cultural Analysis of Purchase Decisions in Global Markets',
-    authors: 'Franklin Mayad, Daniel De Torres, Lada Milera',
-    dateUploaded: 'October 23 2023',
-    datePublished: 'October 23 2023',
-  },
-
-  {
-    title: 'Enhancing Cybersecurity in the Internet of Things (IoT) Era: Challenges, Solutions, and Future Trends',
-    authors: 'Franklin Mayad, Daniel De Torres, Lada Milera',
-    dateUploaded: 'October 23 2023',
-    datePublished: 'October 23 2023',
-  },
-
-  {
-    title: 'Understanding the Role of Blockchain Technology in Supply Chain Management: Opportunities, Challenges, and Implementation Strategies',
-    authors: 'Franklin Mayad, Daniel De Torres, Lada Milera',
-    dateUploaded: 'October 23 2023',
-    datePublished: 'October 23 2023',
-  },
-
-  {
-    title: 'The Influence of Cultural Factors on Consumer Behavior: A Cross-Cultural Analysis of Purchase Decisions in Global Markets',
-    authors: 'Franklin Mayad, Daniel De Torres, Lada Milera',
-    dateUploaded: 'October 23 2023',
-    datePublished: 'October 23 2023',
-  },
-
-  {
-    title: 'Understanding the Role of Blockchain Technology in Supply Chain Management: Opportunities, Challenges, and Implementation Strategies',
-    authors: 'Franklin Mayad, Daniel De Torres, Lada Milera',
-    dateUploaded: 'October 23 2023',
-    datePublished: 'October 23 2023',
-  },
-  
-  {
-    title: 'The Influence of Cultural Factors on Consumer Behavior: A Cross-Cultural Analysis of Purchase Decisions in Global Markets',
-    authors: 'Franklin Mayad, Daniel De Torres, Lada Milera',
-    dateUploaded: 'October 23 2023',
-    datePublished: 'October 23 2023',
-  },
-  
-];
 
 const ArticleList = () => {
   
@@ -118,12 +52,7 @@ const ArticleList = () => {
 
     <div className="min-h-screen text-white p-6 ml-[300px]">
     
-<div className="topcomponent fixed">
-  
-<Tooltip title="Notification" arrow><img className="inline-block cursor-pointer  mr-2 mb-0" src="/src/assets/notification.png" alt="Notification" /></Tooltip>
-<Tooltip title="Download Thesis Format" arrow><img onClick={handleClick} className="inline-block cursor-pointer mr-2 mb-0" src="/src/assets/docxtemplate.png" alt="Doc Template" /></Tooltip>
-<Tooltip title="Title Proposals" arrow><img className="inline-block cursor-pointer  mr-2 mb-0" src="/src/assets/title-proposals-icon.png" alt="Title Proposals" /></Tooltip>
-</div>
+
   
       <header className="header justify-between items-center fixed">
        
@@ -175,10 +104,9 @@ const ArticleList = () => {
           ))}
         </div>
         <div className="w-1/4 fixed text-right p-4 ml-[800px] mb-[50px]">
-          <p className="text-red-500 mr-[12.3px] mb-2 cursor-pointer">Any time</p>
-          <p className="text-green-500 mb-2 cursor-pointer">Since 2024</p>
-          <p className="text-green-500 mb-2 cursor-pointer">Since 2023</p>
-          <p className="text-green-500 cursor-pointer">Since 2022</p>
+        {ArticleDate.map((item, index) => (
+          <p key={index} className="text-red-500 mr-[12.3px] mb-2 cursor-pointer hover:text-green-500">{item.title}</p>
+        ))}
         </div>
       </div>
     </div>

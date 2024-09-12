@@ -4,7 +4,6 @@ import { PieChart } from './Piechart'
 import { Cards } from './Statistics'
 import "./Styles/viewAnalytics.css";
 
-import HeaderTools from './HeaderTools'
 import YearDropdown from './YearDropdown'
 const Chart = () => {
   return (
@@ -15,7 +14,7 @@ const Chart = () => {
       </div>
     
       <div className="absolute right-[57px] top-[27px]">
-      <HeaderTools/>
+      {/* <BasicModal/> */}
       </div>
     
    <div className="bar-charts">

@@ -19,7 +19,9 @@ function AdviserRoutes() {
                 <Route path="AdviserDashboard/MyAdvisee" element={<MyAdvisee/>} />
                 <Route path="AdviserDashboard/ExploreManuscript" element={<ExploreManuscript/>} />
                 <Route path="AdviserDashboard/ViewAnalytics" element={<ViewAnalytics/>} />
-      
+
+
+                <Route path="AdviserDashboard/ViewAnalytics" element={<ViewAnalytics/>} />
               </Routes>
           
     </>

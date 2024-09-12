@@ -4,6 +4,10 @@ import "./Sidebar.css";
 import { Link } from 'react-router-dom';
 import UserAvatar from './Avatar'
 
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
 
 const Sidebar = ({ onSelect }) => {
   

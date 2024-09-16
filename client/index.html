@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html style=" background-color: #1E1E1E;" lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ResearchTree</title>
+  <link rel="icon" type="image/png" href="./src/assets/tabs-icon.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div id="root"></div>
+  <div class="loading-screen">
+  <img src="/src/assets/rstree-loadingscreen.png" width="100%"> 
+  </div>
+
+  
+  <script type="module" src="/src/main.jsx"></script>
+
+  <script>
+    window.addEventListener('load', function() {
+      console.log("Window loaded, starting timeout for loading screen.");
+      // Hide loading screen and show content after a delay
+      setTimeout(function() {
+        console.log("Timeout completed, hiding loading screen.");
+        document.querySelector('.loading-screen').style.display = 'none';
+      }, 0); // 10000 milliseconds (10 seconds) delay
+    });
+  </script>
+
+</body>
+</html>

@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { height } from '@mui/system';
-
+import Avatar from './avatars'
 
 import TextArea from './TitleProposals/TextArea'
 import GenerateButton from './TitleProposals/Generate'
@@ -47,6 +47,7 @@ export default function BasicModal() {
           
           <TextArea/>
          <GenerateButton/>
+         <Avatar />
         </Box>
       </Modal>
     </div>

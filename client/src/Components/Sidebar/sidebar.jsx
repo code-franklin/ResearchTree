@@ -4,13 +4,11 @@ import "./Sidebar.css";
 import { Link } from 'react-router-dom';
 import UserAvatar from './Avatar'
 
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
 
 const Sidebar = ({ onSelect }) => {
   
+  const user = JSON.parse(localStorage.getItem('user'));
+
   return (
     <div className="sidebar z-1 h-screen w-[313px] bg-[#1E1E1E] text-white flex flex-col fixed">
 
@@ -20,10 +18,12 @@ const Sidebar = ({ onSelect }) => {
         
       <div className='flex ml-[9px] '>
         <div className="myName ml-[50px] mt-[20px] p-4 text-center">
+
       <UserAvatar/>
-        <span className="text-[21px] font-semibold">Franklin Mayad </span>
+
+        <span className="text-[21px] font-semibold">{user.name}</span>
         
-        <p className="font-light text-[#4B4B4B]">Student</p>
+        <p className="font-light text-[#4B4B4B]">{user.role}</p>
         </div>
        
         </div>

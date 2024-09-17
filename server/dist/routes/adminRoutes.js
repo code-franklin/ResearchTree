@@ -1,0 +1,22 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const adminController_1 = require("../controllers/adminController");
+const adminController_2 = require("../controllers/adminController");
+const upload_1 = __importDefault(require("../middleware/upload"));
+const router = express_1.default.Router();
+router.post('/register', upload_1.default.single('profileImage'), adminController_1.registerAdmin);
+router.post('/login', adminController_1.loginAdmin);
+router.put('/approve/:userId', adminController_1.approveUser);
+router.put('/decline/:userId', adminController_1.declineUser);
+router.get('/pending', adminController_1.getPendingUsers);
+router.get('/users', adminController_1.getAllUsers);
+router.delete('/users/:id', adminController_1.deleteUser);
+router.get('/specializations', adminController_2.getSpecializations);
+router.post('/specializations', adminController_2.addSpecialization);
+router.put('/specializations/:id', adminController_2.updateSpecialization);
+router.delete('/specializations/:id', adminController_2.deleteSpecialization);
+exports.default = router;

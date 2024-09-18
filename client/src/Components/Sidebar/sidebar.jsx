@@ -74,7 +74,7 @@ const Sidebar = ({ onSelect }) => {
           
         </Link>
 
-        <Link to="StudentDashboard/"
+        <Link to="StudentDashboard/Revision"
           className="revision mx-10 
                      focus:font-semibold 
                      focus:ml-[4rem] focus:bg-gradient-to-r from-[#0BF677] to-[#079774] 

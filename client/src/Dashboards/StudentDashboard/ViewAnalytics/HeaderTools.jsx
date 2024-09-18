@@ -2,14 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-<<<<<<< HEAD
-=======
-import { height } from '@mui/system';
-import Avatar from './avatars'
-
-import TextArea from './TitleProposals/TextArea'
-import GenerateButton from './TitleProposals/Generate'
->>>>>>> 882281b85fde3e3017ba02a259c5547836b148ee
 
 /* import TextArea from './TitleProposals/TextArea' 
 import GenerateButton from './TitleProposals/Generate'*/
@@ -126,7 +118,6 @@ export default function BasicModal() {
             Title Proposals
           </Typography>
           
-<<<<<<< HEAD
           {(!advisorInfo || advisorStatus === 'declined') && (
             <form onSubmit={(e) => { e.preventDefault(); submitProposal(); }}>
               <textarea
@@ -181,11 +172,6 @@ export default function BasicModal() {
          <br />
 
 
-=======
-          <TextArea/>
-         <GenerateButton/>
-         <Avatar />
->>>>>>> 882281b85fde3e3017ba02a259c5547836b148ee
         </Box>
       </Modal>
     </div>

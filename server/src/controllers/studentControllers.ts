@@ -85,7 +85,7 @@ export const createProposal = async (req: Request, res: Response) => {
     await loadNlpManager();
 
     // Find the student by userId
-    const student = await User.findById(userId) as IStudent | null;
+    const student = await User.findById(userId);
     if (!student) {
       return res.status(404).json({ message: 'Student not found' });
     }
@@ -98,7 +98,10 @@ export const createProposal = async (req: Request, res: Response) => {
     // Generate a unique channelId
     const channelId = uuidv4();
     student.channelId = channelId;
-    await student.save(); // Save the updated channelId to the student's record
+
+    // Add the new proposal to the user's proposals array
+    student.proposals.push({ proposalText, submittedAt: new Date() });
+    await student.save(); // Save the updated student record
 
     // Fetch advisors excluding those the student has declined
     const declinedAdvisors = student.declinedAdvisors || [];
@@ -111,36 +114,24 @@ export const createProposal = async (req: Request, res: Response) => {
     // Analyze proposal and get top advisors based on specialization matching
     const topAdvisors = await analyzeProposal(proposalText, advisors as IAdvisor[]);
 
-    // Create and save the new proposal
-    const newProposal = await Proposal.create({ userId, proposalText });
-
-    // Respond with the created proposal, top advisors, and channelId
-    res.status(201).json({ proposal: newProposal, topAdvisors, channelId });
-    console.log('Top Advisors after slicing:', topAdvisors.slice(0, 5));
+    // Respond with the top advisors and channelId
+    res.status(201).json({ topAdvisors, channelId });
 
   } catch (error) {
     console.error('Error creating proposal:', error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
-
 // Get Proposal by userId
 export const getProposalByUser = async (req: Request, res: Response) => {
-  const { userId } = req.params;
-
   try {
-    // Find the proposal for the specific user
-    const proposal = await Proposal.findOne({ userId });
-
-    if (!proposal) {
-      return res.status(404).json({ message: 'No proposal found for this user' });
-    }
-
-    // Respond with the proposal data
-    res.status(200).json(proposal);
+      const user = await User.findById(req.params.id).select('name proposals');
+      if (!user) {
+          return res.status(404).json({ message: 'User not found' });
+      }
+      res.json(user);
   } catch (error) {
-    console.error('Error fetching proposal:', error);
-    res.status(500).json({ message: 'Internal Server Error' });
+      res.status(500).json({ message: 'Server error' });
   }
 };
 

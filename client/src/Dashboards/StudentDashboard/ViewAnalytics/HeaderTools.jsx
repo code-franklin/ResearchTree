@@ -2,18 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-<<<<<<< HEAD
-=======
-import { height } from '@mui/system';
-import Avatar from './avatars'
-
-import TextArea from './TitleProposals/TextArea'
-import GenerateButton from './TitleProposals/Generate'
->>>>>>> 882281b85fde3e3017ba02a259c5547836b148ee
-
-/* import TextArea from './TitleProposals/TextArea' 
-import GenerateButton from './TitleProposals/Generate'*/
- 
+import CkEditorDocuments from '../../../CKeditorDocuments'
 
 const style = {
   position: 'absolute',
@@ -30,15 +19,18 @@ const style = {
 };
 
 export default function BasicModal() {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const [proposal, setProposal] = useState('');
+  const [submittedAt, setSubmittedAt] = useState(null); // Add this state for submittedAt
   const [topAdvisors, setTopAdvisors] = useState([]);
   const [advisorInfo, setAdvisorInfo] = useState(null);
   const [advisorStatus, setAdvisorStatus] = useState(null);
   const [panelists, setPanelists] = useState([]);
+
+  const [isEditorOpen, setIsEditorOpen] = useState(false);
 
   const user = JSON.parse(localStorage.getItem('user'));
 
@@ -54,7 +46,8 @@ export default function BasicModal() {
         setAdvisorInfo(data.chosenAdvisor);
         setAdvisorStatus(data.advisorStatus);
         setPanelists(data.panelists || []);
-        setChannelId(data.channelId || ''); // Set channelId from the response
+        setProposal(data.proposalText); // Assuming proposalText is returned
+        setSubmittedAt(data.submittedAt); // Assuming submittedAt is returned
       } else {
         const errorData = await response.json();
         console.error('Error fetching advisor info:', errorData.message);
@@ -77,8 +70,7 @@ export default function BasicModal() {
       if (response.ok) {
         const data = await response.json();
         setTopAdvisors(data.topAdvisors);
-        setChannelId(data.channelId); // Update channelId with the response
-        console.log('Channel ID:', data.channelId); // Use the returned channelId as needed
+        setSubmittedAt(data.submittedAt); // Set the submittedAt date from response
         console.log('Proposal submitted successfully!');
       } else {
         const errorData = await response.json();
@@ -113,7 +105,7 @@ export default function BasicModal() {
   return (
     <div>
       <img onClick={handleOpen} className="tooltip3 cursor-pointer inline-block mr-2 mt-[2px]" src="/src/assets/title-proposals-icon.png" />
-    
+
       <Modal
         open={open}
         onClose={handleClose}
@@ -121,12 +113,19 @@ export default function BasicModal() {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-        <img src="/src/assets/title-proposals-logo.png"></img>
+          <img src="/src/assets/title-proposals-logo.png" alt="Logo" />
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Title Proposals
           </Typography>
-          
-<<<<<<< HEAD
+
+          {/* Display existing proposal and submitted date */}
+          {submittedAt && (
+            <div>
+              <p><strong>Submitted At:</strong> {new Date(submittedAt).toLocaleDateString()}</p>
+              <p><strong>Proposal Text:</strong> {proposal}</p>
+            </div>
+          )}
+
           {(!advisorInfo || advisorStatus === 'declined') && (
             <form onSubmit={(e) => { e.preventDefault(); submitProposal(); }}>
               <textarea
@@ -142,20 +141,21 @@ export default function BasicModal() {
 
           <br />
 
-         {advisorInfo && (
+          {advisorInfo && (
             <div className="mt-4 grid grid-cols-5 gap-4">
               <h2>Chosen Advisor</h2>
               <img
                 src={`http://localhost:5000/public/uploads/${advisorInfo.profileImage}`}
                 className="w-16 h-16 rounded-full"
+                alt={advisorInfo.name}
               />
               <p className="mt-2 text-center text-gray-700">{advisorInfo.name}</p>
-              <p className="mt-2 text-center text-gray-700" >{advisorStatus}</p>
+              <p className="mt-2 text-center text-gray-700">{advisorStatus}</p>
             </div>
           )}
-          
-        <br />
-         <h2>Top Advisors</h2>
+
+          <br />
+          <h2>Top Advisors</h2>
           <ul>
             {topAdvisors.map((advisor) => (
               <li className="mt-2 text-center text-gray-700" key={advisor._id}>
@@ -178,14 +178,12 @@ export default function BasicModal() {
               </ul>
             </div>
           )}
-         <br />
+          <br />
 
-
-=======
-          <TextArea/>
-         <GenerateButton/>
-         <Avatar />
->>>>>>> 882281b85fde3e3017ba02a259c5547836b148ee
+          <button onClick={() => setIsEditorOpen(true)}>Upload Manuscript</button>
+          {isEditorOpen && (
+            <CkEditorDocuments userId={user._id} channelId={user.channelId} />
+          )}
         </Box>
       </Modal>
     </div>

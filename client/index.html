@@ -9,13 +9,18 @@
 </head>
 
 <body>
+
   <div id="root"></div>
-  <div class="loading-screen">
-  <img src="/src/assets/rstree-loadingscreen.png" width="100%"> 
-  </div>
 
   
+
+    <div class="loading-screen">
+      <img src="/src/assets/rstree-loadingscreen.png" width="100%"> 
+    </div>
+
+  <script src="https://cdn.ckbox.io/ckbox/latest/ckbox.js"></script>
   <script type="module" src="/src/main.jsx"></script>
+
 
   <script>
     window.addEventListener('load', function() {
@@ -24,7 +29,7 @@
       setTimeout(function() {
         console.log("Timeout completed, hiding loading screen.");
         document.querySelector('.loading-screen').style.display = 'none';
-      }, 0); // 10000 milliseconds (10 seconds) delay
+      }, 2000); // 2000 milliseconds (2 seconds) delay
     });
   </script>
 

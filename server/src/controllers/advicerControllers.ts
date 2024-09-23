@@ -6,7 +6,7 @@ import Specialization from '../models/Specialization';
 import Proposal from '../models/Proposal';
 
 export const registration = async (req: Request, res: Response) => {
-  const { name, email, password, role, course, year, handleNumber } = req.body;
+  const { name, email, password, role, course, year, handleNumber, groupMembers } = req.body;
   const specializations = JSON.parse(req.body.specializations);
   const profileImage = (req as any).file?.filename;
 
@@ -28,6 +28,7 @@ export const registration = async (req: Request, res: Response) => {
       course, // Add course
       year,   // Add year
       handleNumber, // Add handle number
+      groupMembers: JSON.parse(groupMembers), // Store group members
       isApproved: false,
     });
 

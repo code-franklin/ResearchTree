@@ -1,5 +1,12 @@
 import mongoose, { Schema, Document, model } from 'mongoose';
 
+// Define interface for the proposal within the user schema
+interface IProposal {
+  proposalText: string;
+  submittedAt: Date;
+}
+
+// Define interface for User document
 export interface IUser extends Document {
   name: string;
   email: string;
@@ -16,7 +23,8 @@ export interface IUser extends Document {
   declinedAdvisors: Schema.Types.ObjectId[];
   panelists: Schema.Types.ObjectId[];
   channelId?: string; // Optional field for channel ID
-  
+  groupMembers: string[]; // New field for group members
+  proposals: IProposal[]; // Store multiple proposals
 }
 
 const userSchema: Schema = new Schema<IUser>({
@@ -35,6 +43,11 @@ const userSchema: Schema = new Schema<IUser>({
   declinedAdvisors: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   panelists: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   channelId: { type: String }, // Add the channelId field
+  groupMembers: { type: [String], required: function() { return this.role === 'student'; } }, // New groupMembers field
+  proposals: [{
+    proposalText: { type: String, required: true },
+    submittedAt: { type: Date, default: Date.now },
+  }],
 });
 
 const User = model<IUser>('User', userSchema);

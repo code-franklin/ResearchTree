@@ -4,9 +4,8 @@ import "./Sidebar.css";
 import { Link } from 'react-router-dom';
 import UserAvatar from './Avatar'
 
-
 const Sidebar = ({ onSelect }) => {
-  
+
   const user = JSON.parse(localStorage.getItem('user'));
 
   return (
@@ -30,7 +29,7 @@ const Sidebar = ({ onSelect }) => {
       
       <div className="mr-5 mt-[30px] space-y-2 text-[20px] ">
         
-        <Link to="StudentDashboard/MyManuscript"
+        <Link  to="StudentDashboard/MyManuscript"
           className="myManuscript mx-10 whitespace-nowrap
                      focus:font-semibold 
                      focus:ml-[4rem] focus:bg-gradient-to-r from-[#0BF677] to-[#079774] 
@@ -41,6 +40,7 @@ const Sidebar = ({ onSelect }) => {
         <img className="inline-block mr-2 mb-1" src="/src/assets/my-manuscript.png"/>
           My Manuscript
         </Link>
+
 
         <Link to="StudentDashboard/ExploreManuscript" 
           className="exploreManuscript mx-10 

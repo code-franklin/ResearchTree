@@ -1,0 +1,81 @@
+.todo-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.todo-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 300px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.todo-item.completed p {
+    color: #888;
+    text-decoration: line-through;
+}
+
+.todo-item input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.todo-item button {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-left: 5px;
+}
+
+.todo-item button:hover {
+    background-color: #0056b3;
+}
+
+.todo-item small {
+    display: block;
+    font-size: 12px;
+    color: #666;
+    margin-top: 5px;
+}
+
+.task-input {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.task-input input {
+    width: 200px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.task-input button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.task-input button:hover {
+    background-color: #0056b3;
+}
+
+/* New Error message styling */
+.error {
+    color: red;
+    margin-top: 10px;
+}

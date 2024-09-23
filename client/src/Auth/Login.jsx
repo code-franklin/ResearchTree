@@ -110,3 +110,8 @@ const LoginFunction = () => {
 };
 
 export default LoginFunction;
+<<<<<<< HEAD
+ 
+=======
+ 
+>>>>>>> 662997e3ce29e7eb9229f5ce20e2634ba8c554c5

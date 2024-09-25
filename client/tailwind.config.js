@@ -14,6 +14,7 @@ module.exports = {
         "light-white": "rgba(255,255,255,0.17)",
         'custom-gradient': 'linear-gradient(90deg, #8F00FF, #0066FF)',
       },
+     
     },
   },
   plugins: [],

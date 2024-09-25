@@ -20,16 +20,20 @@
 }
 
 .main-container {
-	--ckeditor5-preview-sidebar-width: 270px;
-	--ckeditor5-preview-height: 700px;
+	--ckeditor5-preview-sidebar-width: 300px;
+	--ckeditor5-preview-height: 800px;
 	font-family: 'Lato';
 	width: fit-content;
-	margin-left: auto;
+	margin-left: -470px;
+	margin-top: -250px;
 	margin-right: auto;
 }
 
 .main-container .presence {
-	margin-bottom: 8px;
+	position: absolute;
+	top: 40px;
+	
+	
 }
 
 .ck-content {
@@ -48,6 +52,7 @@
 }
 
 .editor-container_document-editor .editor-container__toolbar {
+	
 	display: flex;
 	position: relative;
 	box-shadow: 0 2px 3px hsla(0, 0%, 0%, 0.078);
@@ -91,12 +96,14 @@
 	min-height: 297mm;
 	height: fit-content;
 	padding: 20mm 12mm;
-	border: 1px hsl(106, 65%, 45%) solid;
-	background: hsl(120, 44%, 24%);
+	border: 1px hsl(0, 0%, 100%) solid;
+	background: hsl(0, 0%, 100%);
 	box-shadow: 0 2px 3px hsla(0, 0%, 0%, 0.078);
 	flex: 1 1 auto;
 	margin-left: 72px;
 	margin-right: 72px;
+
+	color: black;
 }
 
 .editor-container_include-outline .editor-container__editor .ck.ck-editor__editable {
@@ -116,7 +123,7 @@
 }
 
 .revision-history {
-	display: none;
+	display: block;
 }
 
 .revision-history__wrapper {

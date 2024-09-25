@@ -112,7 +112,9 @@ const ResearchCard = () => {
             <span className='absolute bottom-[67px] ml-[-20px]'>Open</span></a>
 
             {isEditorOpen && (
-              <CkEditorDocuments userId={user._id} channelId={user.channelId}/> 
+             <CkEditorDocuments 
+             width={800}
+             userId={user._id} channelId={user.channelId}/> 
             )}
 
           </div>

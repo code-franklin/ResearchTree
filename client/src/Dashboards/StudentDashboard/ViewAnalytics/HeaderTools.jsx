@@ -2,11 +2,19 @@ import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import { CheckCircleOutlined, CloseCircleOutlined, ClockCircleOutlined } from '@ant-design/icons';
-import { Tag } from 'antd';
-import { Input } from 'antd';
 
-const { TextArea } = Input;
+import {
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  SyncOutlined,
+} from '@ant-design/icons';
+import { Tag , Flex } from 'antd';
+
+
+import Textarea from '@mui/joy/Textarea';
+
+
+
 
 const style = {
   position: 'absolute',
@@ -130,8 +138,8 @@ export default function BasicModal() {
             variant="h6"
             component="h2"
           >
-            {advisorStatus === 'declined' && 'Not Acceptable Title'}
-            {advisorStatus === 'pending' && 'Waiting for Approval'}
+            {advisorStatus === 'declined' && 'Title Proposals'}
+            {advisorStatus === 'pending' && 'Title Proposals'}
             {advisorStatus === 'accepted' && 'Your Adviser'}
           </Typography>
 
@@ -146,35 +154,131 @@ export default function BasicModal() {
           {/* Render based on advisor status */}
           {(!advisorInfo || advisorStatus === 'declined') && (
             <div>
-              <Tag icon={<CloseCircleOutlined />} color="red">
-                Declined
+              <Tag 
+              style={{position: 'absolute', marginLeft: '100px', marginTop: '-280px'}}
+              icon={<CloseCircleOutlined />} 
+              color="#cd201f">
+               Your Title Proposals is Declined 
               </Tag>
               <form onSubmit={(e) => { e.preventDefault(); submitProposal(); }}>
-                <TextArea
-                  showCount
-                  maxLength={100}
-                  value={proposal}
-                  onChange={(e) => setProposal(e.target.value)}
-                  placeholder="Write your proposal here..."
-                  required
-                  style={{
-                    height: 120,
-                    resize: 'none',
-                    
-                  }}
-                />
-                <br />
-                <button type="submit">Submit Proposal</button>
-              </form>
+  <Textarea
+    sx={{
+      color: 'white',
+      position: 'absolute',
+      top: '200px',
+      left: '117px',
+      borderRadius: '20px',
+      backgroundColor: '#1E1E1E', 
+      borderColor: '#585050',
+      width: '495px',
+      height: '92px',
+      paddingLeft: '20px',
+      paddingTop:'10px',
+    }}
+    color='success'
+    minRows={2}
+    placeholder="Write your research title..."
+    size="sm"
+    variant="outlined"
+  />
+  
+  <Textarea
+    sx={{
+      color: 'white',
+      position: 'absolute',
+      top: '310px',
+      left: '117px',
+      borderRadius: '20px',
+      backgroundColor: '#1E1E1E', 
+      borderColor: '#585050',
+      width: '495px',
+      height: '92px',
+      paddingLeft: '20px',
+      paddingTop:'10px',
+    }}
+    color='success'
+    minRows={2}
+    placeholder="Write your research title..."
+    size="sm"
+    variant="outlined"
+  />
+  
+  {/* Add a submit button or trigger elsewhere */}
+  <button type="submit" style={{ display: 'none' }}>Submit Proposal</button>
+</form>
+
             </div>
           )}
 
           {advisorInfo && advisorStatus === 'pending' && (
             <div>
-              <Tag icon={<ClockCircleOutlined />} color="orange">
-                Pending
+              <Tag 
+              icon={<SyncOutlined spin />} 
+              color="processing"
+              style={{position: 'absolute', marginLeft: '100px', marginTop: '-280px'}}
+              >
+                Waiting for Approval of Adviser
               </Tag>
-              <p>Your proposal is under review.</p>
+              <Textarea
+             sx={{
+              
+              color: 'white',
+              position: 'absolute',
+              top: '187px',
+              left: '117px',
+              borderRadius: '20px',
+              backgroundColor: '#1E1E1E', 
+              borderColor: '#585050',
+              width: '495px',
+              height: '92px',
+              paddingLeft: '20px',
+              paddingTop:'10px',
+    
+            
+             }}
+             color='success'
+             minRows={2}
+             placeholder="Write your research title..."
+             size="sm"
+             variant="outlined"
+           />
+
+            <Textarea
+             sx={{
+              
+              color: 'white',
+              position: 'absolute',
+              top: '290px',
+              left: '117px',
+              borderRadius: '20px',
+              backgroundColor: '#1E1E1E', 
+              borderColor: '#585050',
+              width: '495px',
+              height: '151px',
+              paddingLeft: '20px',
+              paddingTop:'10px',
+    
+            
+             }}
+             color='success'
+             minRows={2}
+             placeholder="Write your research title..."
+             size="sm"
+             variant="outlined"
+           />
+                <img
+                src={`http://localhost:5000/public/uploads/${advisorInfo.profileImage}`}
+                className="mt-[358px] ml-[260px] w-[130px] h-[130px] rounded-full "
+                alt={advisorInfo.name}
+              />
+              <p className="text-[20px] font-bold ml-[230px] mt-[13px]">{advisorInfo.name}</p>
+              <Flex style={{marginLeft: '132px', marginTop: '5px'}} gap="4px 0" wrap>
+                    <Tag color="#4E4E4E">Machine Learning</Tag>
+                    <Tag color="#4E4E4E">Mobile App</Tag>
+                    <Tag color="#4E4E4E">Arduino</Tag>
+                    <Tag color="#4E4E4E">Cybersecurity</Tag>
+                  </Flex>
+
             </div>
           )}
 

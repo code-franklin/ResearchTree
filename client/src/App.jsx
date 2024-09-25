@@ -15,6 +15,7 @@ import AdviserRoutes from './Routes/AdviserRoutes';
 import PanelistRoutes from './Routes/PanelistRoutes';
 
 
+
 function App() {
 
   
@@ -25,13 +26,14 @@ function App() {
       <Routes>
       <Route path="/" element={<Login/>} />
       <Route path="/Register" element={<Register/>} />
-
-
+ 
 
         <Route path="/StudentDashboard/*" element={<StudentRoutes/>} />
         <Route path="/AdviserDashboard/*" element={<AdviserRoutes/>} />
         <Route path="/PanelistDashboard/*" element={<PanelistRoutes/>} />
-       
+        
+
+
       </Routes>
     </Router>
     </div>

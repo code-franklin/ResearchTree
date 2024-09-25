@@ -83,21 +83,22 @@ const ResearchCard = () => {
 {/* Advisor */}
         <p className="text-gray-400 mb-2">
           <span className="font-bold text-white">Advisor: {getStatusMessage()}</span>
+          <span className="font-bold text-white ml-[81px]">Panelists: </span>
+            <span style={{ color: 'white'}}>
+              {panelists.map((panelist) => panelist.name).join(', ')}
+            </span>
         </p>
 
 {/* Panelist */}
         {advisorInfo && advisorStatus === 'accepted' && panelists.length > 0 && (
           <p className="text-gray-400 mb-2">
-            <span className="font-bold text-white">Panelists: </span>
-            <span style={{ color: 'green' }}>
-              {panelists.map((panelist) => panelist.name).join(', ')}
-            </span>
+         
           </p>
         )}
         
         <div className="text-gray-400 mb-4">
-          <span><span className="font-bold text-white">Uploaded:</span> <span className="mr-5">{user._id}</span></span>
-          <span><span className="font-bold text-white">Date of Published: </span><span>waiting for panelist</span></span>
+          <span><span className="font-bold text-white">Date of Uploaded:</span> <span className="mr-5">{user._id}</span></span>
+          <span><span className="font-bold text-white">Date of Published: </span><span>Pending to Publish</span></span>
         </div>
         <div className="flex justify-between items-center">
           <div>
@@ -107,13 +108,13 @@ const ResearchCard = () => {
           </div>
           
           <div className="flex items-center">
-            <a onClick={() => setIsEditorOpen(true)} className="text-white mr-4">My Manuscript</a>
+            <a onClick={() => setIsEditorOpen(true)} className="rounded-full text-center text-white mr-4 cursor-pointer w-[120px] h-[37px] border 1px solid #6A6A6A " >
+            <span className='absolute bottom-[67px] ml-[-20px]'>Open</span></a>
 
             {isEditorOpen && (
               <CkEditorDocuments userId={user._id} channelId={user.channelId}/> 
             )}
 
-            <a href="#" className="text-white">View Grade</a>
           </div>
         </div>
       </div>

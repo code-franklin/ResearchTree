@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import CkEditorDocuments from '../../../CKeditorDocuments'
+import { CheckCircleOutlined, CloseCircleOutlined, ClockCircleOutlined } from '@ant-design/icons';
+import { Tag } from 'antd';
+import { Input } from 'antd';
+
+const { TextArea } = Input;
 
 const style = {
   position: 'absolute',
@@ -24,13 +28,11 @@ export default function BasicModal() {
   const handleClose = () => setOpen(false);
 
   const [proposal, setProposal] = useState('');
-  const [submittedAt, setSubmittedAt] = useState(null); // Add this state for submittedAt
+  const [submittedAt, setSubmittedAt] = useState(null);
   const [topAdvisors, setTopAdvisors] = useState([]);
   const [advisorInfo, setAdvisorInfo] = useState(null);
   const [advisorStatus, setAdvisorStatus] = useState(null);
   const [panelists, setPanelists] = useState([]);
-
-  const [isEditorOpen, setIsEditorOpen] = useState(false);
 
   const user = JSON.parse(localStorage.getItem('user'));
 
@@ -46,8 +48,8 @@ export default function BasicModal() {
         setAdvisorInfo(data.chosenAdvisor);
         setAdvisorStatus(data.advisorStatus);
         setPanelists(data.panelists || []);
-        setProposal(data.proposalText); // Assuming proposalText is returned
-        setSubmittedAt(data.submittedAt); // Assuming submittedAt is returned
+        setProposal(data.proposalText);
+        setSubmittedAt(data.submittedAt);
       } else {
         const errorData = await response.json();
         console.error('Error fetching advisor info:', errorData.message);
@@ -70,7 +72,7 @@ export default function BasicModal() {
       if (response.ok) {
         const data = await response.json();
         setTopAdvisors(data.topAdvisors);
-        setSubmittedAt(data.submittedAt); // Set the submittedAt date from response
+        setSubmittedAt(data.submittedAt);
         console.log('Proposal submitted successfully!');
       } else {
         const errorData = await response.json();
@@ -92,7 +94,7 @@ export default function BasicModal() {
       });
       if (response.ok) {
         console.log('Advisor chosen successfully!');
-        fetchAdvisorInfo(); // Refresh advisor info
+        fetchAdvisorInfo();
       } else {
         const errorData = await response.json();
         console.error('Error choosing advisor:', errorData.message);
@@ -107,15 +109,30 @@ export default function BasicModal() {
       <img onClick={handleOpen} className="tooltip3 cursor-pointer inline-block mr-2 mt-[2px]" src="/src/assets/title-proposals-icon.png" />
 
       <Modal
+        sx={{border: "none"}}
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <img src="/src/assets/title-proposals-logo.png" alt="Logo" />
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Title Proposals
+          <img className="mt-2 ml-[277px]" src="/src/assets/title-proposals-logo.png" alt="Logo" />
+
+          {/* Dynamic Title based on advisorStatus */}
+          <Typography
+            sx={{
+              position: "absolute",
+              marginLeft: "246px",
+              top: "111px",
+              fontWeight: "bold"
+            }}
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+          >
+            {advisorStatus === 'declined' && 'Not Acceptable Title'}
+            {advisorStatus === 'pending' && 'Waiting for Approval'}
+            {advisorStatus === 'accepted' && 'Your Adviser'}
           </Typography>
 
           {/* Display existing proposal and submitted date */}
@@ -126,36 +143,71 @@ export default function BasicModal() {
             </div>
           )}
 
+          {/* Render based on advisor status */}
           {(!advisorInfo || advisorStatus === 'declined') && (
-            <form onSubmit={(e) => { e.preventDefault(); submitProposal(); }}>
-              <textarea
-                value={proposal}
-                onChange={(e) => setProposal(e.target.value)}
-                placeholder="Write your proposal here..."
-                required
-              />
-              <br />
-              <button type="submit">Submit Proposal</button>
-            </form>
+            <div>
+              <Tag icon={<CloseCircleOutlined />} color="red">
+                Declined
+              </Tag>
+              <form onSubmit={(e) => { e.preventDefault(); submitProposal(); }}>
+                <TextArea
+                  showCount
+                  maxLength={100}
+                  value={proposal}
+                  onChange={(e) => setProposal(e.target.value)}
+                  placeholder="Write your proposal here..."
+                  required
+                  style={{
+                    height: 120,
+                    resize: 'none',
+                    
+                  }}
+                />
+                <br />
+                <button type="submit">Submit Proposal</button>
+              </form>
+            </div>
           )}
 
-          <br />
+          {advisorInfo && advisorStatus === 'pending' && (
+            <div>
+              <Tag icon={<ClockCircleOutlined />} color="orange">
+                Pending
+              </Tag>
+              <p>Your proposal is under review.</p>
+            </div>
+          )}
 
-          {advisorInfo && (
-            <div className="mt-4 grid grid-cols-5 gap-4">
-              <h2>Chosen Advisor</h2>
+          {advisorInfo && advisorStatus === 'accepted' && (
+            <div>
+              <div style={{ position: "absolute", borderLeft: '2px solid #373737', height: '240px', top: "210px", left: "350px" }}></div>
+              <Tag icon={<CheckCircleOutlined />} color="#87d068">
+                Accepted
+              </Tag>
               <img
                 src={`http://localhost:5000/public/uploads/${advisorInfo.profileImage}`}
-                className="w-16 h-16 rounded-full"
+                className="mt-[80px] ml-[60px] w-[197px] h-[197px] rounded-full border-[5px] border-green-500"
                 alt={advisorInfo.name}
               />
-              <p className="mt-2 text-center text-gray-700">{advisorInfo.name}</p>
-              <p className="mt-2 text-center text-gray-700">{advisorStatus}</p>
+              <p className="text-[20px] font-bold ml-[200px]">{advisorInfo.name}</p>
+              
+              <h2 className='font-bold ml-[266px] text-[19px] mt-[25px]'>Your Panelists</h2>
+              <ul className='flex ml-[150px] mt-[27px]'>
+                {panelists.map((panelist) => (
+                  <li key={panelist._id} className="">
+                    <img
+                      src={`http://localhost:5000/public/uploads/${panelist.profileImage}`} 
+                      alt={panelist.name}
+                      className=" w-[80px] h-[80px] rounded-full mr-[53px] "
+                    />
+                    <p className="text-sm ml-[-6px] mt-[6px]">{panelist.name}</p> 
+                  </li>
+                ))}
+              </ul>
             </div>
           )}
 
           <br />
-          <h2>Top Advisors</h2>
           <ul>
             {topAdvisors.map((advisor) => (
               <li className="mt-2 text-center text-gray-700" key={advisor._id}>
@@ -166,24 +218,6 @@ export default function BasicModal() {
               </li>
             ))}
           </ul>
-          <br />
-
-          {advisorInfo && advisorStatus === 'accepted' && panelists.length > 0 && (
-            <div>
-              <h2>Panelists</h2>
-              <ul>
-                {panelists.map((panelist) => (
-                  <li key={panelist._id}>{panelist.name}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-          <br />
-
-          <button onClick={() => setIsEditorOpen(true)}>Upload Manuscript</button>
-          {isEditorOpen && (
-            <CkEditorDocuments userId={user._id} channelId={user.channelId} />
-          )}
         </Box>
       </Modal>
     </div>

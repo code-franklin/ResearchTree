@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import mongoose, { Document, ObjectId } from 'mongoose';
 import User from '../models/User';
-import Proposal from '../models/Proposal';
 import { v4 as uuidv4 } from 'uuid'; // Using UUID to generate a unique channel ID
 
 interface IAdvisor {
@@ -37,20 +36,22 @@ const getTopAdvisors = async (): Promise<IAdvisor[]> => {
   }));
 };
 // Refine analyzeProposal function for better NLP matching
-const analyzeProposal = async (proposalText: string, advisors: IAdvisor[]): Promise<IAdvisor[]> => {
+const analyzeProposal = async (proposalTitle: string, proposalText: string, advisors: IAdvisor[]): Promise<IAdvisor[]> => {
   if (!NlpManager) {
     throw new Error("NlpManager is not loaded yet.");
   }
 
   const manager = new NlpManager({ languages: ['en'], forceNER: true });
 
-  // Adding documents based on specializations
+  // Adding documents based on specializations and proposal title
   advisors.forEach((advisor: IAdvisor) => {
     advisor.specializations.forEach((specialization: string) => {
       manager.addDocument('en', `I am researching ${specialization}`, advisor.id);
       manager.addDocument('en', `My research focuses on ${specialization}`, advisor.id);
       manager.addDocument('en', `I need help with ${specialization}`, advisor.id);
       manager.addDocument('en', `${specialization} is my primary research area`, advisor.id);
+      // Add documents based on proposal title
+      manager.addDocument('en', `My proposal title is ${proposalTitle}`, advisor.id);
     });
   });
 
@@ -72,12 +73,11 @@ const analyzeProposal = async (proposalText: string, advisors: IAdvisor[]): Prom
   return topAdvisors.slice(0, 5); // Return top 5 matching advisors
 };
 
-// Updating the createProposal function
 export const createProposal = async (req: Request, res: Response) => {
-  const { userId, proposalText } = req.body;
+  const { userId, proposalTitle, proposalText } = req.body;
 
-  if (!userId || !proposalText) {
-    return res.status(400).json({ message: 'userId and proposalText are required' });
+  if (!userId || !proposalTitle || !proposalText) {
+    return res.status(400).json({ message: 'userId, proposalTitle and proposalText are required' });
   }
 
   try {
@@ -98,9 +98,17 @@ export const createProposal = async (req: Request, res: Response) => {
     // Generate a unique channelId
     const channelId = uuidv4();
     student.channelId = channelId;
+    await student.save(); // Save the updated channelId to the student's record
+
+    // Create a new proposal object
+    const newProposal = {
+      proposalTitle, // Add proposalTitle to the object
+      proposalText,
+      submittedAt: new Date()
+    };
 
     // Add the new proposal to the user's proposals array
-    student.proposals.push({ proposalText, submittedAt: new Date() });
+    student.proposals.push(newProposal);
     await student.save(); // Save the updated student record
 
     // Fetch advisors excluding those the student has declined
@@ -112,7 +120,7 @@ export const createProposal = async (req: Request, res: Response) => {
     });
 
     // Analyze proposal and get top advisors based on specialization matching
-    const topAdvisors = await analyzeProposal(proposalText, advisors as IAdvisor[]);
+    const topAdvisors = await analyzeProposal(proposalTitle, proposalText, advisors as IAdvisor[]);
 
     // Respond with the top advisors and channelId
     res.status(201).json({ topAdvisors, channelId });
@@ -122,16 +130,39 @@ export const createProposal = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
-// Get Proposal by userId
-export const getProposalByUser = async (req: Request, res: Response) => {
+
+export const getStudentInfoAndProposal = async (req: Request, res: Response) => {
   try {
-      const user = await User.findById(req.params.id).select('name proposals');
-      if (!user) {
-          return res.status(404).json({ message: 'User not found' });
-      }
-      res.json(user);
+    const userId = req.params.userId; // Assuming you're passing the userId as a parameter
+
+    const user = await User.findById(userId)
+      .populate('chosenAdvisor')
+      .populate('panelists');
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Check if advisor is accepted before fetching the proposal
+    const proposal = user.advisorStatus === 'accepted'
+      ? user.proposals[user.proposals.length - 1] // Get the latest proposal
+      : null;
+
+    const response = {
+      chosenAdvisor: user.chosenAdvisor,
+      advisorStatus: user.advisorStatus,
+      panelists: user.panelists,
+      proposal: proposal ? {
+        proposalTitle: proposal.proposalTitle,
+        proposalText: proposal.proposalText,
+        submittedAt: proposal.submittedAt
+      } : null
+    };
+
+    res.status(200).json(response);
   } catch (error) {
-      res.status(500).json({ message: 'Server error' });
+    console.error('Error fetching student info and proposal:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 };
 
@@ -165,22 +196,10 @@ export const chooseAdvisor = async (req: Request, res: Response) => {
   }
 };
 
-/* export const postUploadManuscript = (req: Request, res: Response) => {
-  const { channelId, userId } = req.body;
 
-  if (!channelId || !userId) {
-    return res.status(400).json({ error: 'Missing channelId or userId' });
-  }
+// FOR STUDENT FETCHING THERE OWN ADVICER+
 
-  // Handle the unique channel ID and user ID
-  console.log(`Received upload request: channelId=${channelId}, userId=${userId}`);
-
-  // Here, you can associate the channelId with the userId and store it in your database if needed.
-
-  res.status(200).json({ message: 'Upload process started' });
-}; */
-
-export const getStudentAdvisorInfo = async (req: Request, res: Response) => {
+/* export const getStudentAdvisorInfo = async (req: Request, res: Response) => {
   const { userId } = req.params;
 
   try {
@@ -193,7 +212,7 @@ export const getStudentAdvisorInfo = async (req: Request, res: Response) => {
     console.error('Error fetching student advisor info:', error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
-};
+}; */
 
 // Training Endpoint
 export const trainModel = async (req: Request, res: Response) => {

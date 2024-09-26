@@ -26,14 +26,10 @@
 	width: fit-content;
 	margin-left: -470px;
 	margin-top: -250px;
-	margin-right: auto;
 }
 
 .main-container .presence {
-	position: absolute;
-	top: 40px;
-	
-	
+	margin-bottom: 8px;
 }
 
 .ck-content {
@@ -52,7 +48,6 @@
 }
 
 .editor-container_document-editor .editor-container__toolbar {
-	
 	display: flex;
 	position: relative;
 	box-shadow: 0 2px 3px hsla(0, 0%, 0%, 0.078);
@@ -103,7 +98,7 @@
 	margin-left: 72px;
 	margin-right: 72px;
 
-	color: black;
+	color: black
 }
 
 .editor-container_include-outline .editor-container__editor .ck.ck-editor__editable {
@@ -123,7 +118,7 @@
 }
 
 .revision-history {
-	display: block;
+	display: none;
 }
 
 .revision-history__wrapper {

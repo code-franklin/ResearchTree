@@ -50,7 +50,7 @@ export default function BasicModal() {
 
   const fetchAdvisorInfo = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/student/student-advisor-info/${user._id}`);
+      const response = await fetch(`http://localhost:5000/api/student/advisor-info-StudProposal/${user._id}`);
       if (response.ok) {
         const data = await response.json();
         setAdvisorInfo(data.chosenAdvisor);
@@ -165,6 +165,7 @@ export default function BasicModal() {
           >
             {advisorStatus === 'accepted' && 'Your Adviser'}
           </Typography>
+<<<<<<< HEAD
           {/* Display existing proposal and submitted date */}
           {submittedAt && (
             <div>
@@ -172,6 +173,8 @@ export default function BasicModal() {
               <p><strong>Proposal Text:</strong> {proposal}</p>
             </div>
           )}
+=======
+>>>>>>> 4b40bebdef7c2f0088d5a294f413a01b67d8a21f
 
           {/* Render based on advisor status */}
           {(!advisorInfo || advisorStatus === 'declined') && (
@@ -220,13 +223,13 @@ export default function BasicModal() {
     }}
     color='success'
     minRows={2}
-    placeholder="Write your research title..."
+    placeholder="Write your research proposal..."
     size="sm"
     variant="outlined"
   />
   
   {/* Add a submit button or trigger elsewhere */}
-  <button type="submit" style={{ display: 'none' }}>Submit Proposal</button>
+  <button type="submit" style={{ display: 'block' }}>Submit Proposal</button>
 </form>
 
             </div>

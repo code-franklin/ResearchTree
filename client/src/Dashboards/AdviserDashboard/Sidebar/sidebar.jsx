@@ -6,20 +6,22 @@ import UserAvatar from './Avatar'
 
 
 const Sidebar = ({ onSelect }) => {
+
+  const user = JSON.parse(localStorage.getItem('user'));
   
   return (
     <div className="sidebar z-1 h-screen w-[313px] bg-[#1E1E1E] text-white flex flex-col fixed">
 
         <div>
-        <img className="" src="./src/assets/rstreelogo.png"/>
+        <img className="" src="/src/assets/rstreelogo.png"/>
         </div>
         
       <div className='flex ml-[9px] '>
         <div className="myName ml-[50px] mt-[20px] p-4 text-center">
       <UserAvatar/>
-        <span className="text-[21px] font-semibold">Crisanto Gulay </span>
+        <span className="text-[21px] font-semibold">{user.name}</span>
         
-        <p className="font-light text-[#4B4B4B]">Adviser</p>
+        <p className="font-light text-[#4B4B4B]">{user.role}</p>
         </div>
        
         </div>
@@ -34,7 +36,7 @@ const Sidebar = ({ onSelect }) => {
                      text-white px-2 "
           
         >
-        <img className="inline-block mr-2 mb-1" src="./src/assets/my-manuscript.png"/>
+        <img className="inline-block mr-2 mb-1" src="/src/assets/my-manuscript.png"/>
           My Advisee
         </Link>
 
@@ -47,7 +49,7 @@ const Sidebar = ({ onSelect }) => {
                      text-white px-2 "
          
         >
-        <img className="inline-block mr-2 mb-1" src="./src/assets/explore-manuscript.png"/>
+        <img className="inline-block mr-2 mb-1" src="/src/assets/explore-manuscript.png"/>
           Explore Manuscript
         </Link>
 
@@ -64,13 +66,13 @@ const Sidebar = ({ onSelect }) => {
      
         >
          
-          <img className="inline-block mr-2 mb-1" src="./src/assets/User.png"/>
+          <img className="inline-block mr-2 mb-1" src="/src/assets/User.png"/>
           <span className="text">View Analytics</span>
           
           
         </Link>
 
-        <Link to="AdviserDashboard/"
+{/*         <Link to="AdviserDashboard/"
           className="revision mx-10 
                      focus:font-semibold 
                      focus:ml-[4rem] focus:bg-gradient-to-r from-[#0BF677] to-[#079774] 
@@ -78,9 +80,9 @@ const Sidebar = ({ onSelect }) => {
                      text-white px-2 "
           
         >
-        <img className="inline-block mr-2 mb-1" src="./src/assets/revision-icon.png"/>
+        <img className="inline-block mr-2 mb-1" src="/src/assets/revision-icon.png"/>
           Revision
-        </Link>
+        </Link> */}
 
         
 

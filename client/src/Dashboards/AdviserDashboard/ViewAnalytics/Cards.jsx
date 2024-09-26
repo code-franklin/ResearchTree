@@ -1,5 +1,6 @@
 import React from 'react';
 import './Cards.css';
+import { Link } from 'react-router-dom';
 
 
 import Box from '@mui/material/Box';
@@ -14,6 +15,9 @@ import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
 
 export const Cards = () => {
+
+    const user = JSON.parse(localStorage.getItem('user'));
+    
     const [open, setOpen] = React.useState(false); // Start with the alert closed
 
     // Function to handle the button click
@@ -28,6 +32,8 @@ export const Cards = () => {
 
     return (
         <div>
+
+
             <div className="cards-container">
                 
          
@@ -35,15 +41,16 @@ export const Cards = () => {
                 <div className="year-container"> 
                     
                 <div className="absolute mt-[-8px]">
+
+                    
                 <Dropdown />
 
                 </div>
-                
                     <span className="absolute left-[-1174px] mt-[20px] text-[40px] font-bold">View Analytics</span>
                    <div className="Tooltop">
                      <div className="mt-[12px]">
                             <Tooltip title="Notification" arrow>
-                           <img className="tooltip cursor-pointer w-[auto] inline-block mr-2" src="./src/assets/notification.png" />
+                           <img className="tooltip cursor-pointer w-[auto] inline-block mr-2" src="/src/assets/notification.png" />
                             </Tooltip>
                         </div>
                     </div>
@@ -51,11 +58,11 @@ export const Cards = () => {
 
                 <div className="card">
                     <div className="card-icon-1">
-                        <img className="" src="./src/assets/student-handle.png" />
+                        <img className="" src="/src/assets/student-handle.png" />
                     </div>
                     <div className="card-content">
                         <p className="card-title">Student Handle</p>
-                        <p className="card-value-1 ml-[80px]">7 Groups</p>
+                        <p className="card-value-1 ml-[80px]">{user.handleNumber} Groups</p>
                     </div>
                 </div>
                 <div className="card">
@@ -88,6 +95,8 @@ export const Cards = () => {
                 
                 </div>
             </div>
+
+            
             
             <Box sx={{ position: 'fixed', top: 45, left: 1200, width: '16%', zIndex: 9999 }}>
                 <Collapse in={open}>

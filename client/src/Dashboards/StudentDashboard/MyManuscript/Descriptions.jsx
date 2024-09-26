@@ -6,8 +6,11 @@ const ResearchCard = () => {
   const [advisorInfo, setAdvisorInfo] = useState(null);
   const [advisorStatus, setAdvisorStatus] = useState(null);
   const [panelists, setPanelists] = useState([]);
+  
+  const [proposal, setProposal] = useState('');
   const [channelId, setChannelId] = useState('');
   const [isEditorOpen, setIsEditorOpen] = useState(false);
+
 
   const user = JSON.parse(localStorage.getItem('user'));
 
@@ -17,13 +20,15 @@ const ResearchCard = () => {
   
   const fetchAdvisorInfo = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/student/student-advisor-info/${user._id}`);
+      const response = await fetch(`http://localhost:5000/api/student/advisor-info-StudProposal/${user._id}`);
       if (response.ok) {
         const data = await response.json();
         setAdvisorInfo(data.chosenAdvisor);
         setAdvisorStatus(data.advisorStatus);
         setPanelists(data.panelists || []);
         setChannelId(data.channelId || '');
+        setProposal(data.proposal || {}); 
+        
       } else {
         const errorData = await response.json();
         console.error('Error fetching advisor info:', errorData.message);
@@ -61,6 +66,8 @@ const ResearchCard = () => {
       );
     }
   };
+
+  
   
 
   return (
@@ -71,33 +78,65 @@ const ResearchCard = () => {
           <span className="bg-[#1E1E] text-white px-2 py-0 mr-2">{user.course}</span>
           <div className="absolute ml-[920px]"></div>
         </div>
-        <h1 className="text-2xl font-bold mb-2">
-          Exploring the Impact of Artificial Intelligence on Healthcare: A Comprehensive
-          <br />
-          Analysis of Adoption, Challenges, and Future Directions
-        </h1>
-        <p className="text-gray-500 font-bold mb-4">
-          {user.groupMembers.join(', ')}
-        </p>
+
+{/* details for student */}
+        {advisorStatus === 'accepted' && (
+          <div>
+            <h1 className="text-2xl font-bold mb-2">
+              {proposal?.proposalTitle}
+            </h1>
+            <p className="text-gray-500 font-bold mb-4">
+              {user.groupMembers.join(', ')}
+            </p>
+          </div>
+        )}
+
+        {advisorStatus === 'pending' && (
+          <div>
+            <h1 className="text-2xl font-bold mb-2">
+              Loading title proposal...
+            </h1>
+            <p className="text-gray-500 font-bold mb-4">
+              {user.groupMembers.join(', ')}
+            </p>
+          </div>
+        )}
+
+        {advisorStatus === 'declined' && (
+          <div>
+            <h1 className="text-2xl font-bold mb-2">
+              Submit another title proposal...
+            </h1>
+            <p className="text-gray-500 font-bold mb-4">
+              {user.groupMembers.join(', ')}
+            </p>
+          </div>
+        )}
+
+        
+
+
+{/* <p><strong>Text:</strong> {proposal?.proposalText}</p>  */}
 
 {/* Advisor */}
         <p className="text-gray-400 mb-2">
           <span className="font-bold text-white">Advisor: {getStatusMessage()}</span>
+          <span className="font-bold text-white ml-[81px]">Panelists: </span>
+            <span style={{ color: 'white'}}>
+              {panelists.map((panelist) => panelist.name).join(', ')}
+            </span>
         </p>
 
 {/* Panelist */}
         {advisorInfo && advisorStatus === 'accepted' && panelists.length > 0 && (
           <p className="text-gray-400 mb-2">
-            <span className="font-bold text-white">Panelists: </span>
-            <span style={{ color: 'green' }}>
-              {panelists.map((panelist) => panelist.name).join(', ')}
-            </span>
+         
           </p>
         )}
         
         <div className="text-gray-400 mb-4">
-          <span><span className="font-bold text-white">Uploaded:</span> <span className="mr-5">{user._id}</span></span>
-          <span><span className="font-bold text-white">Date of Published: </span><span>waiting for panelist</span></span>
+        <span><span className="font-bold text-white">Date of Uploaded:</span> <span className="mr-5">{proposal?.submittedAt && new Date(proposal?.submittedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span></span>
+          <span><span className="font-bold text-white">Date of Published: </span><span>Pending to Publish</span></span>
         </div>
         <div className="flex justify-between items-center">
           <div>
@@ -107,13 +146,15 @@ const ResearchCard = () => {
           </div>
           
           <div className="flex items-center">
-            <a onClick={() => setIsEditorOpen(true)} className="text-white mr-4">My Manuscript</a>
+            <a onClick={() => setIsEditorOpen(true)} className="rounded-full text-center text-white mr-4 cursor-pointer w-[120px] h-[37px] border 1px solid #6A6A6A " >
+            <span className='absolute bottom-[67px] ml-[-20px]'>Open</span></a>
 
             {isEditorOpen && (
-              <CkEditorDocuments userId={user._id} channelId={user.channelId}/> 
+             <CkEditorDocuments 
+             width={800}
+             userId={user._id} channelId={user.channelId}/> 
             )}
 
-            <a href="#" className="text-white">View Grade</a>
           </div>
         </div>
       </div>

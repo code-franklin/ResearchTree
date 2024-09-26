@@ -1,13 +1,12 @@
 .chart-1 {
-   display: flex;
-   margin-left: 340px;
-   width: 80%;
-   margin-top: 0px;
-}
-
-.bar-charts {
-    width: 68.3%;
+    display: flex;
+    margin-left: 340px;
+    width: 80%;
+    margin-top: 0px;
+ }
  
-    margin-left: 10px;
-}
-
+ .bar-charts {
+     width: 68.3%;
+  
+     margin-left: 10px;
+ }

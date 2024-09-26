@@ -2,6 +2,7 @@ import mongoose, { Schema, Document, model } from 'mongoose';
 
 // Define interface for the proposal within the user schema
 interface IProposal {
+  proposalTitle: string;
   proposalText: string;
   submittedAt: Date;
 }
@@ -45,6 +46,7 @@ const userSchema: Schema = new Schema<IUser>({
   channelId: { type: String }, // Add the channelId field
   groupMembers: { type: [String], required: function() { return this.role === 'student'; } }, // New groupMembers field
   proposals: [{
+    proposalTitle: { type: String, required: true },
     proposalText: { type: String, required: true },
     submittedAt: { type: Date, default: Date.now },
   }],

@@ -23,8 +23,10 @@ export default function BasicModal() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const [title, setTitle] = useState('');   
   const [proposal, setProposal] = useState('');
   const [submittedAt, setSubmittedAt] = useState(null); // Add this state for submittedAt
+  
   const [topAdvisors, setTopAdvisors] = useState([]);
   const [advisorInfo, setAdvisorInfo] = useState(null);
   const [advisorStatus, setAdvisorStatus] = useState(null);
@@ -35,25 +37,26 @@ export default function BasicModal() {
   const user = JSON.parse(localStorage.getItem('user'));
 
   useEffect(() => {
-    fetchAdvisorInfo();
+    fetchStudentInfoAndProposal();
   }, []);
 
-  const fetchAdvisorInfo = async () => {
+  const fetchStudentInfoAndProposal = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/student/student-advisor-info/${user._id}`);
+      const response = await fetch(`http://localhost:5000/api/student/advisor-info-StudProposal/${user._id}`);
       if (response.ok) {
         const data = await response.json();
         setAdvisorInfo(data.chosenAdvisor);
         setAdvisorStatus(data.advisorStatus);
         setPanelists(data.panelists || []);
-        setProposal(data.proposalText); // Assuming proposalText is returned
-        setSubmittedAt(data.submittedAt); // Assuming submittedAt is returned
+        setProposal(data.proposal || {}); // Set proposal to an empty object if not found
+        setSubmittedAt(data.submittedAt);
+        setChannelId(data.channelId || '');
       } else {
         const errorData = await response.json();
-        console.error('Error fetching advisor info:', errorData.message);
+        console.error('Error fetching student info and proposal:', errorData.message);
       }
     } catch (error) {
-      console.error('Error fetching advisor info:', error.message);
+      console.error('Error fetching student info and proposal:', error.message);
     }
   };
 
@@ -64,14 +67,22 @@ export default function BasicModal() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ userId: user._id, proposalText: proposal }),
+        body: JSON.stringify({ userId: user._id, proposalTitle: title, proposalText: proposal }),
       });
-
+  
       if (response.ok) {
         const data = await response.json();
         setTopAdvisors(data.topAdvisors);
         setSubmittedAt(data.submittedAt); // Set the submittedAt date from response
         console.log('Proposal submitted successfully!');
+
+              // Update the proposal state with the newly submitted data
+      setProposal({
+        proposalTitle: data.proposalTitle,
+        proposalText: data.proposalText,
+        submittedAt: data.submittedAt
+      });
+
       } else {
         const errorData = await response.json();
         console.error('Error submitting proposal:', errorData.message);
@@ -92,7 +103,7 @@ export default function BasicModal() {
       });
       if (response.ok) {
         console.log('Advisor chosen successfully!');
-        fetchAdvisorInfo(); // Refresh advisor info
+        fetchStudentInfoAndProposal(); // Refresh advisor info
       } else {
         const errorData = await response.json();
         console.error('Error choosing advisor:', errorData.message);
@@ -118,25 +129,31 @@ export default function BasicModal() {
             Title Proposals
           </Typography>
 
-          {/* Display existing proposal and submitted date */}
-          {submittedAt && (
-            <div>
-              <p><strong>Submitted At:</strong> {new Date(submittedAt).toLocaleDateString()}</p>
-              <p><strong>Proposal Text:</strong> {proposal}</p>
-            </div>
-          )}
 
           {(!advisorInfo || advisorStatus === 'declined') && (
             <form onSubmit={(e) => { e.preventDefault(); submitProposal(); }}>
+
+              <input
+                className='text-black'
+                type="text"
+                placeholder="Enter Proposal Title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                style={{ marginBottom: '16px', width: '100%' }}
+              />
+              
+              <br />
               <textarea
-                value={proposal}
+                className='text-black'
                 onChange={(e) => setProposal(e.target.value)}
                 placeholder="Write your proposal here..."
+                value={proposal}
                 required
               />
+              
               <br />
-              <button type="submit">Submit Proposal</button>
-            </form>
+            <button type="submit">Submit Proposal</button>
+          </form>
           )}
 
           <br />
@@ -179,6 +196,13 @@ export default function BasicModal() {
             </div>
           )}
           <br />
+
+          <div>
+            <h2>Submitted Proposal</h2>
+            <p><strong>Title:</strong> {proposal?.proposalTitle}</p>
+            <p><strong>Text:</strong> {proposal?.proposalText}</p>
+            <p><strong>Submitted At:</strong> {submittedAt && new Date(submittedAt).toLocaleDateString()}</p>
+          </div>
 
           <button onClick={() => setIsEditorOpen(true)}>Upload Manuscript</button>
           {isEditorOpen && (

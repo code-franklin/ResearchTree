@@ -129,7 +129,7 @@ export default function BasicModal() {
           <Typography
             sx={{
               position: "absolute",
-              marginLeft: "256px",
+              marginLeft: "243px",
               top: "111px",
               fontWeight: "bold"
             }}
@@ -138,10 +138,33 @@ export default function BasicModal() {
             component="h2"
           >
             {advisorStatus === 'declined' && 'Title Proposals'}
-            {advisorStatus === 'pending' && 'Title Proposals'}
+          </Typography>
+          <Typography
+            sx={{
+              position: "absolute",
+              marginLeft: "243px",
+              top: "111px",
+              fontWeight: "bold"
+            }}
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+          >
+            {advisorStatus === 'pending' && 'Title Proposals'} 
+          </Typography>
+          <Typography
+            sx={{
+              position: "absolute",
+              marginLeft: "253px",
+              top: "111px",
+              fontWeight: "bold"
+            }}
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+          >
             {advisorStatus === 'accepted' && 'Your Adviser'}
           </Typography>
-
           {/* Display existing proposal and submitted date */}
           {submittedAt && (
             <div>

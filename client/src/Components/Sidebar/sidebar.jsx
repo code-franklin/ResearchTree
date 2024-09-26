@@ -3,7 +3,7 @@ import React from 'react';
 import "./Sidebar.css";
 import { Link } from 'react-router-dom';
 import UserAvatar from './Avatar'
-
+import HeaderTools from './TitleProposals'
 const Sidebar = ({ onSelect }) => {
 
   const user = JSON.parse(localStorage.getItem('user'));
@@ -20,7 +20,7 @@ const Sidebar = ({ onSelect }) => {
 
       <UserAvatar/>
 
-        <span className="text-[21px] font-semibold">{user.name}</span>
+        <span className="text-[21px] font-semibold ml-2">{user.name}</span>
         
         <p className="font-light text-[#4B4B4B]">{user.role}</p>
         </div>
@@ -92,7 +92,7 @@ const Sidebar = ({ onSelect }) => {
         
       </div>
 
-      <button className="upload-btn w-[230px] h-[50px]  mt-[320px] ml-[36px] text-[20px]"> Upload<img className="inline-block ml-2 mb-1" src="/src/assets/import-icon.png"/></button>
+      <HeaderTools/>
      
     </div>
   );

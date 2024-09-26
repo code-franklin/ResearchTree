@@ -114,8 +114,7 @@ export default function BasicModal() {
 
   return (
     <div>
-      <img onClick={handleOpen} className="tooltip3 cursor-pointer inline-block mr-2 mt-[2px]" src="/src/assets/title-proposals-icon.png" />
-
+      <button onClick={handleOpen} className="bg-black w-[230px] h-[50px]  mt-[20px] ml-[36px] text-[20px]"> </button>
       <Modal
         sx={{border: "none"}}
         open={open}
@@ -130,7 +129,7 @@ export default function BasicModal() {
           <Typography
             sx={{
               position: "absolute",
-              marginLeft: "246px",
+              marginLeft: "256px",
               top: "111px",
               fontWeight: "bold"
             }}
@@ -285,17 +284,20 @@ export default function BasicModal() {
           {advisorInfo && advisorStatus === 'accepted' && (
             <div>
               <div style={{ position: "absolute", borderLeft: '2px solid #373737', height: '240px', top: "210px", left: "350px" }}></div>
-              <Tag icon={<CheckCircleOutlined />} color="#87d068">
+              <Tag 
+              style={{position: 'absolute', marginLeft: '350px', marginTop: '-20px'}}
+              
+              icon={<CheckCircleOutlined />} color="#87d068">
                 Accepted
               </Tag>
               <img
                 src={`http://localhost:5000/public/uploads/${advisorInfo.profileImage}`}
-                className="mt-[80px] ml-[60px] w-[197px] h-[197px] rounded-full border-[5px] border-green-500"
+                className=" mt-[120px] ml-[60px] w-[197px] h-[197px] rounded-full border-[5px] border-green-500"
                 alt={advisorInfo.name}
               />
-              <p className="text-[20px] font-bold ml-[200px]">{advisorInfo.name}</p>
+              <p className="absolute text-[20px] font-bold ml-[350px] mt-[-193px]">{advisorInfo.name}</p>
               
-              <h2 className='font-bold ml-[266px] text-[19px] mt-[25px]'>Your Panelists</h2>
+              <h2 className='font-bold ml-[266px] text-[19px] mt-[66px]'>Your Panelists</h2>
               <ul className='flex ml-[150px] mt-[27px]'>
                 {panelists.map((panelist) => (
                   <li key={panelist._id} className="">

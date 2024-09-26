@@ -5,7 +5,7 @@ import { Cards } from './Statistics'
 import "./Styles/viewAnalytics.css";
 
 import YearDropdown from './YearDropdown'
-import HeaderTools from './HeaderTools'
+
 const Chart = () => {
   return (
        <div className="h-[800px]]">
@@ -14,9 +14,7 @@ const Chart = () => {
       <YearDropdown/>
       </div>
     
-      <div className="absolute right-[57px] top-[27px]">
-      <HeaderTools/>
-      </div>
+     
     
    <div className="bar-charts">
   

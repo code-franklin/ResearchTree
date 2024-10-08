@@ -35,20 +35,24 @@ export default function BasicModal() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const [title, setTitle] = useState('');   
   const [proposal, setProposal] = useState('');
-  const [submittedAt, setSubmittedAt] = useState(null);
+  const [submittedAt, setSubmittedAt] = useState(null); // Add this state for submittedAt
+  
   const [topAdvisors, setTopAdvisors] = useState([]);
   const [advisorInfo, setAdvisorInfo] = useState(null);
   const [advisorStatus, setAdvisorStatus] = useState(null);
   const [panelists, setPanelists] = useState([]);
 
+  const [isEditorOpen, setIsEditorOpen] = useState(false);
+
   const user = JSON.parse(localStorage.getItem('user'));
 
   useEffect(() => {
-    fetchAdvisorInfo();
+    fetchStudentInfoAndProposal();
   }, []);
 
-  const fetchAdvisorInfo = async () => {
+  const fetchStudentInfoAndProposal = async () => {
     try {
       const response = await fetch(`http://localhost:5000/api/student/advisor-info-StudProposal/${user._id}`);
       if (response.ok) {
@@ -56,16 +60,18 @@ export default function BasicModal() {
         setAdvisorInfo(data.chosenAdvisor);
         setAdvisorStatus(data.advisorStatus);
         setPanelists(data.panelists || []);
-        setProposal(data.proposalText);
+        setProposal(data.proposal || {}); // Set proposal to an empty object if not found
         setSubmittedAt(data.submittedAt);
       } else {
         const errorData = await response.json();
-        console.error('Error fetching advisor info:', errorData.message);
+        console.error('Error fetching student info and proposal:', errorData.message);
       }
     } catch (error) {
-      console.error('Error fetching advisor info:', error.message);
+      console.error('Error fetching student info and proposal:', error.message);
     }
   };
+
+  
 
   const submitProposal = async () => {
     try {
@@ -74,14 +80,22 @@ export default function BasicModal() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ userId: user._id, proposalText: proposal }),
+        body: JSON.stringify({ userId: user._id, proposalTitle: title, proposalText: proposal }),
       });
-
+  
       if (response.ok) {
         const data = await response.json();
         setTopAdvisors(data.topAdvisors);
-        setSubmittedAt(data.submittedAt);
+        setSubmittedAt(data.submittedAt); // Set the submittedAt date from response
         console.log('Proposal submitted successfully!');
+
+              // Update the proposal state with the newly submitted data
+      setProposal({
+        proposalTitle: data.proposalTitle,
+        proposalText: data.proposalText,
+        submittedAt: data.submittedAt
+      });
+
       } else {
         const errorData = await response.json();
         console.error('Error submitting proposal:', errorData.message);
@@ -90,7 +104,7 @@ export default function BasicModal() {
       console.error('Error submitting proposal:', error.message);
     }
   };
-
+  
   const chooseAdvisor = async (advisorId) => {
     try {
       const response = await fetch('http://localhost:5000/api/student/choose-advisor', {
@@ -102,7 +116,7 @@ export default function BasicModal() {
       });
       if (response.ok) {
         console.log('Advisor chosen successfully!');
-        fetchAdvisorInfo();
+        fetchStudentInfoAndProposal(); // Refresh advisor info
       } else {
         const errorData = await response.json();
         console.error('Error choosing advisor:', errorData.message);
@@ -133,73 +147,80 @@ export default function BasicModal() {
               top: "111px",
               fontWeight: "bold"
             }}
-            id="modal-modal-title"
-            variant="h6"
-            component="h2"
-          >
-            {advisorStatus === 'declined' && 'Title Proposals'}
-            {advisorStatus === 'pending' && 'Title Proposals'}
-            {advisorStatus === 'accepted' && 'Your Adviser'}
+              id="modal-modal-title"
+              variant="h6"
+              component="h2"
+            >
+              {advisorStatus === 'declined' && 'Title Proposals'}
+              {advisorStatus === 'pending' && 'Title Proposals'}
+              {advisorStatus === 'accepted' && 'Your Adviser'}
           </Typography>
+
 
           {/* Render based on advisor status */}
           {(!advisorInfo || advisorStatus === 'declined') && (
             <div>
               <Tag 
-              style={{position: 'absolute', marginLeft: '100px', marginTop: '-280px'}}
-              icon={<CloseCircleOutlined />} 
-              color="#cd201f">
-               Your Title Proposals is Declined 
+                style={{position: 'absolute', marginLeft: '100px', marginTop: '50px'}}
+                icon={<CloseCircleOutlined />} 
+                color="#cd201f">
+                Your Title Proposals is Declined 
               </Tag>
+              
               <form onSubmit={(e) => { e.preventDefault(); submitProposal(); }}>
-  <Textarea
-    sx={{
-      color: 'white',
-      position: 'absolute',
-      top: '200px',
-      left: '117px',
-      borderRadius: '20px',
-      backgroundColor: '#1E1E1E', 
-      borderColor: '#585050',
-      width: '495px',
-      height: '92px',
-      paddingLeft: '20px',
-      paddingTop:'10px',
-    }}
-    color='success'
-    minRows={2}
-    placeholder="Write your research title..."
-    size="sm"
-    variant="outlined"
-  />
-  
-  <Textarea
-    sx={{
-      color: 'white',
-      position: 'absolute',
-      top: '310px',
-      left: '117px',
-      borderRadius: '20px',
-      backgroundColor: '#1E1E1E', 
-      borderColor: '#585050',
-      width: '495px',
-      height: '92px',
-      paddingLeft: '20px',
-      paddingTop:'10px',
-    }}
-    color='success'
-    minRows={2}
-    placeholder="Write your research proposal..."
-    size="sm"
-    variant="outlined"
-  />
-  
-  {/* Add a submit button or trigger elsewhere */}
-  <button type="submit" style={{ display: 'block' }}>Submit Proposal</button>
-</form>
-
+                <Textarea
+                      sx={{
+                      color: 'white',
+                      position: 'absolute',
+                      top: '200px',
+                      left: '117px',
+                      borderRadius: '20px',
+                      backgroundColor: '#1E1E1E', 
+                      borderColor: '#585050',
+                      width: '495px',
+                      height: '92px',
+                      paddingLeft: '20px',
+                      paddingTop:'10px',
+                    }}
+                      color='success'
+                      minRows={2}
+                      placeholder="Write your research title..."
+                      size="sm"
+                      variant="outlined"
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                />
+                
+                <Textarea
+                      sx={{
+                      color: 'white',
+                      position: 'absolute',
+                      top: '310px',
+                      left: '117px',
+                      borderRadius: '20px',
+                      backgroundColor: '#1E1E1E', 
+                      borderColor: '#585050',
+                      width: '495px',
+                      height: '92px',
+                      paddingLeft: '20px',
+                      paddingTop:'10px',
+                    }}
+                      color='success'
+                      minRows={2}
+                      placeholder="Write your research proposal..."
+                      size="sm"
+                      variant="outlined"
+                      value={proposal}
+                      onChange={(e) => setProposal(e.target.value)}
+                />
+                
+                {/* Add a submit button or trigger elsewhere */}
+                <button type="submit" style={{ display: 'block' }}>Submit Proposal</button>
+                </form>
             </div>
           )}
+
+{/* pending output frontend */}
 
           {advisorInfo && advisorStatus === 'pending' && (
             <div>
@@ -210,65 +231,20 @@ export default function BasicModal() {
               >
                 Waiting for Approval of Adviser
               </Tag>
-              <Textarea
-             sx={{
-              
-              color: 'white',
-              position: 'absolute',
-              top: '187px',
-              left: '117px',
-              borderRadius: '20px',
-              backgroundColor: '#1E1E1E', 
-              borderColor: '#585050',
-              width: '495px',
-              height: '92px',
-              paddingLeft: '20px',
-              paddingTop:'10px',
-    
-            
-             }}
-             color='success'
-             minRows={2}
-             placeholder="Write your research title..."
-             size="sm"
-             variant="outlined"
-           />
 
-            <Textarea
-             sx={{
-              
-              color: 'white',
-              position: 'absolute',
-              top: '290px',
-              left: '117px',
-              borderRadius: '20px',
-              backgroundColor: '#1E1E1E', 
-              borderColor: '#585050',
-              width: '495px',
-              height: '151px',
-              paddingLeft: '20px',
-              paddingTop:'10px',
-    
-            
-             }}
-             color='success'
-             minRows={2}
-             placeholder="Write your research title..."
-             size="sm"
-             variant="outlined"
-           />
-                <img
+            <img
                 src={`http://localhost:5000/public/uploads/${advisorInfo.profileImage}`}
                 className="mt-[358px] ml-[260px] w-[130px] h-[130px] rounded-full "
                 alt={advisorInfo.name}
-              />
-              <p className="text-[20px] font-bold ml-[230px] mt-[13px]">{advisorInfo.name}</p>
-              <Flex style={{marginLeft: '132px', marginTop: '5px'}} gap="4px 0" wrap>
-                    <Tag color="#4E4E4E">Machine Learning</Tag>
-                    <Tag color="#4E4E4E">Mobile App</Tag>
-                    <Tag color="#4E4E4E">Arduino</Tag>
-                    <Tag color="#4E4E4E">Cybersecurity</Tag>
-                  </Flex>
+            />
+            <p className="text-[20px] font-bold ml-[245px] mt-[10px]">{advisorInfo.name}</p>
+
+            <Flex style={{marginLeft: '132px', marginTop: '10px'}} gap="4px 0" wrap>
+                <Tag color="#4E4E4E">Machine Learning</Tag>
+                <Tag color="#4E4E4E">Mobile App</Tag>
+                <Tag color="#4E4E4E">Arduino</Tag>
+                <Tag color="#4E4E4E">Cybersecurity</Tag>
+            </Flex>
 
             </div>
           )}
@@ -306,16 +282,24 @@ export default function BasicModal() {
           )}
 
           <br />
-          <ul>
-            {topAdvisors.map((advisor) => (
-              <li className="mt-2 text-center text-gray-700" key={advisor._id}>
-                {advisor.name}
-                {(!advisorInfo || advisorStatus === 'declined') && (
-                  <button onClick={() => chooseAdvisor(advisor._id)}>Choose Advisor</button>
-                )}
-              </li>
-            ))}
-          </ul>
+          {(!advisorInfo || advisorStatus === 'declined') && (
+            <section className="top-advisors">
+              <h2 className="font-bold ml-[266px] text-[19px] mt-[280px]">Top Advisors</h2>
+              <ul className="flex ml-[150px] mt-[50px]"> {/* Adjusted margin for better spacing */}
+                {topAdvisors.map((advisor) => (
+                  <li className="" key={advisor._id}>
+                    <img
+                      src={`http://localhost:5000/public/uploads/${advisor.profileImage}`}
+                      alt={advisor.name}
+                      className="w-[80px] h-[80px] rounded-full mr-[53px]"
+                      onClick={() => chooseAdvisor(advisor._id)}
+                    />
+                    <p className="text-sm ml-[-17px] mt-[6px]">{advisor.name}</p>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
         </Box>
       </Modal>
     </div>

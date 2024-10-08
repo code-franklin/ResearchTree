@@ -28,7 +28,7 @@ export default function AccountMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  
+
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');

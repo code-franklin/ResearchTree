@@ -40,6 +40,21 @@ const Sidebar = ({ onSelect }) => {
           My Advisee
         </Link>
 
+
+
+        <Link to="AdviserDashboard/Publishing" 
+          className="exploreManuscript mx-10 
+                     
+                     focus:font-semibold 
+                     hover:mr-auto focus:mr-auto focus:ml-[4rem] focus:bg-gradient-to-r from-[#0BF677] to-[#079774] 
+                     hover:font-medium hover:ml-[4rem] 
+                     text-white px-2 "
+         
+        >
+        <img className="inline-block mr-2 mb-1" src="/src/assets/my-manuscript.png"/>
+          Panelist Group
+        </Link>
+
         <Link to="AdviserDashboard/ExploreManuscript" 
           className="exploreManuscript mx-10 
                      

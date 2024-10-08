@@ -14,7 +14,7 @@ import CkEditorDocuments from './CkEditorDocuments'
 const { Text } = Typography;
 
 
-const initialData = [
+/* const initialData = [
   {
     title: 'Exploring the Impact of Artificial Intelligence on Healthcare: A Comprehensive Analysis of Adoption, Challenges, and Future Directions',
     authors: 'Franklin Mayad, Daniel De Torres, Lada Milera',
@@ -22,22 +22,23 @@ const initialData = [
     datePublished: 'October 23 2023',
   }
 
-];
+]; */
 
 const ListManuscript = () => {
-  const [data, setData] = useState(initialData);
-  const [searchResults, setSearchResults] = useState(data);
+  const [data, setData] = useState([]); // Initial data (unused in this example)
+  const [searchResults, setSearchResults] = useState([]);
   const [searchText, setSearchText] = useState('');
-  const [deletedItems, setDeletedItems] = useState([]);
-  const [showDeletedItems, setShowDeletedItems] = useState(false);
+  // ... other state variables for deleted items (removed)
 
-  
   const [acceptedStudents, setAcceptedStudents] = useState([]);
-  
 
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [selectedStudentId, setSelectedStudentId] = useState(null);
   const [selectedChannelId, setSelectedChannelId] = useState(null); // Store channelId
+
+
+  const [showDeletedItems, setShowDeletedItems] = useState(false);
+  const [deletedItems, setDeletedItems] = useState([]);
 
   const user = JSON.parse(localStorage.getItem('user'));
 
@@ -64,6 +65,10 @@ const ListManuscript = () => {
     }
   };
 
+  const handleToggleDeletedItems = () => {
+  setShowDeletedItems(!showDeletedItems);
+};
+  
   const handleViewManuscript = (studentId, channelId) => {
     setSelectedStudentId(studentId);
     setSelectedChannelId(channelId); // Set the correct channelId for the student's manuscript
@@ -82,10 +87,9 @@ const ListManuscript = () => {
 
   const handleSearch = (value) => {
     setSearchText(value);
-    const filteredData = data.filter((item) =>
-      item.title.toLowerCase().includes(value.toLowerCase()) ||
-      item.name.toLowerCase().includes(value.toLowerCase()) ||
-      item.authors.toLowerCase().includes(value.toLowerCase())
+    const filteredData = acceptedStudents.filter((student) =>
+      student.name.toLowerCase().includes(value.toLowerCase()) ||
+      student.groupMembers.join(', ').toLowerCase().includes(value.toLowerCase())
     );
     setSearchResults(filteredData);
   };
@@ -117,6 +121,7 @@ const ListManuscript = () => {
     );
   };
 
+  
   return (
     <div style={{ position: 'absolute', left: '440px', top: '200px', maxWidth: '1150px', height: '641px', borderRadius: '8px', display: 'flex', flexDirection: 'column' }}>
       <div style={{ marginBottom: '16px' }}>
@@ -171,7 +176,7 @@ const ListManuscript = () => {
       <div style={{ marginBottom: '16px', display: 'flex', justifyContent: 'flex-end' }}>
     </div>
 
-{/* Loop List Manuscript */}
+{/* List Manuscript by on Accepted */}
       <div style={{ flex: '1', overflowX: 'hidden' }}>
       {acceptedStudents.map((student) => (
         <List grid={{ gutter: 16, column: 1 }} dataSource={searchResults} renderItem={(item, index) => (
@@ -181,34 +186,18 @@ const ListManuscript = () => {
 
                     {/* Render highlighted title */}
                     <div style={{ color: '#ffffff', marginBottom: '8px', fontSize: '16px', fontWeight: 'bold' }}>
-                      {highlightText(student.proposalTitle, searchText)} {/* change into title proposal */}
+                      {highlightText(student.name, searchText)} {/* change into title proposal */}
                     </div>
 
                     {/* Render highlighted authors */}
                     <Text style={{ color: '#ffffff' }}>
                       <span className="font-bold">Authors: </span>
-                      {highlightText(student.groupMembers
-                        .map(member => member.replace(/([a-z])([A-Z])/g, '$1 $2')) // Insert space between lowercase and uppercase letters
-                        .join(', '))}
+                      {highlightText(student.groupMembers.join(', '), searchText)}
                     </Text>
 
-                    <div style={{ display: 'flex' }}>
-                      <Text style={{ color: '#ffffff', marginRight: '10px' }}>
-                        {student.submittedAt && (
-                          <p>
-                            <span className="font-bold">Date Uploaded:</span> {new Date(student.submittedAt).toLocaleDateString('en-US', {
-                              month: 'short',
-                              day: 'numeric',
-                              year: 'numeric',
-                            })}
-                          </p>
-                        )}
-                      </Text>
 
-                      <Text style={{ color: '#ffffff' }}>
-                        <span className="font-bold">Date Published:</span> {item.datePublished}
-                      </Text>
-                    </div>
+
+                    
                 </div>
 
                 <div style={{ background: '#222222', boxShadow: '-6px 0px 6.9px 0px rgba(0, 0, 0, 0.25)', height: '117px', width: '205px', alignItems: 'center', paddingLeft: '44px', display: 'flex', gap: '10px' }}>

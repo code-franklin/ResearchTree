@@ -11,12 +11,16 @@ const ResearchCard = () => {
   const [channelId, setChannelId] = useState('');
   const [isEditorOpen, setIsEditorOpen] = useState(false);
 
+  // button edit for Title
+  const [isEditingProposalTitle, setIsEditingProposalTitle] = useState(false);
+  const [newProposalTitle, setNewProposalTitle] = useState('');
+
 
   const user = JSON.parse(localStorage.getItem('user'));
 
   useEffect(() => {
     fetchAdvisorInfo();
-  }, []);
+  }, [isEditingProposalTitle]);
   
   const fetchAdvisorInfo = async () => {
     try {
@@ -38,9 +42,38 @@ const ResearchCard = () => {
     }
   };
 
+  const handleEditProposalTitle = () => {
+    setIsEditingProposalTitle(true);
+  };
+  
+  const handleSaveProposalTitle = async () => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/student/update-proposal-title/${user._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ newTitle: newProposalTitle }),
+      });
+  
+      if (response.ok) {
+        const updatedProposal = await response.json();
+        setProposal(updatedProposal);
+        setIsEditingProposalTitle(false);
+      } else {
+        const errorData = await response.json();
+        console.error('Error updating proposal title:', errorData.message);
+      }
+    } catch (error) {
+      console.error('Error updating proposal title:', error.message);
+    }
+  };
+
   // Function to display status message based on advisorStatus
-  const getStatusMessage = () => {
-    if (advisorStatus === 'pending') {
+  const getStatusMessage = (advisorStatus, advisorInfo) => {
+    if (advisorStatus === 'accepted') {
+      return advisorInfo.name; // Just return the advisor name
+    } else if (advisorStatus === 'pending') {
       return (
         <span style={{ color: 'orange' }}>
           Waiting for advisor to accept your proposal.
@@ -59,12 +92,21 @@ const ResearchCard = () => {
         </span>
       );
     } else {
-      return (
-        <span style={{ color: 'white' }}>
-          {advisorInfo.name}
-        </span>
-      );
+      // Default case: Display advisor name only if advisor is assigned but status is unknown
+      return advisorInfo.name;
     }
+  };
+  
+  const PanelistList = ({ panelists }) => {
+    if (!panelists || panelists.length === 0) {
+      return null; // Don't render anything if no panelists
+    }
+  
+    return (
+      <span style={{ color: 'white' }}>
+        <span className="font-bold text-white ml-[81px]">Panelists: {panelists.map((panelist) => panelist.name).join(', ')} </span>
+      </span>
+    );
   };
 
   
@@ -83,10 +125,22 @@ const ResearchCard = () => {
         {advisorStatus === 'accepted' && (
           <div>
             <h1 className="text-2xl font-bold mb-2">
-              {proposal?.proposalTitle}
+              {isEditingProposalTitle ? (
+                <input
+                  type="text"
+                  value={newProposalTitle}
+                  onChange={(e) => setNewProposalTitle(e.target.value)}
+                  onBlur={handleSaveProposalTitle}
+                />
+              ) : (
+                proposal?.proposalTitle
+              )}
             </h1>
+            <button onClick={handleEditProposalTitle}>Edit</button>
             <p className="text-gray-500 font-bold mb-4">
-              {user.groupMembers.join(', ')}
+              {student.groupMembers
+                .map(member => member.replace(/([a-z])([A-Z])/g, '$1 $2')) // Insert space between lowercase and uppercase letters
+                .join(', ')}
             </p>
           </div>
         )}
@@ -97,7 +151,9 @@ const ResearchCard = () => {
               Loading title proposal...
             </h1>
             <p className="text-gray-500 font-bold mb-4">
-              {user.groupMembers.join(', ')}
+              {student.groupMembers
+                .map(member => member.replace(/([a-z])([A-Z])/g, '$1 $2')) // Insert space between lowercase and uppercase letters
+                .join(', ')}
             </p>
           </div>
         )}
@@ -108,7 +164,22 @@ const ResearchCard = () => {
               Submit another title proposal...
             </h1>
             <p className="text-gray-500 font-bold mb-4">
-              {user.groupMembers.join(', ')}
+              {student.groupMembers
+                .map(member => member.replace(/([a-z])([A-Z])/g, '$1 $2')) // Insert space between lowercase and uppercase letters
+                .join(', ')}
+            </p>
+          </div>
+        )}
+
+        {!advisorStatus && (
+          <div>
+            <h1 className="text-2xl font-bold mb-2">
+              Submit title proposal...
+            </h1>
+            <p className="text-gray-500 font-bold mb-4">
+              {student.groupMembers
+                .map(member => member.replace(/([a-z])([A-Z])/g, '$1 $2')) // Insert space between lowercase and uppercase letters
+                .join(', ')}
             </p>
           </div>
         )}
@@ -117,14 +188,10 @@ const ResearchCard = () => {
 
 
 {/* <p><strong>Text:</strong> {proposal?.proposalText}</p>  */}
-
-{/* Advisor */}
+        {/* Advisor */}
         <p className="text-gray-400 mb-2">
-          <span className="font-bold text-white">Advisor: {getStatusMessage()}</span>
-          <span className="font-bold text-white ml-[81px]">Panelists: </span>
-            <span style={{ color: 'white'}}>
-              {panelists.map((panelist) => panelist.name).join(', ')}
-            </span>
+          <span className="font-bold text-white">Advisor: {getStatusMessage(advisorStatus, advisorInfo)}</span>
+          {advisorStatus === 'accepted' && <PanelistList panelists={panelists} />}
         </p>
 
 {/* Panelist */}

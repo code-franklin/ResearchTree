@@ -3,8 +3,6 @@ import {
     registration, 
     login, 
     getSpecializations,
-    getAllProposals, 
-    getProposalsByUserId,
     listStudentsManage,
     updateStatusStudent,
     getAdviserStudents,
@@ -24,11 +22,6 @@ router.post('/login', login);
 router.get('/get-ckeditor-token/:userId', getToken);
 
 router.get('/specializations', getSpecializations);
-
-// admin & advicer
-router.get('/proposals', getAllProposals);
-router.get('/proposals/:userId', getProposalsByUserId);
-
 
 // Adviser routes
 router.get('/advisor-students/:advisorId', getAdviserStudents);

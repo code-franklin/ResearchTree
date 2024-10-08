@@ -2,8 +2,8 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/User';
-import Specialization from '../models/Specialization';
-import Proposal from '../models/Proposal';
+import Specialization from '../models/Specialization';/* 
+import Proposal from '../models/Proposal'; */
 
 export const registration = async (req: Request, res: Response) => {
   const { name, email, password, role, course, year, handleNumber, groupMembers } = req.body;
@@ -120,7 +120,7 @@ export const getToken = async (req: Request, res: Response) => {
 
 /* admin & advicer */
 
-// Get all proposals
+/* // Get all proposals
 export const getAllProposals = async (req: Request, res: Response) => {
   try {
     const proposals = await Proposal.find().populate('userId', 'name email');
@@ -129,9 +129,9 @@ export const getAllProposals = async (req: Request, res: Response) => {
     console.error('Error fetching proposals:', error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
-};
+}; */
 /* admin & advicer */
-// Get proposals by user ID
+/* // Get proposals by user ID
 export const getProposalsByUserId = async (req: Request, res: Response) => {
   const { userId } = req.params;
 
@@ -142,7 +142,7 @@ export const getProposalsByUserId = async (req: Request, res: Response) => {
     console.error('Error fetching proposals by user ID:', error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
-};
+}; */
 /* admin & advicer */
   export const listStudentsManage = async (req: Request, res: Response) => {
   const { advisorId } = req.params;
@@ -188,16 +188,37 @@ export const getAdviserStudents = async (req: Request, res: Response) => {
   const { advisorId } = req.params;
 
   try {
-    const acceptedStudents = await User.find({ chosenAdvisor: advisorId, advisorStatus: 'accepted' });
+    // Fetch the students who have the current advisor and have been accepted
+    const acceptedStudents = await User.find(
+      { chosenAdvisor: advisorId, advisorStatus: 'accepted' },
+      'name groupMembers proposals' // Select the fields you need (name, groupMembers, proposals)
+    ).lean(); // Use .lean() for faster queries with plain JavaScript objects
+    
+    
     const declinedStudents = await User.find({ chosenAdvisor: advisorId, advisorStatus: 'declined' });
-    const studentsToManage = await User.find({ chosenAdvisor: advisorId, advisorStatus: 'pending' || null });
+    const studentsToManage = await User.find({ chosenAdvisor: advisorId, advisorStatus: 'pending' });
 
-    res.status(200).json({ acceptedStudents, declinedStudents, studentsToManage });
+    // Map through acceptedStudents to fetch the latest proposal for each student
+    const studentData = acceptedStudents.map(student => {
+      // Assuming we are interested in the latest proposal (could be changed to a specific logic if needed)
+      const latestProposal = student.proposals.length > 0 ? student.proposals[student.proposals.length - 1] : null;
+
+      return {
+        _id: student._id,
+        name: student.name,
+        groupMembers: student.groupMembers,
+        proposalTitle: latestProposal ? latestProposal.proposalTitle : 'No proposal submitted',
+        submittedAt: latestProposal ? latestProposal.submittedAt : null
+      };
+    });
+
+    res.status(200).json({ acceptedStudents: studentData, declinedStudents, studentsToManage  });
   } catch (error) {
     console.error('Error fetching students:', error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+
 
 /* accepted opr declined the student */
 
@@ -228,12 +249,30 @@ export const getPanelistStudents = async (req: Request, res: Response) => {
   const { advisorId } = req.params;
 
   try {
-    // Filter students who have been accepted by the panelist
-    const students = await User.find({ panelists: advisorId, advisorStatus: 'accepted' }).populate('panelists');
-    res.status(200).json({ panelistStudents: students });
+    // Fetch students who have the advisor as a panelist and have been accepted
+    const panelistStudents = await User.find(
+      { panelists: advisorId, advisorStatus: 'accepted' },
+      'name groupMembers proposals' // Select necessary fields (name, groupMembers, proposals)
+    ).lean();
+
+    // Map through students and extract the latest proposal details
+    const studentData = panelistStudents.map(student => {
+      const latestProposal = student.proposals.length > 0 ? student.proposals[student.proposals.length - 1] : null;
+
+      return {
+        _id: student._id,
+        name: student.name,
+        groupMembers: student.groupMembers,
+        proposalTitle: latestProposal ? latestProposal.proposalTitle : 'No proposal submitted',
+        submittedAt: latestProposal ? latestProposal.submittedAt : null,
+      };
+    });
+
+    res.status(200).json({ panelistStudents: studentData });
   } catch (error) {
     console.error('Error fetching panelist students:', error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+
 

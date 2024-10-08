@@ -84,7 +84,6 @@ const ListManuscript = () => {
     setSearchText(value);
     const filteredData = data.filter((item) =>
       item.title.toLowerCase().includes(value.toLowerCase()) ||
-      item.name.toLowerCase().includes(value.toLowerCase()) ||
       item.authors.toLowerCase().includes(value.toLowerCase())
     );
     setSearchResults(filteredData);
@@ -181,28 +180,18 @@ const ListManuscript = () => {
 
                     {/* Render highlighted title */}
                     <div style={{ color: '#ffffff', marginBottom: '8px', fontSize: '16px', fontWeight: 'bold' }}>
-                      {highlightText(student.proposalTitle, searchText)} {/* change into title proposal */}
+                      {highlightText(student.name, searchText)} {/* change into title proposal */}
                     </div>
 
                     {/* Render highlighted authors */}
                     <Text style={{ color: '#ffffff' }}>
                       <span className="font-bold">Authors: </span>
-                      {highlightText(student.groupMembers
-                        .map(member => member.replace(/([a-z])([A-Z])/g, '$1 $2')) // Insert space between lowercase and uppercase letters
-                        .join(', '))}
+                      {highlightText(student.groupMembers.join(', '), searchText)}
                     </Text>
 
                     <div style={{ display: 'flex' }}>
                       <Text style={{ color: '#ffffff', marginRight: '10px' }}>
-                        {student.submittedAt && (
-                          <p>
-                            <span className="font-bold">Date Uploaded:</span> {new Date(student.submittedAt).toLocaleDateString('en-US', {
-                              month: 'short',
-                              day: 'numeric',
-                              year: 'numeric',
-                            })}
-                          </p>
-                        )}
+                        <span className="font-bold">Date Uploaded:</span> {item.dateUploaded} {/* can you add the submittedAt date of proposal */}
                       </Text>
 
                       <Text style={{ color: '#ffffff' }}>

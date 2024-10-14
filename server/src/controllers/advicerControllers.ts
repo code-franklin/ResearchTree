@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import User from '../models/User';
 import Specialization from '../models/Specialization';/* 
 import Proposal from '../models/Proposal'; */
+import { ObjectId } from 'mongodb';
 
 export const registration = async (req: Request, res: Response) => {
   const { name, email, password, role, course, year, handleNumber, groupMembers } = req.body;
@@ -188,33 +189,88 @@ export const getAdviserStudents = async (req: Request, res: Response) => {
   const { advisorId } = req.params;
 
   try {
-    // Fetch the students who have the current advisor and have been accepted
     const acceptedStudents = await User.find(
       { chosenAdvisor: advisorId, advisorStatus: 'accepted' },
-      'name groupMembers proposals' // Select the fields you need (name, groupMembers, proposals)
-    ).lean(); // Use .lean() for faster queries with plain JavaScript objects
-    
-    
+      'name groupMembers channelId proposals tasks'
+    ).lean();
+
     const declinedStudents = await User.find({ chosenAdvisor: advisorId, advisorStatus: 'declined' });
     const studentsToManage = await User.find({ chosenAdvisor: advisorId, advisorStatus: 'pending' });
 
-    // Map through acceptedStudents to fetch the latest proposal for each student
-    const studentData = acceptedStudents.map(student => {
-      // Assuming we are interested in the latest proposal (could be changed to a specific logic if needed)
+    const studentData = acceptedStudents.map((student) => {
       const latestProposal = student.proposals.length > 0 ? student.proposals[student.proposals.length - 1] : null;
-
       return {
         _id: student._id,
         name: student.name,
         groupMembers: student.groupMembers,
+        channelId: student.channelId,
         proposalTitle: latestProposal ? latestProposal.proposalTitle : 'No proposal submitted',
-        submittedAt: latestProposal ? latestProposal.submittedAt : null
+        submittedAt: latestProposal ? latestProposal.submittedAt : null,
+        tasks: student.tasks, // Include tasks
       };
     });
 
     res.status(200).json({ acceptedStudents: studentData, declinedStudents, studentsToManage  });
   } catch (error) {
     console.error('Error fetching students:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+
+// Add Task API - POST /api/advicer/add-task/:studentId
+export const addTaskMyAdvicee = async (req: Request, res: Response) => {
+  const { studentId } = req.params;
+  const { taskTitle } = req.body;
+
+  try {
+    const student = await User.findById(studentId);
+    if (!student) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+
+    // Add the new task
+    student.tasks.push({
+      taskTitle, isCompleted: false,
+      _id: new ObjectId
+    });
+    await student.save();
+
+    res.status(200).json({ message: 'Task added successfully' });
+  } catch (error) {
+    console.error('Error adding task:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+
+export const getPanelistStudents = async (req: Request, res: Response) => {
+  const { advisorId } = req.params;
+
+  try {
+    // Fetch students who have the advisor as a panelist and have been accepted
+    const panelistStudents = await User.find(
+      { panelists: advisorId, advisorStatus: 'accepted' },
+      'name groupMembers channelId proposals' // Select necessary fields (name, groupMembers, proposals)
+    ).lean();
+
+    // Map through students and extract the latest proposal details
+    const studentData = panelistStudents.map(student => {
+      const latestProposal = student.proposals.length > 0 ? student.proposals[student.proposals.length - 1] : null;
+
+      return {
+        _id: student._id,
+        name: student.name,
+        groupMembers: student.groupMembers,
+        channelId: student.channelId,
+        proposalTitle: latestProposal ? latestProposal.proposalTitle : 'No proposal submitted',
+        submittedAt: latestProposal ? latestProposal.submittedAt : null,
+      };
+    });
+
+    res.status(200).json({ panelistStudents: studentData });
+  } catch (error) {
+    console.error('Error fetching panelist students:', error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
@@ -244,35 +300,3 @@ export const respondToStudent = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
-
-export const getPanelistStudents = async (req: Request, res: Response) => {
-  const { advisorId } = req.params;
-
-  try {
-    // Fetch students who have the advisor as a panelist and have been accepted
-    const panelistStudents = await User.find(
-      { panelists: advisorId, advisorStatus: 'accepted' },
-      'name groupMembers proposals' // Select necessary fields (name, groupMembers, proposals)
-    ).lean();
-
-    // Map through students and extract the latest proposal details
-    const studentData = panelistStudents.map(student => {
-      const latestProposal = student.proposals.length > 0 ? student.proposals[student.proposals.length - 1] : null;
-
-      return {
-        _id: student._id,
-        name: student.name,
-        groupMembers: student.groupMembers,
-        proposalTitle: latestProposal ? latestProposal.proposalTitle : 'No proposal submitted',
-        submittedAt: latestProposal ? latestProposal.submittedAt : null,
-      };
-    });
-
-    res.status(200).json({ panelistStudents: studentData });
-  } catch (error) {
-    console.error('Error fetching panelist students:', error);
-    res.status(500).json({ message: 'Internal Server Error' });
-  }
-};
-
-

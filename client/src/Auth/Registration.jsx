@@ -12,13 +12,94 @@ const LoginFunction = () => {
   const [form] = Form.useForm();
   const [clientReady, setClientReady] = useState(false);
 
-  // To disable submit button at the beginning. test
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    role: 'student',
+    profileImage: null,
+    specializations: [],
+    course: '', // For student course
+    year: '', // For student year
+    handleNumber: '', // For adviser handle number
+    groupMembers: [] // New field for group members
+  });
+  const [specializationsOptions, setSpecializationsOptions] = useState([]);
+  const [message, setMessage] = useState('');
+
+  // Generate years from 1900 to 2100
+  const startYear = 2000;
+  const endYear = 2100;
+  const yearOptions = Array.from({ length: endYear - startYear + 1 }, (_, i) => ({
+    value: startYear + i,
+    label: startYear + i,
+  }));
+
+  const courseOptions = [
+    { value: 'BSIT', label: 'BSIT' },
+    { value: 'BSCS', label: 'BSCS' },
+  ];
+
   useEffect(() => {
+    const fetchSpecializations = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/advicer/specializations');
+        setSpecializationsOptions(response.data.map(spec => ({ value: spec.name, label: spec.name })));
+      } catch (error) {
+        console.error('Error fetching specializations:', error);
+      }
+    };
+    
+    fetchSpecializations();
     setClientReady(true);
   }, []);
   const onFinish = (values) => {
     console.log('Finish:', values);
   };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
+  const handleFileChange = (e) => {
+    setFormData({ ...formData, profileImage: e.target.files[0] });
+  };
+
+  const handleSpecializationsChange = (selectedOptions) => {
+    setFormData({ ...formData, specializations: selectedOptions.map(option => option.value) });
+  };
+
+  const handleGroupMembersChange = (e) => {
+    setFormData({ ...formData, groupMembers: e.target.value.split(',').map(member => member.trim()) });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const data = new FormData();
+    data.append('name', formData.name);
+    data.append('email', formData.email);
+    data.append('password', formData.password);
+    data.append('role', formData.role);
+    data.append('profileImage', formData.profileImage);
+    data.append('specializations', JSON.stringify(formData.specializations));
+    data.append('course', formData.course);
+    data.append('year', formData.year);
+    data.append('handleNumber', formData.handleNumber);
+    data.append('groupMembers', JSON.stringify(formData.groupMembers)); // Add group members
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/advicer/register', data);
+      setMessage(response.data.message);
+    } catch (error) {
+      console.error(error.response.data);
+      setMessage('Registration failed. Please try again.');
+    }
+  };
+
   
   return (
     <div className="rectangle">

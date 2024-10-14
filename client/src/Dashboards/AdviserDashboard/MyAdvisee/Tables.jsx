@@ -8,8 +8,8 @@ import TabsButton from './Tabs'
 import TextHeader from './TextHeader'
 
 
-import CkEditorDocuments from './CkEditorDocuments'
-
+import CkEditorDocuments from '../../../CKeditorDocuments'
+import NewTables from './NewTables';
 
 const { Text } = Typography;
 
@@ -21,7 +21,6 @@ const initialData = [
     dateUploaded: 'October 23 2023',
     datePublished: 'October 23 2023',
   }
-
 ];
 
 const ListManuscript = () => {
@@ -35,16 +34,14 @@ const ListManuscript = () => {
   const [acceptedStudents, setAcceptedStudents] = useState([]);
   
 
+  const [channelId, setChannelId] = useState('');
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [selectedStudentId, setSelectedStudentId] = useState(null);
   const [selectedChannelId, setSelectedChannelId] = useState(null); // Store channelId
 
   const user = JSON.parse(localStorage.getItem('user'));
 
-  useEffect(() => {
-    fetchStudents();
-  }, []);
-
+useEffect(() => {
   const fetchStudents = async () => {
     try {
       const response = await fetch(`http://localhost:5000/api/advicer/advisor-students/${user._id}`, {
@@ -63,6 +60,10 @@ const ListManuscript = () => {
       console.error('Error fetching students:', error.message);
     }
   };
+    fetchStudents();
+}, [])
+
+  // console.log(acceptedStudents)
 
   const handleViewManuscript = (studentId, channelId) => {
     setSelectedStudentId(studentId);
@@ -70,35 +71,15 @@ const ListManuscript = () => {
     setIsEditorOpen(true);
   };
 
-  const handleDelete = (index) => {
-    const itemToDelete = data[index];
-    const newData = [...data];
-    newData.splice(index, 1);
-    setData(newData);
-    setSearchResults(newData);
-    setDeletedItems([...deletedItems, itemToDelete]);
-    message.success('Item deleted successfully');
-  };
-
   const handleSearch = (value) => {
     setSearchText(value);
     const filteredData = data.filter((item) =>
       item.title.toLowerCase().includes(value.toLowerCase()) ||
-      item.name.toLowerCase().includes(value.toLowerCase()) ||
       item.authors.toLowerCase().includes(value.toLowerCase())
     );
     setSearchResults(filteredData);
   };
 
-  const handleRestore = (index) => {
-    const itemToRestore = deletedItems[index];
-    setData([...data, itemToRestore]);
-    setSearchResults([...data, itemToRestore]);
-    const newDeletedItems = [...deletedItems];
-    newDeletedItems.splice(index, 1);
-    setDeletedItems(newDeletedItems);
-    message.success('Item restored successfully');
-  };
 
   const highlightText = (text, search) => {
     if (!search) return text;
@@ -148,15 +129,6 @@ const ListManuscript = () => {
           <div>
             <TextHeader/>
             <TabsButton />
-
-            <Button 
-              type="primary" 
-              onClick={() => setShowDeletedItems(true)}
-              style={{position: 'absolute', top: '-20px', left: '1095px'}}
-              >
-              <RestoreIcon />
-            </Button>
-
             <Input
                 placeholder="Search articles..."
                 value={searchText}
@@ -181,33 +153,36 @@ const ListManuscript = () => {
 
                     {/* Render highlighted title */}
                     <div style={{ color: '#ffffff', marginBottom: '8px', fontSize: '16px', fontWeight: 'bold' }}>
-                      {highlightText(student.proposalTitle, searchText)} {/* change into title proposal */}
+                    {highlightText(student.proposalTitle)}
+                      
                     </div>
 
                     {/* Render highlighted authors */}
                     <Text style={{ color: '#ffffff' }}>
                       <span className="font-bold">Authors: </span>
                       {highlightText(student.groupMembers
-                        .map(member => member.replace(/([a-z])([A-Z])/g, '$1 $2')) // Insert space between lowercase and uppercase letters
-                        .join(', '))}
+                          .map(member => member.replace(/([a-z])([A-Z])/g, '$1 $2')) // Insert space between lowercase and uppercase letters
+                          .join(', '))}
                     </Text>
 
                     <div style={{ display: 'flex' }}>
                       <Text style={{ color: '#ffffff', marginRight: '10px' }}>
-                        {student.submittedAt && (
-                          <p>
-                            <span className="font-bold">Date Uploaded:</span> {new Date(student.submittedAt).toLocaleDateString('en-US', {
-                              month: 'short',
-                              day: 'numeric',
-                              year: 'numeric',
-                            })}
-                          </p>
-                        )}
+                      {student.submittedAt && (
+                            <p>
+                              <span className="font-bold">Date Uploaded:</span> {new Date(student.submittedAt).toLocaleDateString('en-US', {
+                                month: 'short',
+                                day: 'numeric',
+                                year: 'numeric',
+                              })}
+                            </p>
+                          )}
                       </Text>
 
                       <Text style={{ color: '#ffffff' }}>
                         <span className="font-bold">Date Published:</span> {item.datePublished}
+                        {/* <br />ChannelID: {student.channelId} */}
                       </Text>
+
                     </div>
                 </div>
 
@@ -240,47 +215,6 @@ const ListManuscript = () => {
       <CkEditorDocuments userId={user._id} channelId={selectedChannelId} onClose={() => setIsEditorOpen(false)} />
     )}
 
-  {/* MODAL FOR RESTORING the DELETED Manuscript */}
-      <Modal style={{ position: 'absolute', left: '460px', top: '20px' }} title="Deleted Items" visible={showDeletedItems} onCancel={() => setShowDeletedItems(false)} footer={null} width={1000}>
-        <div style={{ maxHeight: '730px', overflowX: 'hidden', paddingTop: '20px' }}>
-          <List grid={{ gutter: 16, column: 1 }} dataSource={deletedItems} renderItem={(item, index) => (
-              <List.Item>
-                <div style={{ height: '130px', width: '950px', padding: '30px', borderRadius: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', transition: 'all 0.3s ease', cursor: 'pointer', background: '#222222', color: '#ffffff'}}>
-                  <div>
-
-                    <div style={{ marginBottom: '8px', fontSize: '16px', fontWeight: 'bold' }}>
-                      {item.title}
-                    </div>
-
-                    <Text style={{ marginRight: '10px', color: 'white' }}>
-                      <span className="font-bold">Authors: </span>{item.authors}
-                    </Text>
-
-                    <div>
-                      <Text style={{ marginRight: '10px', color: 'white' }}>
-                        <span className="font-bold">Date Uploaded:</span> {item.dateUploaded}
-                      </Text>
-
-                      <Text style={{ marginRight: '10px', color: 'white' }}>
-                        <span className="font-bold">Date Published:</span> {item.datePublished}
-                      </Text>
-                      
-                    </div>
-                  </div>
-
-                  <Button
-                    icon={<UndoOutlined />}
-                    type="primary"
-                    onClick={() => handleRestore(index)}
-                  >
-                    Restore
-                  </Button>
-                </div>
-              </List.Item>
-            )}
-          />
-        </div>
-      </Modal>
       </ConfigProvider>
      
     </div>

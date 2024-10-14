@@ -166,6 +166,37 @@ export const getStudentInfoAndProposal = async (req: Request, res: Response) => 
   }
 };
 
+export const markTaskAsCompleted = async (req: Request, res: Response) => {
+  const { taskId } = req.params;
+
+  try {
+    // Find the student with the specific task
+    const student = await User.findOne({ 'tasks._id': taskId });
+    if (!student) {
+      return res.status(404).json({ message: 'Task not found' });
+    }
+
+    // Use Mongoose's .id() method to find the task by its _id
+    const task = student.tasks.id(taskId);
+    if (!task) {
+      return res.status(404).json({ message: 'Task not found' });
+    }
+
+    // Mark task as completed
+    task.isCompleted = true;
+    console.log('Task before saving:', task); // Log the task state
+    await student.save();
+
+    // After saving the student
+    res.status(200).json({ message: 'Task marked as completed', task });
+  } catch (error) {
+    console.error('Error updating task:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+
+
 export const updateProposalTitle = async (req: Request, res: Response) => {
   try {
     const userId = req.params.userId;

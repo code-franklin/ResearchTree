@@ -31,9 +31,9 @@ export default function TabsSegmentedControls() {
         }}
       >
         
-        <Tab disableIndicator>New Uploads</Tab>
-        <Tab disableIndicator>Ongoing Revise</Tab>
-        <Tab disableIndicator>Done</Tab>
+        <Tab disableIndicator>List Manuscript</Tab>
+        <Tab disableIndicator>Ongoing Revise for Advicer</Tab>
+        <Tab disableIndicator>On Panelist</Tab>
       </TabList>
     </Tabs>
   );

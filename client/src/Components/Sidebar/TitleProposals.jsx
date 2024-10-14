@@ -10,11 +10,7 @@ import {
 } from '@ant-design/icons';
 import { Tag , Flex } from 'antd';
 
-
 import Textarea from '@mui/joy/Textarea';
-
-
-
 
 const style = {
   position: 'absolute',
@@ -143,7 +139,7 @@ export default function BasicModal() {
           <Typography
             sx={{
               position: "absolute",
-              marginLeft: "243px",
+              marginLeft: "223px",
               top: "111px",
               fontWeight: "bold"
             }}
@@ -161,10 +157,10 @@ export default function BasicModal() {
           {(!advisorInfo || advisorStatus === 'declined') && (
             <div>
               <Tag 
-                style={{position: 'absolute', marginLeft: '100px', marginTop: '50px'}}
-                icon={<CloseCircleOutlined />} 
-                color="#cd201f">
-                Your Title Proposals is Declined 
+              style={{position: 'absolute', marginLeft: '100px', marginTop: '80px'}}
+              icon={<CloseCircleOutlined />} 
+              color="#cd201f">
+               Your Title Proposals is Declined 
               </Tag>
               
               <form onSubmit={(e) => { e.preventDefault(); submitProposal(); }}>

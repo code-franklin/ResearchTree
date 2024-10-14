@@ -3,31 +3,30 @@ import { Select } from 'antd';
 const handleChange = (value) => {
   console.log(value); // { value: "lucy", key: "lucy", label: "Lucy (101)" }
 };
-const Course = () => (
+const Section = () => (
   
 
   <Select
     
     labelInValue
     defaultValue={{
-      value: 'Course',
-      label: 'Course',
+      value: 'Role',
+      label: 'Role',
     }}
     style={{
       width: 120,
       height: 32,
-      marginTop: '-100px',
       
     }}
     onChange={handleChange}
     options={[
       {
-        value: 'BSIT',
-        label: 'BSIT',
+        value: 'Student',
+        label: 'Student',
       },
       {
-        value: 'BSCS',
-        label: 'BSCS',
+        value: 'Adviser',
+        label: 'Adviser',
       },
     ]}
   />
@@ -35,4 +34,4 @@ const Course = () => (
           
 
 );
-export default Course;
+export default Section;

@@ -1,17 +1,16 @@
-
 import React, { useEffect, useState } from 'react';
 import './register.css';
-
-import Course from './Course'
-
+import axios from 'axios';
+import Course from './Course';
+import Year from './Year';
+import Role from './Role';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, ConfigProvider, Form, Input, Alert, Typography } from 'antd';
+import { Button, Form, Input, Alert, Select } from 'antd';
 
+const { Option } = Select;
 
 const LoginFunction = () => {
   const [form] = Form.useForm();
-  const [clientReady, setClientReady] = useState(false);
-
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -19,27 +18,14 @@ const LoginFunction = () => {
     role: 'student',
     profileImage: null,
     specializations: [],
-    course: '', // For student course
-    year: '', // For student year
-    handleNumber: '', // For adviser handle number
-    groupMembers: [] // New field for group members
+    course: '',
+    year: '',
+    handleNumber: '',
+    groupMembers: [],
   });
   const [specializationsOptions, setSpecializationsOptions] = useState([]);
   const [message, setMessage] = useState('');
-
-  // Generate years from 1900 to 2100
-  const startYear = 2000;
-  const endYear = 2100;
-  const yearOptions = Array.from({ length: endYear - startYear + 1 }, (_, i) => ({
-    value: startYear + i,
-    label: startYear + i,
-  }));
-
-  const courseOptions = [
-    { value: 'BSIT', label: 'BSIT' },
-    { value: 'BSCS', label: 'BSCS' },
-  ];
-
+  
   useEffect(() => {
     const fetchSpecializations = async () => {
       try {
@@ -51,11 +37,7 @@ const LoginFunction = () => {
     };
     
     fetchSpecializations();
-    setClientReady(true);
   }, []);
-  const onFinish = (values) => {
-    console.log('Finish:', values);
-  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -64,21 +46,17 @@ const LoginFunction = () => {
       [name]: value,
     }));
   };
-  const handleFileChange = (e) => {
-    setFormData({ ...formData, profileImage: e.target.files[0] });
+
+  const handleRoleChange = (value) => {
+    setFormData({ ...formData, role: value });
   };
 
-  const handleSpecializationsChange = (selectedOptions) => {
-    setFormData({ ...formData, specializations: selectedOptions.map(option => option.value) });
-  };
-
-  const handleGroupMembersChange = (e) => {
-    setFormData({ ...formData, groupMembers: e.target.value.split(',').map(member => member.trim()) });
+  const handleSpecializationChange = (value) => {
+    setFormData({ ...formData, specializations: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const data = new FormData();
     data.append('name', formData.name);
     data.append('email', formData.email);
@@ -86,10 +64,14 @@ const LoginFunction = () => {
     data.append('role', formData.role);
     data.append('profileImage', formData.profileImage);
     data.append('specializations', JSON.stringify(formData.specializations));
-    data.append('course', formData.course);
-    data.append('year', formData.year);
-    data.append('handleNumber', formData.handleNumber);
-    data.append('groupMembers', JSON.stringify(formData.groupMembers)); // Add group members
+    
+    if (formData.role === 'student') {
+      data.append('course', formData.course);
+      data.append('year', formData.year);
+      data.append('groupMembers', JSON.stringify(formData.groupMembers));
+    } else {
+      data.append('handleNumber', formData.handleNumber);
+    }
 
     try {
       const response = await axios.post('http://localhost:5000/api/advicer/register', data);
@@ -100,85 +82,102 @@ const LoginFunction = () => {
     }
   };
 
-  
   return (
     <div className="rectangle">
-   
+      <h1 className="logintext">REGISTER AS <span className="text-[#0BF677]">{formData.role.toUpperCase()}</span></h1>
+      <h1 className="logintext2">Fill in the details to create your account.</h1>
+      
       <img className="studentgirl " src="./src/assets/student.png"/>
       <img className="leaves " src="./src/assets/leaves.png"/>
        <img className="green-background  " src="./src/assets/gif.gif"/>
-       <h1 className="logintext">REGISTER AS <span className="text-[#0BF677]">STUDENT</span>  </h1>
-       <h1 className="logintext2">Fill in the details to create your account.
-       </h1>
        <img className="logorstree" src="./src/assets/LogoResearchTree.png"/>
+      <Form
+        form={form}
+        name="registration"
+        autoComplete="off"
+        layout="vertical"
+        onFinish={handleSubmit}
+        style={{marginTop: '-450px', marginLeft: '60px'}}
+      >
+        <Form.Item
+          name="username"
+          rules={[{ required: true, message: 'Please input your username!' }]}
+        >
+          <Input className="Username" prefix={<UserOutlined />} placeholder="Username" onChange={handleChange} />
+        </Form.Item>
+
+        <Form.Item
+          name="password"
+          rules={[{ required: true, message: 'Please input your password!' }]}
+        >
+          <Input className="Password" prefix={<LockOutlined />} placeholder="Password" onChange={handleChange} />
+        </Form.Item>
+
+        <Form.Item
+          name="confirmPassword"
+          dependencies={['password']}
+          rules={[
+            { required: true, message: 'Please confirm your password!' },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue('password') === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(new Error('The two passwords do not match!'));
+              },
+            }),
+          ]}
+        >
+          <Input className="Password" prefix={<LockOutlined />} placeholder="Re-type your password" onChange={handleChange} />
+        </Form.Item>
+
+        {/* Role Selection */}
+        <Form.Item >
+          <Select style={{width: '180px', marginTop: '100px'}} value={formData.role} onChange={handleRoleChange}>
+            <Option value="student">Student</Option>
+            <Option value="adviser">Adviser</Option>
+          </Select>
+        </Form.Item>
+
+        {/* Conditional Fields */}
+        {formData.role === 'student' ? (
+          <>
+           <Input className="GroupMembers" placeholder="Group Members (comma separated)" onChange={handleChange} />
+            <Course />
+            <Year />
+           
+          </>
+        ) : (
+          <>
+            <Input placeholder="Adviser Handle Number" name="handleNumber" onChange={handleChange} />
+            <Form.Item label="Specialization">
+              <Select
+                mode="multiple"
+                placeholder="Select Specializations"
+                options={specializationsOptions}
+                onChange={handleSpecializationChange}
+              />
+            </Form.Item>
+          </>
+        )}
+
+        <Button 
+        style= {{
+          width: '124px', 
+          height: '52px', 
+          marginLeft: '-500px', 
       
-       <Form
-      
-      form={form}
-      name="dependencies"
-      autoComplete="off"
-      style={{
-        maxWidth: '364px',
-        marginTop: '-400px',
-        marginLeft: '56px',
-      }}
-      layout="vertical"
-    >
-      <Form.Item
+          }} 
+          
+         color='primary'
         
-        style={{height: '46px'}}
-        name="username"
-        rules={[
-          {
-            required: true,
-            message: '',
-          },
-        ]}
-      >
-        <Input prefix={<UserOutlined />} className='Username' placeholder="Username" />
-      </Form.Item>
-      <Form.Item
-      
-        name="password"
-        rules={[
-          {
-            required: true,
-          },
-        ]}
-      >
-        <Input prefix={<LockOutlined />}  className='Password' placeholder="Password"/>
-      </Form.Item>
-
-      {/* Field */}
-      <Form.Item
-      
-        name="Confirm password"
-        dependencies={['password']}
-        rules={[
-          {
-            required: true,
-          },
-          ({ getFieldValue }) => ({
-            validator(_, value) {
-              if (!value || getFieldValue('password') === value) {
-                return Promise.resolve();
-              }
-              return Promise.reject(new Error('The new password that you entered do not match!'));
-            },
-          }),
-        ]}
-      >
-        <Input  prefix={<LockOutlined />} className='Retype-Password'placeholder="Re-type your password" />
-      </Form.Item>
-      <Course />
-   
-    </Form>
-
-
-
-     <h1 className="Register"><span className="text1">Don’t have an Account?</span> <span className="text2">Sign up here</span></h1>
+       >
+          Register
+        </Button>
+      </Form>
+      {message && <Alert message={message} type="info" />}
     </div>
-  )
-}
+  );
+};
 
-export default LoginFunction
+export default LoginFunction;

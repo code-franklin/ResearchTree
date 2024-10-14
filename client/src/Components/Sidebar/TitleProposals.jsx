@@ -143,7 +143,7 @@ export default function BasicModal() {
           <Typography
             sx={{
               position: "absolute",
-              marginLeft: "256px",
+              marginLeft: "243px",
               top: "111px",
               fontWeight: "bold"
             }}

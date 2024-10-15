@@ -6,7 +6,7 @@ import Progress from './Progress'
 function MyManuscriptComponent() {
   
   return (
-    <div className="h-[1270px]">
+    <div className="h-auto">
           <Description  />
 {/*           <PdfViewers /> */}
 

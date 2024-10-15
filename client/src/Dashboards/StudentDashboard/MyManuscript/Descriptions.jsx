@@ -113,7 +113,7 @@ const ResearchCard = () => {
   
 
   return (
-    <div className="headerCard">
+    <div className="headerCard ">
       <div className="ml-[320px] border border-[#4B4B4B] bg-[#1E1E1E] p-[40px] pl-[80px] rounded-lg shadow-lg text-white">
         <div className="flex items-center mb-4 ">
           <span className="bg-[#868686] text-white px-2 py-0 mr-2">Research Title</span>
@@ -131,6 +131,7 @@ const ResearchCard = () => {
                   value={newProposalTitle}
                   onChange={(e) => setNewProposalTitle(e.target.value)}
                   onBlur={handleSaveProposalTitle}
+                  style={{color: 'black', width: '1150px', height:'50px'}}
                 />
               ) : (
                 proposal?.proposalTitle
@@ -217,12 +218,16 @@ const ResearchCard = () => {
           <div className="flex items-center">
             <a onClick={() => setIsEditorOpen(true)} className="rounded-full text-center text-white mr-4 cursor-pointer w-[120px] h-[37px] border 1px solid #6A6A6A " >
             <span className='absolute bottom-[67px] ml-[-20px]'>Open</span></a>
-
             {isEditorOpen && (
+            <div className="w-[50rem] -mt-9 ">
+
              <CkEditorDocuments 
              width={800}
              userId={user._id} channelId={user.channelId}/> 
+            </div>
+
             )}
+
 
           </div>
         </div>

@@ -157,6 +157,7 @@ const ArticleList = () => {
          
         </div>
       </div>
+      
       <div className="articlesScroll flex">
         <div className="w-3/4">
           {articles.map((article, index) => (

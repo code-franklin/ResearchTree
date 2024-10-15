@@ -21,7 +21,7 @@
 
 .main-container {
 	--ckeditor5-preview-sidebar-width: 300px;
-	--ckeditor5-preview-height: 800px;
+	--ckeditor5-preview-height: 1000px;
 	font-family: 'Lato';
 	width: fit-content;
 	margin-left: -50px;

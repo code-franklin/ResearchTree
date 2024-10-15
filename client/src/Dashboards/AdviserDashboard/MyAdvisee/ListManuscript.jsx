@@ -86,7 +86,7 @@ export default function NewTables() {
 };
 
 // baguhin mo
-
+//patago
   // Function to update student status to 'ongoingrevision'
   const updateToOngoingRevision = async (studentId) => {
     try {

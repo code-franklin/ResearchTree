@@ -9,7 +9,8 @@ import {
     getPanelistStudents,
     respondToStudent,
     getToken,
-    addTaskMyAdvicee
+    addTaskMyAdvicee,
+    updateManuscriptStatus
 } from '../controllers/advicerControllers';
 
 import upload from '../middleware/upload';
@@ -27,6 +28,8 @@ router.get('/specializations', getSpecializations);
 // Adviser routes
 router.get('/advisor-students/:advisorId', getAdviserStudents);
 router.post('/add-task/:studentId', addTaskMyAdvicee)
+
+router.patch('/thesis/manuscript-status', updateManuscriptStatus);
 
 router.get('/panelist-students/:advisorId', getPanelistStudents);
 router.post('/respond-student', respondToStudent);

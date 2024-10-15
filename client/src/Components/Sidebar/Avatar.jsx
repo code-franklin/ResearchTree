@@ -12,19 +12,21 @@ import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 import './Sidebar.css';
 
 export default function AccountMenu() {
-
   const user = JSON.parse(localStorage.getItem('user'));
   const navigate = useNavigate();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -35,11 +37,12 @@ export default function AccountMenu() {
     navigate('/');
   };
 
+
   return (
     <React.Fragment>
-      <Box  sx={{  display: 'flex', alignItems: 'center', textAlign: 'center' }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
         <Tooltip title="Account settings">
-          <IconButton 
+          <IconButton
             onClick={handleClick}
             size="small"
             sx={{ ml: 5 }}
@@ -83,7 +86,7 @@ export default function AccountMenu() {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem onClick={handleClose}>
+        <MenuItem>
           <Avatar sx={{ bgcolor: '#444' }} /> Profile
         </MenuItem>
         <MenuItem onClick={handleClose}>
@@ -103,7 +106,7 @@ export default function AccountMenu() {
           Settings
         </MenuItem>
         <MenuItem onClick={handleClose}>
-          <ListItemIcon>
+          <ListItemIcon onClick={handleLogout}>
             <Logout fontSize="small" sx={{ color: 'red' }} /> {/* Set icon color to red */}
           </ListItemIcon>
           <span onClick={handleLogout} style={{ color: 'red' }}>Logout</span> {/* Set text color to red */}

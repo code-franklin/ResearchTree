@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input } from 'antd';
 import axios from 'axios';
+import ViewAnalytics from '../Dashboards/StudentDashboard/ViewAnalytics/ViewAnalyticsComponent'
 import './login.css';
 
 const LoginFunction = () => {
@@ -10,6 +11,14 @@ const LoginFunction = () => {
   const [clientReady, setClientReady] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
+  const [items, setItems] = useState([]);
+
+useEffect(() => {
+  const items = JSON.parse(localStorage.getItem('user'));
+  if (items) {
+   setItems(items);
+  }
+}, []);
 
   const handleLogin = async (values) => {
     try {
@@ -41,6 +50,17 @@ const LoginFunction = () => {
   useEffect(() => {
     setClientReady(true);
   }, []);
+
+
+// Sorry about that. I. useEffect(() => {
+//   if (items.name ){
+//     return navigate('/StudentDashboard/');
+//   }
+// },[])
+
+console.log(items.email)
+
+
 
   return (
     <div className="rectangle">
@@ -81,22 +101,38 @@ const LoginFunction = () => {
         >
           <Input prefix={<LockOutlined />} className="Username" type="password" placeholder="Password" />
         </Form.Item>
+
         {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+
+        {items.email ? (
+        <Form.Item shouldUpdate>
+          {() => (
+            <Button
+              style={{ width: '104px', height: '52px', marginLeft: '130px', marginTop: '12px', border: 'none', background: '#0BF677', borderRadius: '20px' }}
+              disabled={!clientReady || !form.isFieldsTouched(true) || !!form.getFieldsError().filter(({ errors }) => errors.length).length}
+            >
+              {items.role === 'student' ? (
+                navigate('/StudentDashboard/')
+              ) : (
+                navigate('/AdviserDashboard/')
+              )}
+            </Button>
+          )}
+        </Form.Item>
+      ) : (
         <Form.Item shouldUpdate>
           {() => (
             <Button
               style={{ width: '104px', height: '52px', marginLeft: '130px', marginTop: '12px', border: 'none', background: '#0BF677', borderRadius: '20px' }}
               htmlType="submit"
-              disabled={
-                !clientReady ||
-                !form.isFieldsTouched(true) ||
-                !!form.getFieldsError().filter(({ errors }) => errors.length).length
-              }
+              disabled={!clientReady || !form.isFieldsTouched(true) || !!form.getFieldsError().filter(({ errors }) => errors.length).length}
             >
               <span style={{ color: 'white', fontSize: '16px', fontWeight: 'bolder' }}>Login</span>
             </Button>
           )}
         </Form.Item>
+      )}
+
       </Form>
 
       <h1 className="Register">

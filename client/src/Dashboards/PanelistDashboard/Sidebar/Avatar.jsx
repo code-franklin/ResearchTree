@@ -90,10 +90,10 @@ export default function AccountMenu() {
           Settings
         </MenuItem>
         <MenuItem onClick={handleClose}>
-          <ListItemIcon>
+          <ListItemIcon onClick={handleLogout}>
             <Logout fontSize="small" sx={{ color: 'red' }} /> {/* Set icon color to red */}
           </ListItemIcon>
-          <span style={{ color: 'red' }}>Logout</span> {/* Set text color to red */}
+          <span onClick={handleLogout} style={{ color: 'red' }}>Logout</span> {/* Set text color to red */}
         </MenuItem>
       </Menu>
     </React.Fragment>

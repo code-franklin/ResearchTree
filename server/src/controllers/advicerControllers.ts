@@ -5,6 +5,7 @@ import User from '../models/User';
 import Specialization from '../models/Specialization';/* 
 import Proposal from '../models/Proposal'; */
 import { ObjectId } from 'mongodb';
+import Proposal from '../models/Proposal';
 
 export const registration = async (req: Request, res: Response) => {
   const { name, email, password, role, course, year, handleNumber, groupMembers } = req.body;
@@ -191,31 +192,42 @@ export const getAdviserStudents = async (req: Request, res: Response) => {
   try {
     const acceptedStudents = await User.find(
       { chosenAdvisor: advisorId, advisorStatus: 'accepted' },
-      'name groupMembers channelId proposals tasks'
+      'name groupMembers channelId panelists course proposals tasks'
     ).lean();
 
     const declinedStudents = await User.find({ chosenAdvisor: advisorId, advisorStatus: 'declined' });
     const studentsToManage = await User.find({ chosenAdvisor: advisorId, advisorStatus: 'pending' });
 
-    const studentData = acceptedStudents.map((student) => {
-      const latestProposal = student.proposals.length > 0 ? student.proposals[student.proposals.length - 1] : null;
-      return {
-        _id: student._id,
-        name: student.name,
-        groupMembers: student.groupMembers,
-        channelId: student.channelId,
-        proposalTitle: latestProposal ? latestProposal.proposalTitle : 'No proposal submitted',
-        submittedAt: latestProposal ? latestProposal.submittedAt : null,
-        tasks: student.tasks, // Include tasks
-      };
-    });
+    // Fetch names of panelists for each student
+    const studentData = await Promise.all(
+      acceptedStudents.map(async (student) => {
+        // Fetch panelist names
+        const panelistNames = await User.find({ _id: { $in: student.panelists } }, 'name').lean();
+        const panelistNameList = panelistNames.map((panelist) => panelist.name);
 
-    res.status(200).json({ acceptedStudents: studentData, declinedStudents, studentsToManage  });
+        const latestProposal = student.proposals.length > 0 ? student.proposals[student.proposals.length - 1] : null;
+
+        return {
+          _id: student._id,
+          name: student.name,
+          groupMembers: student.groupMembers,
+          channelId: student.channelId,
+          panelists: panelistNameList, // Return panelist names instead of IDs
+          course: student.course,
+          proposalTitle: latestProposal ? latestProposal.proposalTitle : 'No proposal submitted',
+          submittedAt: latestProposal ? latestProposal.submittedAt : null,
+          tasks: student.tasks, // Include tasks
+        };
+      })
+    );
+
+    res.status(200).json({ acceptedStudents: studentData, declinedStudents, studentsToManage });
   } catch (error) {
     console.error('Error fetching students:', error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+
 
 
 // Add Task API - POST /api/advicer/add-task/:studentId
@@ -243,30 +255,58 @@ export const addTaskMyAdvicee = async (req: Request, res: Response) => {
   }
 };
 
+export const updateManuscriptStatus = async (req: Request, res: Response) => {
+  const { channelId, manuscriptStatus } = req.body;
+
+  try {
+      const updatedProposal = await Proposal.findOneAndUpdate(
+          { channelId }, // Find proposal by channelId
+          { manuscriptStatus }, // Update the status
+          { new: true } // Return updated document
+      );
+
+      if (!updatedProposal) {
+          return res.status(404).json({ message: 'Manuscript not found' });
+      }
+
+      res.status(200).json(updatedProposal);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error updating manuscript status', error });
+  }
+}
+
 
 export const getPanelistStudents = async (req: Request, res: Response) => {
   const { advisorId } = req.params;
 
   try {
-    // Fetch students who have the advisor as a panelist and have been accepted
+    // Fetch students where the advisor is a panelist and their advisorStatus is 'accepted'
     const panelistStudents = await User.find(
       { panelists: advisorId, advisorStatus: 'accepted' },
-      'name groupMembers channelId proposals' // Select necessary fields (name, groupMembers, proposals)
+      'name groupMembers channelId proposals panelists' // Include panelists
     ).lean();
 
-    // Map through students and extract the latest proposal details
-    const studentData = panelistStudents.map(student => {
-      const latestProposal = student.proposals.length > 0 ? student.proposals[student.proposals.length - 1] : null;
+    // Map through students and fetch names of the panelists
+    const studentData = await Promise.all(
+      panelistStudents.map(async (student) => {
+        // Fetch panelist names
+        const panelistNames = await User.find({ _id: { $in: student.panelists } }, 'name').lean();
+        const panelistNameList = panelistNames.map((panelist) => panelist.name);
 
-      return {
-        _id: student._id,
-        name: student.name,
-        groupMembers: student.groupMembers,
-        channelId: student.channelId,
-        proposalTitle: latestProposal ? latestProposal.proposalTitle : 'No proposal submitted',
-        submittedAt: latestProposal ? latestProposal.submittedAt : null,
-      };
-    });
+        const latestProposal = student.proposals.length > 0 ? student.proposals[student.proposals.length - 1] : null;
+
+        return {
+          _id: student._id,
+          name: student.name,
+          groupMembers: student.groupMembers,
+          channelId: student.channelId,
+          panelists: panelistNameList, // Return panelist names instead of IDs
+          proposalTitle: latestProposal ? latestProposal.proposalTitle : 'No proposal submitted',
+          submittedAt: latestProposal ? latestProposal.submittedAt : null,
+        };
+      })
+    );
 
     res.status(200).json({ panelistStudents: studentData });
   } catch (error) {
@@ -274,6 +314,7 @@ export const getPanelistStudents = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+
 
 
 /* accepted opr declined the student */

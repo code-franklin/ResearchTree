@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { style } from '@mui/system';
 
-import { List, Typography, Button, Space, message, Input, ConfigProvider, Modal } from 'antd';
+import { List, Typography, Button, Space, message, Input, ConfigProvider } from 'antd';
 import { EditOutlined, DeleteOutlined, CheckOutlined, UndoOutlined, SearchOutlined } from '@ant-design/icons';
 import RestoreIcon from '@mui/icons-material/Restore';
 import TabsButton from './Tabs'
@@ -63,16 +63,6 @@ const App = () => {
     setIsEditorOpen(true);
   };
 
-  const handleDelete = (index) => {
-    const itemToDelete = data[index];
-    const newData = [...data];
-    newData.splice(index, 1);
-    setData(newData);
-    setSearchResults(newData);
-    setDeletedItems([...deletedItems, itemToDelete]);
-    message.success('Item deleted successfully');
-  };
-
   const handleSearch = (value) => {
     setSearchText(value);
     const filteredData = data.filter((item) =>
@@ -80,16 +70,6 @@ const App = () => {
       item.authors.toLowerCase().includes(value.toLowerCase())
     );
     setSearchResults(filteredData);
-  };
-
-  const handleRestore = (index) => {
-    const itemToRestore = deletedItems[index];
-    setData([...data, itemToRestore]);
-    setSearchResults([...data, itemToRestore]);
-    const newDeletedItems = [...deletedItems];
-    newDeletedItems.splice(index, 1);
-    setDeletedItems(newDeletedItems);
-    message.success('Item restored successfully');
   };
 
   const highlightText = (text, search) => {
@@ -141,15 +121,6 @@ const App = () => {
         <TextHeader/>
         <TabsButton />
 
-        <Button 
-          type="primary" 
-          onClick={() => setShowDeletedItems(true)}
-          style={{position: 'absolute', top: '-20px', left: '1095px'}}
-        >
-
-        <RestoreIcon />
-        </Button>
-
         <Input
             placeholder="Search articles..."
             value={searchText}
@@ -162,7 +133,7 @@ const App = () => {
           
         </ConfigProvider>
       </div>
-      <div style={{ marginBottom: '16px', display: 'flex', justifyContent: 'flex-end' }}>
+        <div style={{ marginBottom: '16px', display: 'flex', justifyContent: 'flex-end' }}>
       </div>
 
       <div style={{ flex: '1', overflowX: 'hidden' }}>
@@ -203,6 +174,14 @@ const App = () => {
                           .join(', '))}
                     </Text>
 
+                    <br />
+
+                    {/* Render panelists */}
+                    <Text style={{ color: '#ffffff' }}>
+                      <span className="font-bold">Panelists: </span>
+                      {highlightText(student.panelists.join(', '), searchText)} {/* This now contains the names */}
+                    </Text>
+
                     <div style={{ display: 'flex' }}>
                         <Text style={{ color: '#ffffff', marginRight: '10px' }}>
                           {student.submittedAt && (
@@ -237,13 +216,6 @@ const App = () => {
                       onClick={() => handleViewManuscript(student._id, student.channelId)}
                     />
 
-                    <Button
-                      icon={<DeleteOutlined />}
-                      shape="circle"
-                      danger
-                      onClick={() => handleDelete(index)}
-                    />
-
                   </div>
                 </div>
 
@@ -271,73 +243,6 @@ const App = () => {
         {isEditorOpen && selectedStudentId && (
           <CkEditorDocuments userId={user._id} channelId={selectedChannelId} onClose={() => setIsEditorOpen(false)} />
         )}
-
-{/* modal function UI */}
-      <Modal
-        style={{ position: 'absolute', left: '460px', top: '20px' }}
-        title="Deleted Items"
-        visible={showDeletedItems}
-        onCancel={() => setShowDeletedItems(false)}
-        footer={null}
-        width={1000}
-      >
-
-        <div style={{ maxHeight: '730px', overflowX: 'hidden', paddingTop: '20px' }}>
-          <List
-            grid={{ gutter: 16, column: 1 }}
-            dataSource={deletedItems}
-            renderItem={(item, index) => (
-              <List.Item>
-                <div
-                  style={{
-                    height: '130px',
-                    width: '950px',
-                    padding: '30px',
-                    borderRadius: '8px',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    transition: 'all 0.3s ease',
-                    cursor: 'pointer',
-                    background: '#222222',
-                    color: '#ffffff',
-                  }}
-                >
-                  <div>
-                    <div style={{ marginBottom: '8px', fontSize: '16px', fontWeight: 'bold' }}>
-                      {item.title}
-                    </div>
-
-                    <Text style={{ marginRight: '10px', color: 'white' }}>
-                      <span className="font-bold">Authors: </span>{item.authors}
-                    </Text>
-
-                    <div>
-                      <Text style={{ marginRight: '10px', color: 'white' }}>
-                        <span className="font-bold">Date Uploaded:</span> {item.dateUploaded}
-                      </Text>
-
-                      <Text style={{ marginRight: '10px', color: 'white' }}>
-                        <span className="font-bold">Date Published:</span> {item.datePublished}
-                      </Text>
-                    </div>
-                  </div>
-
-                  <Button
-                    icon={<UndoOutlined />}
-                    type="primary"
-                    onClick={() => handleRestore(index)}
-                  >
-                    Restore
-                  </Button>
-
-                </div>
-              </List.Item>
-            )}
-          />
-
-        </div>
-      </Modal>
 
       </ConfigProvider>
      

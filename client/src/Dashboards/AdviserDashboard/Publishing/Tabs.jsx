@@ -30,7 +30,8 @@ export default function TabsSegmentedControls() {
           },
         }}
       >
-        <Tab disableIndicator>New Uploads</Tab>
+        <Tab disableIndicator>List Manuscript</Tab>
+        <Tab disableIndicator>Approved on Advicer</Tab>
         <Tab disableIndicator>Revisions</Tab>
         <Tab disableIndicator>Publishing</Tab>
       </TabList>

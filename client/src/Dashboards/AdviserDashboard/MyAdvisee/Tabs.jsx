@@ -1,40 +1,63 @@
-import * as React from 'react';
-import Tabs from '@mui/joy/Tabs';
-import TabList from '@mui/joy/TabList';
-import Tab, { tabClasses } from '@mui/joy/Tab';
+/* import * as React from 'react';
+import PropTypes from 'prop-types';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
 
-export default function TabsSegmentedControls() {
+function CustomTabPanel(props) {
+  const { children, value, index, ...other } = props;
+
   return (
-    <Tabs aria-label="tabs" defaultValue={0} sx={{ position: 'absolute', left:'710px', top:'-27px', maxWidth: '500%', bgcolor: 'transparent' }}>
-      <TabList
-        disableUnderline
-        sx={{
-          whiteSpace: 'nowrap',
-          p: 0.5,
-          gap: 0.5,
-          borderRadius: 'xl',
-          bgcolor: '#222222',
-          color: 'none', // Set text color to white by default
-          [`& .${tabClasses.root}`]: {
-            transition: 'background-color 0.3s ease', // Smooth transition
-            color: 'grey', // Ensure text color remains white
-          },
-          [`& .${tabClasses.root}[aria-selected="true"]`]: {
-            boxShadow: 'md',
-            bgcolor: '#1E1E',
-            color: 'white', // Ensure selected tab text is white
-          },
-          [`& .${tabClasses.root}:hover`]: {
-            bgcolor: '#333333',
-            color: 'white', // Ensure hover state text is white
-          },
-        }}
-      >
-        
-        <Tab disableIndicator>List Manuscript</Tab>
-        <Tab disableIndicator>Ongoing Revise for Advicer</Tab>
-        <Tab disableIndicator>On Panelist</Tab>
-      </TabList>
-    </Tabs>
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+    </div>
   );
 }
+
+CustomTabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
+
+export default function BasicTabs() {
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  return (
+    <Box sx={{ width: '100%' }}>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+          <Tab sx={{color:'white'}} label="List Manuscript" {...a11yProps(0)} />
+          <Tab sx={{color:'white'}} label="Ongoing Revision on Advicer" {...a11yProps(1)} />
+          <Tab sx={{color:'white'}} label="On Panelist" {...a11yProps(2)} />
+        </Tabs>
+      </Box>
+      <CustomTabPanel value={value} index={0}>
+        Item One
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={1}>
+        Item Two
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={2}>
+        Item Three
+      </CustomTabPanel>
+    </Box>
+  );
+} */

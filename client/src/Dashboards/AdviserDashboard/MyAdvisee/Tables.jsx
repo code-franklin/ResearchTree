@@ -1,102 +1,62 @@
 import React, { useEffect, useState } from 'react';
 import { style } from '@mui/system';
 
-import { List, Typography, Button, Space, message, Input, ConfigProvider, Modal } from 'antd';
-import { EditOutlined, DeleteOutlined, CheckOutlined, UndoOutlined, SearchOutlined } from '@ant-design/icons';
-import RestoreIcon from '@mui/icons-material/Restore';
-import TabsButton from './Tabs'
+import { List, Typography, Button, Input, ConfigProvider } from 'antd';
+import { EditOutlined, CheckOutlined, SearchOutlined } from '@ant-design/icons';
+import PropTypes from 'prop-types';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
 import TextHeader from './TextHeader'
 
 
-import CkEditorDocuments from '../../../CKeditorDocuments'
-import NewTables from './NewTables';
+import CkEditorDocuments from './CkEditorDocuments';
 
-const { Text } = Typography;
+import ListManuscriptStudent from './ListManuscript'
+import OngoingReviseAdviser from './ReviseAdviser';
+import OnPanelist from './OnPanelist'
 
 
-const initialData = [
-  {
-    title: 'Exploring the Impact of Artificial Intelligence on Healthcare: A Comprehensive Analysis of Adoption, Challenges, and Future Directions',
-    authors: 'Franklin Mayad, Daniel De Torres, Lada Milera',
-    dateUploaded: 'October 23 2023',
-    datePublished: 'October 23 2023',
-  }
-];
+
+
+
 
 const ListManuscript = () => {
-  const [data, setData] = useState(initialData);
-  const [searchResults, setSearchResults] = useState(data);
-  const [searchText, setSearchText] = useState('');
-  const [deletedItems, setDeletedItems] = useState([]);
-  const [showDeletedItems, setShowDeletedItems] = useState(false);
 
+  const [value, setValue] = useState(0); // Set to 0 (index of the first tab)
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  function CustomTabPanel(props) {
+    const { children, value, index, ...other } = props;
   
-  const [acceptedStudents, setAcceptedStudents] = useState([]);
-  
-
-  const [channelId, setChannelId] = useState('');
-  const [isEditorOpen, setIsEditorOpen] = useState(false);
-  const [selectedStudentId, setSelectedStudentId] = useState(null);
-  const [selectedChannelId, setSelectedChannelId] = useState(null); // Store channelId
-
-  const user = JSON.parse(localStorage.getItem('user'));
-
-useEffect(() => {
-  const fetchStudents = async () => {
-    try {
-      const response = await fetch(`http://localhost:5000/api/advicer/advisor-students/${user._id}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setAcceptedStudents(data.acceptedStudents);
-      } else {
-        const errorData = await response.json();
-        console.error('Error fetching students:', errorData.message);
-      }
-    } catch (error) {
-      console.error('Error fetching students:', error.message);
-    }
-  };
-    fetchStudents();
-}, [])
-
-  // console.log(acceptedStudents)
-
-  const handleViewManuscript = (studentId, channelId) => {
-    setSelectedStudentId(studentId);
-    setSelectedChannelId(channelId); // Set the correct channelId for the student's manuscript
-    setIsEditorOpen(true);
-  };
-
-  const handleSearch = (value) => {
-    setSearchText(value);
-    const filteredData = data.filter((item) =>
-      item.title.toLowerCase().includes(value.toLowerCase()) ||
-      item.authors.toLowerCase().includes(value.toLowerCase())
-    );
-    setSearchResults(filteredData);
-  };
-
-
-  const highlightText = (text, search) => {
-    if (!search) return text;
-
-    const parts = text.split(new RegExp(`(${search})`, 'gi'));
     return (
-      <>
-        {parts.map((part, index) =>
-          part.toLowerCase() === search.toLowerCase() ? (
-            <span key={index} style={{ backgroundColor: 'green' }}>{part}</span>
-          ) : (
-            part
-          )
-        )}
-      </>
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
+        {...other}
+      >
+        {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      </div>
     );
+  }
+  
+  CustomTabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.number.isRequired,
+    value: PropTypes.number.isRequired,
   };
+  
+  function a11yProps(index) {
+    return {
+      id: `simple-tab-${index}`,
+      'aria-controls': `simple-tabpanel-${index}`,
+    };
+  }
 
   return (
     <div style={{ position: 'absolute', left: '440px', top: '200px', maxWidth: '1150px', height: '641px', borderRadius: '8px', display: 'flex', flexDirection: 'column' }}>
@@ -128,11 +88,11 @@ useEffect(() => {
 
           <div>
             <TextHeader/>
-            <TabsButton />
+
             <Input
                 placeholder="Search articles..."
-                value={searchText}
-                onChange={(e) => handleSearch(e.target.value)}
+                /* value={searchText}
+                onChange={(e) => handleSearch(e.target.value)} */
                 style={{  position: 'fixed',top: '173px', width: '40%', height: '45px', borderRadius: '13px', paddingLeft: '60px' }}
             />
             <SearchOutlined style={{ position: 'absolute', marginTop: '-20px', marginLeft: '25px', color: 'grey', fontSize: '28px' }} />
@@ -143,67 +103,28 @@ useEffect(() => {
       <div style={{ marginBottom: '16px', display: 'flex', justifyContent: 'flex-end' }}>
     </div>
 
-{/* Loop List Manuscript */}
-      <div style={{ flex: '1', overflowX: 'hidden' }}>
-      {acceptedStudents.map((student) => (
-        <List grid={{ gutter: 16, column: 1 }} dataSource={searchResults} renderItem={(item, index) => (
-            <List.Item>
-              <div style={{  height: '117px', padding: '20px', borderRadius: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', transition: 'all 0.3s ease', cursor: 'pointer',}} className="bg-[#222222] hover:bg-[#2F2F2F] w-[1170px]">
-                <div style={{ flex: 1 }}>
+    <Box sx={{ width: '100%' }}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+            <Tab sx={{ color: 'white' }} label="List Manuscript" {...a11yProps(0)} />
+            <Tab sx={{ color: 'white' }} label="Ongoing Revision on Advicer" {...a11yProps(1)} />
+            <Tab sx={{ color: 'white' }} label="On Panelist" {...a11yProps(2)} />
+          </Tabs>
+        </Box>
 
-                    {/* Render highlighted title */}
-                    <div style={{ color: '#ffffff', marginBottom: '8px', fontSize: '16px', fontWeight: 'bold' }}>
-                    {highlightText(student.proposalTitle)}
-                      
-                    </div>
+      <CustomTabPanel value={value} index={0}>
+        <ListManuscriptStudent/>
+      </CustomTabPanel>
 
-                    {/* Render highlighted authors */}
-                    <Text style={{ color: '#ffffff' }}>
-                      <span className="font-bold">Authors: </span>
-                      {highlightText(student.groupMembers
-                          .map(member => member.replace(/([a-z])([A-Z])/g, '$1 $2')) // Insert space between lowercase and uppercase letters
-                          .join(', '))}
-                    </Text>
+      <CustomTabPanel value={value} index={1}>
+        <OngoingReviseAdviser/>
+      </CustomTabPanel>
 
-                    <div style={{ display: 'flex' }}>
-                      <Text style={{ color: '#ffffff', marginRight: '10px' }}>
-                      {student.submittedAt && (
-                            <p>
-                              <span className="font-bold">Date Uploaded:</span> {new Date(student.submittedAt).toLocaleDateString('en-US', {
-                                month: 'short',
-                                day: 'numeric',
-                                year: 'numeric',
-                              })}
-                            </p>
-                          )}
-                      </Text>
+      <CustomTabPanel value={value} index={2}>
+        <OnPanelist/>
+      </CustomTabPanel>
 
-                      <Text style={{ color: '#ffffff' }}>
-                        <span className="font-bold">Date Published:</span> {item.datePublished}
-                        {/* <br />ChannelID: {student.channelId} */}
-                      </Text>
-
-                    </div>
-                </div>
-
-                <div style={{ background: '#222222', boxShadow: '-6px 0px 6.9px 0px rgba(0, 0, 0, 0.25)', height: '117px', width: '205px', alignItems: 'center', paddingLeft: '44px', display: 'flex', gap: '10px' }}>
-                  <Button
-                   icon={<CheckOutlined />} 
-                   shape="circle" 
-                  />
-                  <Button 
-                    icon={<EditOutlined />} 
-                    shape="circle" 
-                    onClick={() => handleViewManuscript(student._id, student.channelId)}
-                  />
-                  <Button icon={<DeleteOutlined />} shape="circle" danger onClick={() => handleDelete(index)} />
-                </div>
-              </div>
-            </List.Item>
-          )}
-        />
-      ))}
-      </div>
+    </Box>
 
       <ConfigProvider
 
@@ -211,9 +132,7 @@ useEffect(() => {
      },
   }}
       >
-    {isEditorOpen && selectedStudentId && (
-      <CkEditorDocuments userId={user._id} channelId={selectedChannelId} onClose={() => setIsEditorOpen(false)} />
-    )}
+
 
       </ConfigProvider>
      

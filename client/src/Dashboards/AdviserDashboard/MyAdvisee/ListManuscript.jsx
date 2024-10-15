@@ -85,7 +85,7 @@ export default function NewTables() {
     }
 };
 
-// baguhin mo
+//yung magandang ano
 //patago
   // Function to update student status to 'ongoingrevision'
   const updateToOngoingRevision = async (studentId) => {

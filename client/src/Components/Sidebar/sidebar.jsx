@@ -85,12 +85,10 @@ const Sidebar = ({ onSelect }) => {
         <img className="inline-block mr-2 mb-1" src="/src/assets/revision-icon.png"/>
           Revision
         </Link>
-
-        
-
       
-        
       </div>
+
+       
 
       <HeaderTools/>
      

@@ -3,7 +3,7 @@ import React from 'react';
 import "./Sidebar.css";
 import { Link } from 'react-router-dom';
 import UserAvatar from './Avatar'
-
+import TitleProposal from './TitleProposals'
 
 const Sidebar = ({ onSelect }) => {
 
@@ -87,7 +87,9 @@ const Sidebar = ({ onSelect }) => {
           
         </Link>
 
-{/*         <Link to="AdviserDashboard/"
+
+
+      <Link to="AdviserDashboard/TitleProposal"
           className="revision mx-10 
                      focus:font-semibold 
                      focus:ml-[4rem] focus:bg-gradient-to-r from-[#0BF677] to-[#079774] 
@@ -96,10 +98,10 @@ const Sidebar = ({ onSelect }) => {
           
         >
         <img className="inline-block mr-2 mb-1" src="/src/assets/revision-icon.png"/>
-          Revision
-        </Link> */}
+          TItle Proposal
+        </Link> 
 
-        
+      
 
       
         

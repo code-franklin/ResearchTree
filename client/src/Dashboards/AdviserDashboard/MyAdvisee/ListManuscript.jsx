@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { List, Typography, Button, Select, message } from "antd"; // Added message for notifications
+import { List, Typography, Button, Select, message, Progress} from "antd"; // Added message for notifications
 import { EditOutlined, CheckOutlined, LoadingOutlined } from "@ant-design/icons";
 import CkEditorDocuments from './CkEditorDocuments';
 import axios from "axios"; // Importing axios for HTTP requests
@@ -138,19 +138,21 @@ export default function NewTables() {
   return (
     <div style={{ flex: '1', overflowX: 'hidden' }} className="">
       {/* Dropdown for course filtering */}
-      <Select
+
+      {/* <Select
         value={selectedCourse}
         onChange={handleCourseChange}
         style={{ marginBottom: "20px", width: "200px" }}
         placeholder="Select a course"
       >
+
         <Option value="">All Courses</Option>
         {courses.map(course => (
           <Option key={course} value={course}>
             {course}
           </Option>
         ))}
-      </Select>
+      </Select> */}
 
       <List
         grid={{ gutter: 16, column: 1 }}
@@ -159,7 +161,9 @@ export default function NewTables() {
           <List.Item key={student._id}>
             <div
               style={{
-                height: "117px",
+             
+                height: "157px",
+                width: "1500px",
                 padding: "20px",
                 borderRadius: "8px",
                 display: "flex",
@@ -167,8 +171,8 @@ export default function NewTables() {
                 alignItems: "center",
                 transition: "all 0.3s ease",
                 cursor: "pointer",
-                backgroundColor: "#222222",
-                width: "100%",
+                backgroundColor: "#2B2B2B",
+              
               }}
               className="hover:bg-[#2F2F2F]"
             >
@@ -192,6 +196,8 @@ export default function NewTables() {
                     )
                     .join(", ")}
                 </Text>
+
+               
 
                 <br />
 
@@ -221,9 +227,20 @@ export default function NewTables() {
                   <p>Manuscript Status: {student.manuscriptStatus}</p>
                 </div>
               </div>
-
+              <Progress
+                  style={{marginLeft: '339px', }}
+                  percent={60}
+                  percentPosition={{
+                    align: 'center',
+                    type: 'inner',
+                  }}
+                  size={[300, 20]}
+                    />
               <div
                 style={{
+               
+                  position: 'absolute',
+                  left: '1100px',
                   background: "#222222",
                   boxShadow: "-6px 0px 6.9px 0px rgba(0, 0, 0, 0.25)",
                   height: "117px",
@@ -234,6 +251,8 @@ export default function NewTables() {
                   gap: "10px",
                 }}
               >
+
+           
                 <Button
                   icon={<EditOutlined />}
                   shape="circle"

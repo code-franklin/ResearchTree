@@ -34,7 +34,7 @@ export default function AccountMenu() {
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    navigate('/');
+    window.location.href = '/'; // Update the path based on your routing setup
   };
 
 
@@ -50,7 +50,11 @@ export default function AccountMenu() {
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
           >
-            <Avatar src={`http://localhost:5000/public/uploads/${user.profileImage}`} sx={{ width: 79, height: 79 }}> </Avatar>
+            {user && user.profileImage ? (
+              <Avatar src={`http://localhost:5000/public/uploads/${user.profileImage}`} sx={{ width: 79, height: 79 }} />
+            ) : (
+              <Avatar sx={{ width: 79, height: 79 }} /> // Fallback Avatar if no user or no profile image
+            )}
           </IconButton>
         </Tooltip>
       </Box>

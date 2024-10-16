@@ -5,13 +5,15 @@ import {
     getStudentInfoAndProposal,
     updateProposalTitle,
     trainModel,
-    markTaskAsCompleted
+    markTaskAsCompleted,
+    getTasks
 /*     postUploadManuscript */
 } from '../controllers/studentControllers';
 
 const router: Router = express.Router();
 
 router.post('/submit-proposal', createProposal);
+router.get('/tasks',getTasks)
 router.patch('/mark-task/:taskId', markTaskAsCompleted)
 router.post('/choose-advisor', chooseAdvisor);
 router.get('/advisor-info-StudProposal/:userId', getStudentInfoAndProposal);

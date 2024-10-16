@@ -196,6 +196,28 @@ export const markTaskAsCompleted = async (req: Request, res: Response) => {
 };
 
 
+export const getTasks = async (req: Request, res: Response) => {
+  const { studentId } = req.params; // Use studentId instead of taskId
+
+  console.log('Received studentId:', studentId); // Log the received studentId
+
+  try {
+    // Find the student and populate tasks
+    const student = await User.findById(studentId).select('tasks');
+    
+    if (!student) {
+      console.log('No student found with studentId:', studentId);
+      return res.status(404).json({ message: 'Student not found' });
+    }
+
+    // Return the tasks
+    res.status(200).json({ tasks: student.tasks });
+  } catch (error) {
+    console.error('Error fetching tasks:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 
 export const updateProposalTitle = async (req: Request, res: Response) => {
   try {

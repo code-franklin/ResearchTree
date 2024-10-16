@@ -1,69 +1,52 @@
 import { useEffect, useState } from "react";
-import { List, Typography, Button, Select, message, Progress} from "antd"; // Added message for notifications
+import { List, Typography, Button, message, Progress, Modal, Input } from "antd";
 import { EditOutlined, CheckOutlined, LoadingOutlined } from "@ant-design/icons";
 import CkEditorDocuments from './CkEditorDocuments';
-import axios from "axios"; // Importing axios for HTTP requests
+import axios from "axios";
 
 const { Text } = Typography;
-const { Option } = Select;
 
 export default function NewTables() {
   const [acceptedStudents, setAcceptedStudents] = useState([]);
-  const [filteredStudents, setFilteredStudents] = useState([]); // For filtering based on the course
-  const [courses, setCourses] = useState([]); // To store all unique courses
-  const [selectedCourse, setSelectedCourse] = useState(""); // For the selected course
-
-  
+  const [filteredStudents, setFilteredStudents] = useState([]);
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [selectedStudentId, setSelectedStudentId] = useState(null);
   const [selectedChannelId, setSelectedChannelId] = useState(null);
+  
+  // Modal states
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [currentTaskStudent, setCurrentTaskStudent] = useState(null);
+  const [taskInput, setTaskInput] = useState("");
 
   const user = JSON.parse(localStorage.getItem("user"));
 
-  useEffect(() => {
-    const fetchStudents = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:5000/api/advicer/advisor-students/${user._id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-        if (response.ok) {
-          const data = await response.json();
-          setAcceptedStudents(data.acceptedStudents);
-          setFilteredStudents(data.acceptedStudents);
-
-          // Extract unique courses from the students data
-          const uniqueCourses = [
-            ...new Set(data.acceptedStudents.map(student => student.course))
-          ];
-          setCourses(uniqueCourses);
-        } else {
-          const errorData = await response.json();
-          console.error("Error fetching students:", errorData.message);
+  // Move the fetchStudents function outside of useEffect
+  const fetchStudents = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/advicer/advisor-students/${user._id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         }
-      } catch (error) {
-        console.error("Error fetching students:", error.message);
-      }
-    };
-    fetchStudents();
-  }, [user._id]);
-
-  // Handle course selection
-  const handleCourseChange = (value) => {
-    setSelectedCourse(value);
-
-    if (value === "") {
-      setFilteredStudents(acceptedStudents); // Show all students if no course is selected
-    } else {
-      setFilteredStudents(
-        acceptedStudents.filter(student => student.course === value)
       );
+      if (response.ok) {
+        const data = await response.json();
+        setAcceptedStudents(data.acceptedStudents);
+        setFilteredStudents(data.acceptedStudents);
+      } else {
+        const errorData = await response.json();
+        console.error("Error fetching students:", errorData.message);
+      }
+    } catch (error) {
+      console.error("Error fetching students:", error.message);
     }
   };
+
+  useEffect(() => {
+    fetchStudents();
+  }, [user._id]);
 
   const handleViewManuscript = (studentId, channelId) => {
     setSelectedStudentId(studentId);
@@ -71,89 +54,59 @@ export default function NewTables() {
     setIsEditorOpen(true);
   };
 
-  const updateManuscriptStatus = async (channelId, newStatus) => {
+  const addTask = async (studentId, taskTitle) => {
     try {
-        const response = await axios.patch('http://localhost:5000/api/students/thesis/manuscript-status', {
-            channelId, // Channel ID to find the manuscript
-            manuscriptStatus: newStatus, // New status to set
-        });
-        
-        console.log(response)
-        // Handle success
-    } catch (error) {
-        console.error('Error updating manuscript status:', error);
-    }
-};
-
-//yung magandang ano
-//patago
-  // Function to update student status to 'ongoingrevision'
-  const updateToOngoingRevision = async (studentId) => {
-    try {
-      const response = await fetch('http://localhost:5000/api/students/update-status/ongoingrevision', {
+      const response = await fetch(`http://localhost:5000/api/advicer/add-task/${studentId}`, {
         method: 'POST',
         headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: JSON.stringify({ studentId, status: 'ongoingrevision' }),
+        body: JSON.stringify({ taskTitle }),
       });
-
       if (response.ok) {
-        message.success('Status updated to Ongoing Revision');
-        // Optionally, update state to reflect the status change
-      } else {
-        message.error('Failed to update status');
+        setIsModalVisible(false); // Close the modal after adding task
+        setTaskInput(""); // Clear task input
+        fetchStudents(); // Refresh the list after adding a task
       }
     } catch (error) {
-      console.error("Error updating status:", error.message);
+      console.error('Error adding task:', error);
+    }
+  };
+
+  const updateManuscriptStatus = async (channelId, newStatus) => {
+    try {
+      const response = await axios.patch(
+        'http://localhost:5000/api/students/thesis/manuscript-status',
+        { channelId, manuscriptStatus: newStatus }
+      );
+      console.log(response);
+      message.success('Manuscript status updated');
+    } catch (error) {
+      console.error('Error updating manuscript status:', error);
       message.error('Error updating status');
     }
   };
 
-  // Function to update student status to 'onpanelist'
-  const updateToOnPanelist = async (studentId) => {
-    try {
-      const response = await fetch('http://localhost:5000/api/students/update-status/onpanelist', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({ studentId, status: 'onpanelist' }),
-      });
+  // Function to open the task modal
+  const openTaskModal = (student) => {
+    setCurrentTaskStudent(student);
+    setIsModalVisible(true);
+  };
 
-      if (response.ok) {
-        message.success('Status updated to On Panelist');
-        // Optionally, update state to reflect the status change
-      } else {
-        message.error('Failed to update status');
-      }
-    } catch (error) {
-      console.error("Error updating status:", error.message);
-      message.error('Error updating status');
+  // Function to handle task addition inside the modal
+  const handleTaskInputChange = (e) => {
+    setTaskInput(e.target.value);
+  };
+
+  const handleAddTask = () => {
+    if (taskInput) {
+      addTask(currentTaskStudent._id, taskInput);
     }
   };
 
   return (
-    <div style={{ flex: '1', overflowX: 'hidden' }} className="">
-      {/* Dropdown for course filtering */}
-
-      {/* <Select
-        value={selectedCourse}
-        onChange={handleCourseChange}
-        style={{ marginBottom: "20px", width: "200px" }}
-        placeholder="Select a course"
-      >
-
-        <Option value="">All Courses</Option>
-        {courses.map(course => (
-          <Option key={course} value={course}>
-            {course}
-          </Option>
-        ))}
-      </Select> */}
-
+    <div style={{ flex: 1, overflowX: 'hidden', padding: "20px" }}>
       <List
         grid={{ gutter: 16, column: 1 }}
         dataSource={filteredStudents}
@@ -161,125 +114,97 @@ export default function NewTables() {
           <List.Item key={student._id}>
             <div
               style={{
-             
-                height: "157px",
-                width: "1500px",
                 padding: "20px",
                 borderRadius: "8px",
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
-                transition: "all 0.3s ease",
-                cursor: "pointer",
                 backgroundColor: "#2B2B2B",
-              
+                marginBottom: "16px",
               }}
-              className="hover:bg-[#2F2F2F]"
             >
               <div style={{ flex: 1 }}>
-                <div
-                  style={{
-                    color: "#ffffff",
-                    marginBottom: "8px",
-                    fontSize: "16px",
-                    fontWeight: "bold",
-                  }}
-                >
+                <Text style={{ color: "#ffffff", fontSize: "18px", fontWeight: "bold" }}>
                   {student.proposalTitle}
-                </div>
-
-                <Text style={{ color: "#ffffff" }}>
-                  <span className="font-bold">Authors: </span>
-                  {student.groupMembers
-                    .map((member) =>
-                      member.replace(/([a-z])([A-Z])/g, "$1 $2")
-                    )
-                    .join(", ")}
-                </Text>
-
-               
-
-                <br />
-
-                <Text style={{ color: "#ffffff" }}>
-                  <span className="font-bold">Panelists: </span>
-                  {student.panelists.join(", ")}
                 </Text>
                 <br />
-
-                <div style={{ display: "flex" }}>
-                  {student.submittedAt && (
-                    <Text style={{ color: "#ffffff", marginRight: "10px" }}>
+                <Text style={{ color: "#ffffff" }}>
+                  <strong>Authors:</strong> {student.groupMembers.join(", ")}
+                </Text>
+                <br />
+                <Text style={{ color: "#ffffff" }}>
+                  <strong>Panelists:</strong> {student.panelists.join(", ")}
+                </Text>
+                <br />
+                <Text style={{ color: "#ffffff", marginRight: "10px" }}>
                       <span className="font-bold">Date Uploaded:</span>{" "}
                       {new Date(student.submittedAt).toLocaleDateString("en-US", {
                         month: "short",
                         day: "numeric",
                         year: "numeric",
                       })}
-                    </Text>
-                  )}
-
-                  <Text style={{ color: "#ffffff" }}>
-                    <span className="font-bold">Date Published:</span>{" "}
-                    {student.datePublished || "N/A"}
-                  </Text>
-
-                  <p>Manuscript Status: {student.manuscriptStatus}</p>
-                </div>
+                </Text>
+                <br /><br />
+                <Text style={{ color: "#ffffff" }}>
+                  <strong>Manuscript Status:</strong> {student.manuscriptStatus}
+                </Text>
               </div>
-              <Progress
-                  style={{marginLeft: '339px', }}
-                  percent={60}
-                  percentPosition={{
-                    align: 'center',
-                    type: 'inner',
-                  }}
-                  size={[300, 20]}
-                    />
-              <div
-                style={{
-               
-                  position: 'absolute',
-                  left: '1100px',
-                  background: "#222222",
-                  boxShadow: "-6px 0px 6.9px 0px rgba(0, 0, 0, 0.25)",
-                  height: "117px",
-                  width: "205px",
-                  alignItems: "center",
-                  paddingLeft: "44px",
-                  display: "flex",
-                  gap: "10px",
-                }}
-              >
 
-           
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginRight: "20px" }}>
+                <Progress percent={70} size="small" style={{ marginBottom: "20px" }} />
+                
                 <Button
-                  icon={<EditOutlined />}
-                  shape="circle"
-                  onClick={() =>
-                    handleViewManuscript(student._id, student.channelId)
-                  }
+                    icon={<EditOutlined />}
+                    onClick={() => handleViewManuscript(student._id, student.channelId)}
+                    style={{ marginBottom: "20px", width: "100px" }}
                 />
+                
                 <Button
-                  icon={<LoadingOutlined />}
-                  shape="circle"
-                  onClick={() => updateManuscriptStatus(student._id)}
+                    icon={<LoadingOutlined />}
+                    onClick={() => updateManuscriptStatus(student._id, 'in progress')}
+                    style={{ marginBottom: "20px", width: "100px" }}
                 />
+                
                 <Button
-                  icon={<CheckOutlined />}
-                  shape="circle"
-                  onClick={() => updateManuscriptStatus(student._id)}
+                    icon={<CheckOutlined />}
+                    onClick={() => updateManuscriptStatus(student._id, 'completed')}
+                    style={{ marginBottom: "20px", width: "100px" }}
                 />
+
+                <Button type="primary" onClick={() => openTaskModal(student)} style={{ marginBottom: "20px", width: "100px" }}>
+                  View Task
+                </Button>
               </div>
             </div>
           </List.Item>
         )}
       />
 
-      {/* CKEditorDocuments component to view selected student document */}
       {isEditorOpen && selectedStudentId && (
-        <CkEditorDocuments userId={user._id} channelId={selectedChannelId} onClose={() => setIsEditorOpen(false)} />
+        <CkEditorDocuments
+          userId={user._id}
+          channelId={selectedChannelId}
+          onClose={() => setIsEditorOpen(false)}
+        />
       )}
+
+      {/* Modal for task input */}
+      <Modal
+        title={`Add Task for ${currentTaskStudent?.proposalTitle}`}
+        visible={isModalVisible}
+        onOk={handleAddTask}
+        onCancel={() => setIsModalVisible(false)}
+        okText="Add Task"
+      >
+        <Input
+          placeholder="Enter a task"
+          value={taskInput}
+          onChange={handleTaskInputChange}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') handleAddTask();
+          }}
+        />
+      </Modal>
     </div>
   );
 }

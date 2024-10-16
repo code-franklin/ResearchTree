@@ -32,9 +32,10 @@ useEffect(() => {
 
       // Redirect based on user role
       if (user.role === 'student') {
-        navigate('/StudentDashboard/');
-      } else if (user.role === 'adviser') {
-        navigate('/AdviserDashboard/');
+        window.location.href = '/StudentDashboard/'; // Update the path based on your routing setup
+      } else if (user.role === 'adviser') {/* 
+        navigate('/AdviserDashboard/'); */
+        window.location.href = '/AdviserDashboard/'; // Update the path based on your routing setup
       }
     } catch (error) {
       if (error.response && error.response.status === 403) {

@@ -54,6 +54,8 @@ export default function NewTables() {
     setIsEditorOpen(true);
   };
 
+  // Task for Student
+
   const addTask = async (studentId, taskTitle) => {
     try {
       const response = await fetch(`http://localhost:5000/api/advicer/add-task/${studentId}`, {
@@ -77,17 +79,24 @@ export default function NewTables() {
   const updateManuscriptStatus = async (channelId, newStatus) => {
     try {
       const response = await axios.patch(
-        'http://localhost:5000/api/students/thesis/manuscript-status',
-        { channelId, manuscriptStatus: newStatus }
+        'http://localhost:5000/api/advicer/thesis/manuscript-status',
+        { channelId, manuscriptStatus: newStatus }  // Send student ID and new status
       );
-      console.log(response);
+      console.log(response.data);
       message.success('Manuscript status updated');
     } catch (error) {
-      console.error('Error updating manuscript status:', error);
-      message.error('Error updating status');
+      if (error.response) {
+        console.error('Error response:', error.response.data);
+        message.error(`Error: ${error.response.data.message || 'Failed to update status'}`);
+      } else {
+        console.error('Error:', error.message);
+        message.error('Error updating status');
+      }
     }
   };
-
+  
+  
+  
   // Function to open the task modal
   const openTaskModal = (student) => {
     setCurrentTaskStudent(student);
@@ -150,7 +159,7 @@ export default function NewTables() {
                 <Text style={{ color: "#ffffff", marginRight: "10px" }}>
                       <span className="font-bold">Date Uploaded:</span>{" "}
                              {new Date(student.submittedAt).toLocaleDateString("en-US", {
-                                  month: "short",
+                                  month: "short", 
                                   day: "numeric",
                                   year: "numeric",
                       })}

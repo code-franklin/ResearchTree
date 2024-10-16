@@ -207,8 +207,8 @@ const ResearchCard = () => {
         <div className="text-gray-400 mb-4">
         <span><span className="font-bold text-white">Date of Uploaded:</span> <span className="mr-5">{proposal?.submittedAt && new Date(proposal?.submittedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span></span>
           <span><span className="font-bold text-white">Date of Published: </span><span>Pending to Publish</span></span>
-          {/* <br />
-          {user.channelId} */}
+          <br />
+          {user.channelId}
         </div>
         <div className="flex justify-between items-center">
           <div>

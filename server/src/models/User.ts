@@ -21,6 +21,7 @@ export interface IUser extends Document {
   role: 'student' | 'adviser';
   profileImage: string;
   specializations: string[];
+  manuscriptStatus: 'reviseOnAdvicer' | 'readyToDefense' | null; // manuscript status
   course?: string;
   year?: number;
   handleNumber?: number;
@@ -42,6 +43,11 @@ const userSchema: Schema = new Schema<IUser>({
   role: { type: String, required: true, enum: ['student', 'adviser'] },
   profileImage: { type: String, required: false },
   specializations: { type: [String], required: function() { return this.role === 'adviser'; } },
+  manuscriptStatus: {
+    type: String,
+    enum: ['reviseOnAdvicer', 'readyToDefense', null], // Add manuscript status
+    default: null,
+  },
   course: { type: String },
   year: { type: Number },
   handleNumber: { type: Number },

@@ -2,10 +2,8 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/User';
-import Specialization from '../models/Specialization';/* 
-import Proposal from '../models/Proposal'; */
+import Specialization from '../models/Specialization';
 import { ObjectId } from 'mongodb';
-import Proposal from '../models/Proposal';
 
 export const registration = async (req: Request, res: Response) => {
   const { name, email, password, role, course, year, handleNumber, groupMembers } = req.body;
@@ -258,26 +256,6 @@ export const addTaskMyAdvicee = async (req: Request, res: Response) => {
   }
 };
 
-export const updateManuscriptStatus = async (req: Request, res: Response) => {
-  const { channelId, manuscriptStatus } = req.body;
-
-  try {
-      const updatedProposal = await Proposal.findOneAndUpdate(
-          { channelId }, // Find proposal by channelId
-          { manuscriptStatus }, // Update the status
-          { new: true } // Return updated document
-      );
-
-      if (!updatedProposal) {
-          return res.status(404).json({ message: 'Manuscript not found' });
-      }
-
-      res.status(200).json(updatedProposal);
-  } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Error updating manuscript status', error });
-  }
-}
 
 
 export const getPanelistStudents = async (req: Request, res: Response) => {
@@ -322,8 +300,36 @@ export const getPanelistStudents = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+  
+// Function to update manuscript status for a student
+export const updateManuscriptStatus = async (req: Request, res: Response) => {
+  const { channelId, manuscriptStatus } = req.body;  // Frontend sends `channelId` of the student and new manuscript status
 
+  try {
+    // Find the student by channelId and update their manuscriptStatus
+    const student = await User.findOneAndUpdate(
+      { _id: channelId },  // `channelId` should be the student's ID
+      { manuscriptStatus },
+      { new: true }  // Return the updated document
+    );
 
+    if (!student) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+
+    // Respond with success and the updated student data
+    res.status(200).json({
+      message: 'Manuscript status updated successfully',
+      student,
+    });
+
+    console.log('Received ManuscriptStatus:', manuscriptStatus);
+
+  } catch (error) {
+    console.error('Error updating manuscript status:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
 
 /* accepted opr declined the student */
 

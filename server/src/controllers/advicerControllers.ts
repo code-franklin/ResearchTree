@@ -190,19 +190,20 @@ export const getAdviserStudents = async (req: Request, res: Response) => {
   const { advisorId } = req.params;
 
   try {
+    // Fetch only students with the chosen advisor and their respective statuses
     const acceptedStudents = await User.find(
-      { chosenAdvisor: advisorId, advisorStatus: 'accepted' },
-      'name groupMembers channelId panelists course proposals tasks'
+      { chosenAdvisor: advisorId, advisorStatus: 'accepted', role: 'student' }, // Ensure only students
+      'name groupMembers channelId panelists course profileImage proposals tasks'
     ).lean();
 
-    const declinedStudents = await User.find({ chosenAdvisor: advisorId, advisorStatus: 'declined' });
-    const studentsToManage = await User.find({ chosenAdvisor: advisorId, advisorStatus: 'pending' });
+    const declinedStudents = await User.find({ chosenAdvisor: advisorId, advisorStatus: 'declined', role: 'student' });
+    const studentsToManage = await User.find({ chosenAdvisor: advisorId, advisorStatus: 'pending', role: 'student' });
 
     // Fetch names of panelists for each student
     const studentData = await Promise.all(
       acceptedStudents.map(async (student) => {
         // Fetch panelist names
-        const panelistNames = await User.find({ _id: { $in: student.panelists } }, 'name').lean();
+        const panelistNames = await User.find({ _id: { $in: student.panelists }, role: 'student' }, 'name').lean();
         const panelistNameList = panelistNames.map((panelist) => panelist.name);
 
         const latestProposal = student.proposals.length > 0 ? student.proposals[student.proposals.length - 1] : null;
@@ -214,6 +215,7 @@ export const getAdviserStudents = async (req: Request, res: Response) => {
           channelId: student.channelId,
           panelists: panelistNameList, // Return panelist names instead of IDs
           course: student.course,
+          profileImage: student.profileImage,
           proposalTitle: latestProposal ? latestProposal.proposalTitle : 'No proposal submitted',
           submittedAt: latestProposal ? latestProposal.submittedAt : null,
           tasks: student.tasks, // Include tasks
@@ -227,6 +229,7 @@ export const getAdviserStudents = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+
 
 
 
@@ -284,8 +287,11 @@ export const getPanelistStudents = async (req: Request, res: Response) => {
     // Fetch students where the advisor is a panelist and their advisorStatus is 'accepted'
     const panelistStudents = await User.find(
       { panelists: advisorId, advisorStatus: 'accepted' },
-      'name groupMembers channelId proposals panelists' // Include panelists
-    ).lean();
+      'name groupMembers channelId profileImage chosenAdvisor proposals panelists'
+    )
+    .populate('chosenAdvisor', 'name profileImage') // Populate advisor's name and profile image
+    .populate('panelists', 'name'); // Fetch names of panelists
+    
 
     // Map through students and fetch names of the panelists
     const studentData = await Promise.all(
@@ -301,6 +307,8 @@ export const getPanelistStudents = async (req: Request, res: Response) => {
           name: student.name,
           groupMembers: student.groupMembers,
           channelId: student.channelId,
+          profileImage: student.profileImage,
+          chosenAdvisor: student.chosenAdvisor,
           panelists: panelistNameList, // Return panelist names instead of IDs
           proposalTitle: latestProposal ? latestProposal.proposalTitle : 'No proposal submitted',
           submittedAt: latestProposal ? latestProposal.submittedAt : null,

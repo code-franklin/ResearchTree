@@ -106,7 +106,7 @@ export default function NewTables() {
   };
 
   return (
-    <div style={{ flex: 1, overflowX: 'hidden', padding: "20px" }}>
+    <div style={{ flex: 1, overflowX: 'hidden', padding: "20px", width: '1263px'}}>
       <List
         grid={{ gutter: 16, column: 1 }}
         dataSource={filteredStudents}
@@ -114,6 +114,7 @@ export default function NewTables() {
           <List.Item key={student._id}>
             <div
               style={{
+                height: '200px',
                 padding: "20px",
                 borderRadius: "8px",
                 display: "flex",
@@ -123,63 +124,82 @@ export default function NewTables() {
                 marginBottom: "16px",
               }}
             >
+
+                {/* Manuscript Containers */}
               <div style={{ flex: 1 }}>
+
+                {/* Research Title */}
                 <Text style={{ color: "#ffffff", fontSize: "18px", fontWeight: "bold" }}>
                   {student.proposalTitle}
                 </Text>
                 <br />
+
+                {/* Authors */}
                 <Text style={{ color: "#ffffff" }}>
                   <strong>Authors:</strong> {student.groupMembers.join(", ")}
                 </Text>
                 <br />
+
+                {/* Panelist */}
                 <Text style={{ color: "#ffffff" }}>
                   <strong>Panelists:</strong> {student.panelists.join(", ")}
                 </Text>
                 <br />
+
+                 {/* Date Uploaded */}
                 <Text style={{ color: "#ffffff", marginRight: "10px" }}>
                       <span className="font-bold">Date Uploaded:</span>{" "}
-                      {new Date(student.submittedAt).toLocaleDateString("en-US", {
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
+                             {new Date(student.submittedAt).toLocaleDateString("en-US", {
+                                  month: "short",
+                                  day: "numeric",
+                                  year: "numeric",
                       })}
                 </Text>
                 <br /><br />
+
+                {/* Status */}
                 <Text style={{ color: "#ffffff" }}>
                   <strong>Manuscript Status:</strong> {student.manuscriptStatus}
                 </Text>
               </div>
+              
 
+                 {/* Action Buttons */}
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginRight: "20px" }}>
-                <Progress percent={70} size="small" style={{ marginBottom: "20px" }} />
-                
+             
+                 {/* View Manuscript Button */}
                 <Button
                     icon={<EditOutlined />}
                     onClick={() => handleViewManuscript(student._id, student.channelId)}
                     style={{ marginBottom: "20px", width: "100px" }}
                 />
-                
+                {/* In Progress Button */}
                 <Button
                     icon={<LoadingOutlined />}
                     onClick={() => updateManuscriptStatus(student._id, 'in progress')}
                     style={{ marginBottom: "20px", width: "100px" }}
                 />
-                
+                {/* Completed Button */}
                 <Button
                     icon={<CheckOutlined />}
                     onClick={() => updateManuscriptStatus(student._id, 'completed')}
                     style={{ marginBottom: "20px", width: "100px" }}
                 />
-
+                {/* View Task */}
                 <Button type="primary" onClick={() => openTaskModal(student)} style={{ marginBottom: "20px", width: "100px" }}>
                   View Task
                 </Button>
+
+
               </div>
             </div>
           </List.Item>
         )}
       />
 
+
+
+      {/* CK EDITOR */}
       {isEditorOpen && selectedStudentId && (
         <CkEditorDocuments
           userId={user._id}
@@ -187,6 +207,7 @@ export default function NewTables() {
           onClose={() => setIsEditorOpen(false)}
         />
       )}
+
 
       {/* Modal for task input */}
       <Modal

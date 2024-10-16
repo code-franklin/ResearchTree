@@ -87,15 +87,19 @@ const ListManuscript = () => {
         >
 
           <div>
+            
+            <div className='absolute w-[1000px]'>
             <TextHeader/>
+            </div>
+           
 
             <Input
                 placeholder="Search articles..."
                 /* value={searchText}
                 onChange={(e) => handleSearch(e.target.value)} */
-                style={{  position: 'fixed',top: '200px', right: '140px', width: '35%', height: '45px', borderRadius: '13px', paddingLeft: '60px'  }}
+                style={{  position: 'fixed',top: '194px', right: '770px', width: '35%', height: '50px', borderRadius: '20px', paddingLeft: '60px'  }}
             />
-            <SearchOutlined style={{ position: 'absolute', marginTop: '10px', marginLeft: '685px', color: 'grey', fontSize: '28px' }} />
+            <SearchOutlined style={{ position: 'absolute', marginTop: '6px', marginLeft: '60px', color: 'grey', fontSize: '28px' }} />
           </div>
 
         </ConfigProvider>
@@ -107,26 +111,36 @@ const ListManuscript = () => {
     <Box sx={{ width: '100%' }}>
     <Box sx={{ width: '100%' }}>
   <Box
+  
     sx={{
       position: 'fixed',
       borderBottom: 1,
       borderColor: 'divider',
       marginLeft: '25px',
-      width: '47%',
+      width: '27.7%',
       marginTop: '-36px',
+      marginLeft: '740px',
     }}
   >
-    <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+    <Tabs 
+      style={{borderRadius: '20px', background: '#222222'}}
+      value={value} 
+      onChange={handleChange} 
+      aria-label="basic tabs example"
+      TabIndicatorProps={{ sx: { display: 'none' } }} // This hides the underline
+    >
       <Tab
+      
         sx={{
+          borderRadius: '20px',
           color: 'green', // Default color
           '&:hover': {
-            color: 'orange', // Customize hover text color
-            backgroundColor: 'lightgray', // Customize hover background color
+            color: 'white', // Customize active text color
+            backgroundColor: 'green', // Customize active background color
           },
           '&.Mui-selected': {
-            color: 'red', // Customize active text color
-            backgroundColor: 'lightblue', // Customize active background color
+            color: 'white', // Customize active text color
+            backgroundColor: 'green', // Customize active background color
           },
         }}
         label="List Manuscript"
@@ -134,29 +148,33 @@ const ListManuscript = () => {
       />
       <Tab
         sx={{
+          marginLeft: '5px',
+          borderRadius: '20px',
           color: 'green',
           '&:hover': {
-            color: 'orange',
-            backgroundColor: 'lightgray',
+            color: 'white', // Customize active text color
+            backgroundColor: 'green', // Customize active background color
           },
           '&.Mui-selected': {
-            color: 'red',
-            backgroundColor: 'lightblue',
+            color: 'white', // Customize active text color
+            backgroundColor: 'green', // Customize active background color
           },
         }}
-        label="Ongoing Revision on Advicer"
+        label="Ongoing Revision "
         {...a11yProps(1)}
       />
       <Tab
         sx={{
+          marginLeft: '5px',
+          borderRadius: '20px',
           color: 'green',
           '&:hover': {
-            color: 'orange',
-            backgroundColor: 'lightgray',
+            color: 'white', // Customize active text color
+            backgroundColor: 'green', // Customize active background color
           },
           '&.Mui-selected': {
-            color: 'red',
-            backgroundColor: 'lightblue',
+            color: 'white', // Customize active text color
+            backgroundColor: 'green', // Customize active background color
           },
         }}
         label="Ready for Defense"

@@ -133,14 +133,7 @@ export default function NewTables() {
                   gap: "10px",
                 }}
               >
-                <Button icon={<CheckOutlined />} shape="circle" />
-                <Button
-                  icon={<EditOutlined />}
-                  shape="circle"
-                  onClick={() =>
-                    handleViewManuscript(student._id, student.channelId)
-                  }
-                />
+             
               </div>
             </div>
           </List.Item>

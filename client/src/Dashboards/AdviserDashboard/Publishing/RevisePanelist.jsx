@@ -242,7 +242,7 @@ export default function NewTables() {
                 />
                 <Button
                   icon={<CheckOutlined />}
-                  onClick={() => updateManuscriptStatus(student._id, 'readyToDefense')}
+                  onClick={() => updateManuscriptStatus(student._id, 'approvedOnPanel')}
                   style={{ marginBottom: "20px", width: "100px" }}
                 />
                 <Button type="primary" onClick={() => openTaskModal(student)} style={{ marginBottom: "20px", width: "100px" }}>

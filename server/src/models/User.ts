@@ -21,7 +21,7 @@ export interface IUser extends Document {
   role: 'student' | 'adviser';
   profileImage: string;
   specializations: string[];
-  manuscriptStatus: 'reviseOnAdvicer' | 'readyToDefense' | null; // manuscript status
+  manuscriptStatus: 'reviseOnAdvicer' | 'readyToDefense' | 'reviseOnPanelist' | 'approvedOnPanel' | null; // manuscript status
   course?: string;
   year?: number;
   handleNumber?: number;

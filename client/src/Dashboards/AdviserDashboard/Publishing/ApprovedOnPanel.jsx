@@ -23,10 +23,33 @@ export default function NewTables() {
   const [taskInput, setTaskInput] = useState("");
   const [tasks, setTasks] = useState([]); // To store tasks
 
+  
+  const [panelistStudents, setPanelistStudents] = useState([]);
+
   const user = JSON.parse(localStorage.getItem("user"));
 
-
   useEffect(() => {
+    fetchPanelistStudents();
+  }, []);
+
+  const fetchPanelistStudents = async () => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/advicer/panelist-students/${user._id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setPanelistStudents(data.panelistStudents);
+      } else {
+        console.error('Error fetching panelist students');
+      }
+    } catch (error) {
+      console.error('Error fetching panelist students:', error.message);
+    }
+  };
+
   // Fetch students
   const fetchStudents = async () => {
     try {
@@ -57,6 +80,7 @@ export default function NewTables() {
     }
   };
 
+  useEffect(() => {
     fetchStudents();
   }, [user._id]);
 
@@ -173,7 +197,7 @@ export default function NewTables() {
 
       <List
         grid={{ gutter: 16, column: 1 }}
-        dataSource={filteredStudents.filter(student => student.manuscriptStatus === "reviseOnAdvicer")}
+        dataSource={panelistStudents.filter(student => student.manuscriptStatus === 'approvedOnPanel' )}
         renderItem={(student) => (
           <List.Item key={student._id}>
             <div
@@ -237,12 +261,12 @@ export default function NewTables() {
                 />
                 <Button
                   icon={<LoadingOutlined />}  
-                  onClick={() => updateManuscriptStatus(student._id, 'reviseOnAdvicer')}
+                  onClick={() => updateManuscriptStatus(student._id, 'reviseOnPanelist')}
                   style={{ marginBottom: "20px", width: "100px" }}
                 />
                 <Button
                   icon={<CheckOutlined />}
-                  onClick={() => updateManuscriptStatus(student._id, 'readyToDefense')}
+                  onClick={() => updateManuscriptStatus(student._id, 'approvedOnPanel')}
                   style={{ marginBottom: "20px", width: "100px" }}
                 />
                 <Button type="primary" onClick={() => openTaskModal(student)} style={{ marginBottom: "20px", width: "100px" }}>

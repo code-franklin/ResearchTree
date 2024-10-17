@@ -8,7 +8,7 @@ const { Text } = Typography;
 const { Option } = Select;
 
 export default function NewTables() {
-  const [acceptedStudents, setAcceptedStudents] = useState([]);
+  const [panelistStudents, setPanelistStudents] = useState([]);
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [selectedStudentId, setSelectedStudentId] = useState(null);
   const [selectedChannelId, setSelectedChannelId] = useState(null);
@@ -23,42 +23,42 @@ export default function NewTables() {
   const [taskInput, setTaskInput] = useState("");
   const [tasks, setTasks] = useState([]); // To store tasks
 
+  
+
   const user = JSON.parse(localStorage.getItem("user"));
 
-
   useEffect(() => {
-  // Fetch students
-  const fetchStudents = async () => {
-    try {
-      const response = await fetch(
-        `http://localhost:5000/api/advicer/advisor-students/${user._id}`,
-        {
+    const fetchPanelistStudents = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/api/advicer/panelist-students/${user._id}`, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setPanelistStudents(data.panelistStudents);
+          setFilteredStudents(data.panelistStudents);
+          // Extract unique courses from the students data
+          const uniqueCourses = [
+            ...new Set(data.panelistStudents.map(student => student.course))
+          ];
+          setCourses(uniqueCourses);
+
+        } else {
+          console.error('Error fetching panelist students');
         }
-      );
-      if (response.ok) {
-        const data = await response.json();
-        setAcceptedStudents(data.acceptedStudents);
-        setFilteredStudents(data.acceptedStudents);
-
-        // Extract unique courses from the students data
-        const uniqueCourses = [
-          ...new Set(data.acceptedStudents.map(student => student.course))
-        ];
-        setCourses(uniqueCourses);
-      } else {
-        const errorData = await response.json();
-        console.error("Error fetching students:", errorData.message);
+      } catch (error) {
+        console.error('Error fetching panelist students:', error.message);
       }
-    } catch (error) {
-      console.error("Error fetching students:", error.message);
-    }
-  };
+    };
 
-    fetchStudents();
-  }, [user._id]);
+    
+    fetchPanelistStudents();
+  }, []);
+
+
+
 
   const handleViewManuscript = (studentId, channelId) => {
     setSelectedStudentId(studentId);
@@ -143,10 +143,10 @@ export default function NewTables() {
     const handleCourseChange = (value) => {
       setSelectedCourse(value);
       if (value === "") {
-        setFilteredStudents(acceptedStudents); // Show all students if no course is selected
+        setFilteredStudents(panelistStudents); // Show all students if no course is selected
       } else {
         setFilteredStudents(
-          acceptedStudents.filter(student => student.course === value)
+            panelistStudents.filter(student => student.course === value)
         );
       }
     };
@@ -156,7 +156,6 @@ export default function NewTables() {
   return (
     <div style={{ flex: 1, overflowX: 'hidden', padding: "20px", width: '1263px' }}>
 
-            {/* Dropdown for course filtering */}
       <Select
         value={selectedCourse}
         onChange={handleCourseChange}
@@ -173,7 +172,7 @@ export default function NewTables() {
 
       <List
         grid={{ gutter: 16, column: 1 }}
-        dataSource={filteredStudents.filter(student => student.manuscriptStatus === "reviseOnAdvicer")}
+        dataSource={filteredStudents.filter(student => student.manuscriptStatus === "readyToDefense" )}
         renderItem={(student) => (
           <List.Item key={student._id}>
             <div
@@ -237,12 +236,12 @@ export default function NewTables() {
                 />
                 <Button
                   icon={<LoadingOutlined />}  
-                  onClick={() => updateManuscriptStatus(student._id, 'reviseOnAdvicer')}
+                  onClick={() => updateManuscriptStatus(student._id, 'reviseOnPanelist')}
                   style={{ marginBottom: "20px", width: "100px" }}
                 />
                 <Button
                   icon={<CheckOutlined />}
-                  onClick={() => updateManuscriptStatus(student._id, 'readyToDefense')}
+                  onClick={() => updateManuscriptStatus(student._id, 'approvedOnPanel')}
                   style={{ marginBottom: "20px", width: "100px" }}
                 />
                 <Button type="primary" onClick={() => openTaskModal(student)} style={{ marginBottom: "20px", width: "100px" }}>

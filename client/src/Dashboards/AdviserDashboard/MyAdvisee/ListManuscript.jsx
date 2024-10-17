@@ -1,17 +1,21 @@
 import { useEffect, useState } from "react";
-import { List, Typography, Button, message, Modal, Input, Checkbox, ConfigProvider } from "antd";
+import { List, Typography, Button, message, Modal, Input, Checkbox, ConfigProvider, Select } from "antd";
 import { EditOutlined, CheckOutlined, LoadingOutlined, DeleteOutlined } from "@ant-design/icons";
 import CkEditorDocuments from './CkEditorDocuments';
 import axios from "axios";
 
 const { Text } = Typography;
+const { Option } = Select;
 
 export default function NewTables() {
   const [acceptedStudents, setAcceptedStudents] = useState([]);
-  const [filteredStudents, setFilteredStudents] = useState([]);
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [selectedStudentId, setSelectedStudentId] = useState(null);
   const [selectedChannelId, setSelectedChannelId] = useState(null);
+
+  const [courses, setCourses] = useState([]); // To store all unique courses
+  const [filteredStudents, setFilteredStudents] = useState([]); // For filtering based on the course
+  const [selectedCourse, setSelectedCourse] = useState(""); // For the selected course
 
   // Modal states
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -36,6 +40,12 @@ export default function NewTables() {
         const data = await response.json();
         setAcceptedStudents(data.acceptedStudents);
         setFilteredStudents(data.acceptedStudents);
+
+        // Extract unique courses from the students data
+        const uniqueCourses = [
+          ...new Set(data.acceptedStudents.map(student => student.course))
+        ];
+        setCourses(uniqueCourses);
       } else {
         const errorData = await response.json();
         console.error("Error fetching students:", errorData.message);
@@ -83,7 +93,7 @@ export default function NewTables() {
         'http://localhost:5000/api/advicer/thesis/manuscript-status',
         { channelId, manuscriptStatus: newStatus }  // Send student ID and new status
       );
-      console.log(response.data);
+
       message.success('Manuscript status updated');
     } catch (error) {
       if (error.response) {
@@ -128,11 +138,41 @@ export default function NewTables() {
     setTasks(updatedTasks); // Update task completion status
   };
 
+    // Handle course selection
+    const handleCourseChange = (value) => {
+      setSelectedCourse(value);
+      if (value === "") {
+        setFilteredStudents(acceptedStudents); // Show all students if no course is selected
+      } else {
+        setFilteredStudents(
+          acceptedStudents.filter(student => student.course === value)
+        );
+      }
+    };
+
+    
+
   return (
     <div style={{ flex: 1, overflowX: 'hidden', padding: "20px", width: '1263px' }}>
+
+            {/* Dropdown for course filtering */}
+      <Select
+        value={selectedCourse}
+        onChange={handleCourseChange}
+        style={{ marginBottom: "20px", width: "200px" }}
+        placeholder="Select a course"
+      >
+        <Option value="">All Courses</Option>
+        {courses.map(course => (
+          <Option key={course} value={course}>
+            {course}
+          </Option>
+        ))}
+      </Select>
+
       <List
         grid={{ gutter: 16, column: 1 }}
-        dataSource={filteredStudents}
+        dataSource={filteredStudents.filter(student => student.manuscriptStatus === null )}
         renderItem={(student) => (
           <List.Item key={student._id}>
             <div
@@ -152,48 +192,56 @@ export default function NewTables() {
                   {student.proposalTitle}
                 </Text>
                 <br />
-                <Text style={{ color: "#ffffff" }}>
-                  <strong>Authors:</strong> {student.groupMembers.join(", ")}
+                <Text style={{ color: '#ffffff' }}>
+                  <span className="font-bold">Authors: </span>
+                  {student.groupMembers
+                    .map(member => member.replace(/([a-z])([A-Z])/g, '$1 $2')) // Insert space between lowercase and uppercase letters
+                    .join(', ')}
                 </Text>
                 <br />
                 <Text style={{ color: "#ffffff" }}>
-                  <strong>Panelists:</strong> {student.panelists.join(", ")}
+                  <span className="font-bold">Panelists: </span>
+                  {student.panelists.join(", ")}
                 </Text>
+
                 <br />
-                <Text style={{ color: "#ffffff", marginRight: "10px" }}>
-                      <span className="font-bold">Date Uploaded:</span>{" "}
-                             {new Date(student.submittedAt).toLocaleDateString("en-US", {
-                                  month: "short", 
-                                  day: "numeric",
-                                  year: "numeric",
-                      })}
-                  <span className="font-bold">Date Uploaded:</span>{" "}
-                  {new Date(student.submittedAt).toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                  })}
+                {student.submittedAt && (
+                  <Text style={{ color: "#ffffff", marginRight: "10px" }}>
+                    <span className="font-bold">Date Uploaded:</span>{" "}
+                    {new Date(student.submittedAt).toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })}
+                  </Text>
+                )}
+                <Text style={{ color: "#ffffff" }}>
+                  <span className="font-bold">Date Published:</span>{" "}
+                  {student.datePublished || "N/A"}
                 </Text>
                 <br /><br />
+                <p style={{ color: "#ffffff" }}>Course: {student.course}</p>
+                <br />
+
                 <Text style={{ color: "#ffffff" }}>
                   <strong>Manuscript Status:</strong> {student.manuscriptStatus}
                 </Text>
               </div>
 
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginRight: "20px" }}>
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginRight: "10px" }}>
                 <Button
                   icon={<EditOutlined />}
                   onClick={() => handleViewManuscript(student._id, student.channelId)}
                   style={{ marginBottom: "20px", width: "100px" }}
                 />
                 <Button
-                  icon={<LoadingOutlined />}
-                  onClick={() => updateManuscriptStatus(student._id, 'in progress')}
+                  icon={<LoadingOutlined />}  
+                  onClick={() => updateManuscriptStatus(student._id, 'reviseOnAdvicer')}
                   style={{ marginBottom: "20px", width: "100px" }}
                 />
                 <Button
                   icon={<CheckOutlined />}
-                  onClick={() => updateManuscriptStatus(student._id, 'completed')}
+                  onClick={() => updateManuscriptStatus(student._id, 'readyToDefense')}
                   style={{ marginBottom: "20px", width: "100px" }}
                 />
                 <Button type="primary" onClick={() => openTaskModal(student)} style={{ marginBottom: "20px", width: "100px" }}>
@@ -212,6 +260,7 @@ export default function NewTables() {
           onClose={() => setIsEditorOpen(false)}
         />
       )}
+
  <ConfigProvider
       theme={{
         components: {

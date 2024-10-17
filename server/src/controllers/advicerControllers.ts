@@ -201,7 +201,7 @@ export const getAdviserStudents = async (req: Request, res: Response) => {
     const studentData = await Promise.all(
       acceptedStudents.map(async (student) => {
         // Fetch panelist names
-        const panelistNames = await User.find({ _id: { $in: student.panelists }, role: 'student' }, 'name').lean();
+        const panelistNames = await User.find({ _id: { $in: student.panelists } }, 'name').lean();
         const panelistNameList = panelistNames.map((panelist) => panelist.name);
 
         const latestProposal = student.proposals.length > 0 ? student.proposals[student.proposals.length - 1] : null;
@@ -215,9 +215,9 @@ export const getAdviserStudents = async (req: Request, res: Response) => {
           course: student.course,
           profileImage: student.profileImage,
           manuscriptStatus: student.manuscriptStatus,
+          chosenAdvisor: student.chosenAdvisor,
           proposalTitle: latestProposal ? latestProposal.proposalTitle : 'No proposal submitted',
           submittedAt: latestProposal ? latestProposal.submittedAt : null,
-          tasks: student.tasks, // Include tasks
         };
       })
     );
@@ -228,9 +228,6 @@ export const getAdviserStudents = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
-
-
-
 
 // Add Task API - POST /api/advicer/add-task/:studentId
 export const addTaskMyAdvicee = async (req: Request, res: Response) => {
@@ -266,7 +263,7 @@ export const getPanelistStudents = async (req: Request, res: Response) => {
     // Fetch students where the advisor is a panelist and their advisorStatus is 'accepted'
     const panelistStudents = await User.find(
       { panelists: advisorId, advisorStatus: 'accepted' },
-      'name groupMembers channelId profileImage chosenAdvisor proposals panelists'
+      'name groupMembers channelId course profileImage chosenAdvisor manuscriptStatus proposals panelists'
     )
     .populate('chosenAdvisor', 'name profileImage') // Populate advisor's name and profile image
     .populate('panelists', 'name'); // Fetch names of panelists
@@ -286,8 +283,10 @@ export const getPanelistStudents = async (req: Request, res: Response) => {
           name: student.name,
           groupMembers: student.groupMembers,
           channelId: student.channelId,
+          course: student.course,
           profileImage: student.profileImage,
           chosenAdvisor: student.chosenAdvisor,
+          manuscriptStatus: student.manuscriptStatus,
           panelists: panelistNameList, // Return panelist names instead of IDs
           proposalTitle: latestProposal ? latestProposal.proposalTitle : 'No proposal submitted',
           submittedAt: latestProposal ? latestProposal.submittedAt : null,

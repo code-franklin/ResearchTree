@@ -102,6 +102,17 @@ const Sidebar = ({ onSelect }) => {
         </Link> 
 
       
+        <Link to="AdviserDashboard/Grading"
+          className="revision mx-10 
+                     focus:font-semibold 
+                     focus:ml-[4rem] focus:bg-gradient-to-r from-[#0BF677] to-[#079774] 
+                     hover:font-medium hover:ml-[4rem] 
+                     text-white px-2 "
+          
+        >
+        <img className="inline-block mr-2 mb-1" src="/src/assets/revision-icon.png"/>
+       Grading
+        </Link> 
 
       
         

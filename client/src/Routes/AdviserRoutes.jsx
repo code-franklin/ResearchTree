@@ -3,7 +3,7 @@ import { Route, Routes, Link } from 'react-router-dom';
 
 
 import TitleProposal from '../Dashboards/AdviserDashboard/Sidebar/TitleProposals'
-
+import Grading from '../Dashboards/AdviserDashboard/MyAdvisee/Grading'
 import MyAdvisee from '../Dashboards/AdviserDashboard/MyAdvisee/Tables'
 import Publishing from '../Dashboards/AdviserDashboard/Publishing/Tables'
 import ExploreManuscript from '../Dashboards/AdviserDashboard/ExploreManuscript/ArticleList'
@@ -29,6 +29,7 @@ function AdviserRoutes() {
               <Routes>
 
               <Route path="AdviserDashboard/TitleProposal" element={<TitleProposal/>} />
+              <Route path="AdviserDashboard/Grading" element={<Grading/>} />
 
                 <Route path="/" element={<ViewAnalytics/>} />
                 <Route path="AdviserDashboard/MyAdvisee" element={<MyAdvisee/>} />

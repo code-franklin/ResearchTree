@@ -191,7 +191,7 @@ export const getAdviserStudents = async (req: Request, res: Response) => {
     // Fetch only students with the chosen advisor and their respective statuses
     const acceptedStudents = await User.find(
       { chosenAdvisor: advisorId, advisorStatus: 'accepted', role: 'student' }, // Ensure only students
-      'name groupMembers channelId panelists course profileImage proposals tasks'
+      'name groupMembers channelId panelists course profileImage manuscriptStatus proposals tasks'
     ).lean();
 
     const declinedStudents = await User.find({ chosenAdvisor: advisorId, advisorStatus: 'declined', role: 'student' });
@@ -214,6 +214,7 @@ export const getAdviserStudents = async (req: Request, res: Response) => {
           panelists: panelistNameList, // Return panelist names instead of IDs
           course: student.course,
           profileImage: student.profileImage,
+          manuscriptStatus: student.manuscriptStatus,
           proposalTitle: latestProposal ? latestProposal.proposalTitle : 'No proposal submitted',
           submittedAt: latestProposal ? latestProposal.submittedAt : null,
           tasks: student.tasks, // Include tasks

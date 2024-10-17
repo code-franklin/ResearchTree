@@ -8,7 +8,7 @@ import {
   CloseCircleOutlined,
   SyncOutlined,
 } from '@ant-design/icons';
-import { Tag , Flex } from 'antd';
+import { Tag , Flex, message } from 'antd';
 
 import Textarea from '@mui/joy/Textarea';
 
@@ -83,21 +83,27 @@ export default function BasicModal() {
         const data = await response.json();
         setTopAdvisors(data.topAdvisors);
         setSubmittedAt(data.submittedAt); // Set the submittedAt date from response
-        console.log('Proposal submitted successfully!');
-
-              // Update the proposal state with the newly submitted data
-      setProposal({
-        proposalTitle: data.proposalTitle,
-        proposalText: data.proposalText,
-        submittedAt: data.submittedAt
-      });
-
+        const newChannelId = data.channelId;  
+        localStorage.setItem('channelId', newChannelId);
+        message.success('Proposal submitted successfully');
+        console.log('Proposal submitted successfully!', data);
+  
+        // add the channel id if doesn't work on localStorage
+        
+        // Update the proposal state with the newly submitted data
+        setProposal({
+          proposalTitle: data.proposalTitle,
+          proposalText: data.proposalText,
+          submittedAt: data.submittedAt,
+        });
       } else {
         const errorData = await response.json();
         console.error('Error submitting proposal:', errorData.message);
+        message.error('Failed to submit proposal: ' + errorData.message);
       }
     } catch (error) {
       console.error('Error submitting proposal:', error.message);
+      message.error('An error occurred while submitting the proposal');
     }
   };
   

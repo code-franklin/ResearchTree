@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { List, Typography, Button, message, Progress, Modal, Input } from "antd";
-import { EditOutlined, CheckOutlined, LoadingOutlined } from "@ant-design/icons";
+import { List, Typography, Button, message, Modal, Input, Checkbox, ConfigProvider } from "antd";
+import { EditOutlined, CheckOutlined, LoadingOutlined, DeleteOutlined } from "@ant-design/icons";
 import CkEditorDocuments from './CkEditorDocuments';
 import axios from "axios";
 
@@ -12,15 +12,16 @@ export default function NewTables() {
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [selectedStudentId, setSelectedStudentId] = useState(null);
   const [selectedChannelId, setSelectedChannelId] = useState(null);
-  
+
   // Modal states
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentTaskStudent, setCurrentTaskStudent] = useState(null);
   const [taskInput, setTaskInput] = useState("");
+  const [tasks, setTasks] = useState([]); // To store tasks
 
   const user = JSON.parse(localStorage.getItem("user"));
 
-  // Move the fetchStudents function outside of useEffect
+  // Fetch students
   const fetchStudents = async () => {
     try {
       const response = await fetch(
@@ -67,7 +68,7 @@ export default function NewTables() {
         body: JSON.stringify({ taskTitle }),
       });
       if (response.ok) {
-        setIsModalVisible(false); // Close the modal after adding task
+        setTasks([...tasks, { title: taskTitle, completed: false }]); // Add new task
         setTaskInput(""); // Clear task input
         fetchStudents(); // Refresh the list after adding a task
       }
@@ -97,13 +98,11 @@ export default function NewTables() {
   
   
   
-  // Function to open the task modal
   const openTaskModal = (student) => {
     setCurrentTaskStudent(student);
     setIsModalVisible(true);
   };
 
-  // Function to handle task addition inside the modal
   const handleTaskInputChange = (e) => {
     setTaskInput(e.target.value);
   };
@@ -114,8 +113,23 @@ export default function NewTables() {
     }
   };
 
+  const handleDeleteTask = (index) => {
+    const updatedTasks = tasks.filter((_, i) => i !== index);
+    setTasks(updatedTasks); // Update task list after deletion
+  };
+
+  const handleCompleteTask = (index) => {
+    const updatedTasks = tasks.map((task, i) => {
+      if (i === index) {
+        return { ...task, completed: !task.completed };
+      }
+      return task;
+    });
+    setTasks(updatedTasks); // Update task completion status
+  };
+
   return (
-    <div style={{ flex: 1, overflowX: 'hidden', padding: "20px", width: '1263px'}}>
+    <div style={{ flex: 1, overflowX: 'hidden', padding: "20px", width: '1263px' }}>
       <List
         grid={{ gutter: 16, column: 1 }}
         dataSource={filteredStudents}
@@ -133,29 +147,19 @@ export default function NewTables() {
                 marginBottom: "16px",
               }}
             >
-
-                {/* Manuscript Containers */}
               <div style={{ flex: 1 }}>
-
-                {/* Research Title */}
                 <Text style={{ color: "#ffffff", fontSize: "18px", fontWeight: "bold" }}>
                   {student.proposalTitle}
                 </Text>
                 <br />
-
-                {/* Authors */}
                 <Text style={{ color: "#ffffff" }}>
                   <strong>Authors:</strong> {student.groupMembers.join(", ")}
                 </Text>
                 <br />
-
-                {/* Panelist */}
                 <Text style={{ color: "#ffffff" }}>
                   <strong>Panelists:</strong> {student.panelists.join(", ")}
                 </Text>
                 <br />
-
-                 {/* Date Uploaded */}
                 <Text style={{ color: "#ffffff", marginRight: "10px" }}>
                       <span className="font-bold">Date Uploaded:</span>{" "}
                              {new Date(student.submittedAt).toLocaleDateString("en-US", {
@@ -163,52 +167,44 @@ export default function NewTables() {
                                   day: "numeric",
                                   year: "numeric",
                       })}
+                  <span className="font-bold">Date Uploaded:</span>{" "}
+                  {new Date(student.submittedAt).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                  })}
                 </Text>
                 <br /><br />
-
-                {/* Status */}
                 <Text style={{ color: "#ffffff" }}>
                   <strong>Manuscript Status:</strong> {student.manuscriptStatus}
                 </Text>
               </div>
-              
 
-                 {/* Action Buttons */}
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginRight: "20px" }}>
-             
-                 {/* View Manuscript Button */}
                 <Button
-                    icon={<EditOutlined />}
-                    onClick={() => handleViewManuscript(student._id, student.channelId)}
-                    style={{ marginBottom: "20px", width: "100px" }}
+                  icon={<EditOutlined />}
+                  onClick={() => handleViewManuscript(student._id, student.channelId)}
+                  style={{ marginBottom: "20px", width: "100px" }}
                 />
-                {/* In Progress Button */}
                 <Button
-                    icon={<LoadingOutlined />}
-                    onClick={() => updateManuscriptStatus(student._id, 'in progress')}
-                    style={{ marginBottom: "20px", width: "100px" }}
+                  icon={<LoadingOutlined />}
+                  onClick={() => updateManuscriptStatus(student._id, 'in progress')}
+                  style={{ marginBottom: "20px", width: "100px" }}
                 />
-                {/* Completed Button */}
                 <Button
-                    icon={<CheckOutlined />}
-                    onClick={() => updateManuscriptStatus(student._id, 'completed')}
-                    style={{ marginBottom: "20px", width: "100px" }}
+                  icon={<CheckOutlined />}
+                  onClick={() => updateManuscriptStatus(student._id, 'completed')}
+                  style={{ marginBottom: "20px", width: "100px" }}
                 />
-                {/* View Task */}
                 <Button type="primary" onClick={() => openTaskModal(student)} style={{ marginBottom: "20px", width: "100px" }}>
                   View Task
                 </Button>
-
-
               </div>
             </div>
           </List.Item>
         )}
       />
 
-
-
-      {/* CK EDITOR */}
       {isEditorOpen && selectedStudentId && (
         <CkEditorDocuments
           userId={user._id}
@@ -216,25 +212,62 @@ export default function NewTables() {
           onClose={() => setIsEditorOpen(false)}
         />
       )}
+ <ConfigProvider
+      theme={{
+        components: {
+          Modal: {
+          
+            algorithm: true, // Enable algorithm
+          },
+       
+        },
+      }}
+    >
+<Modal
+  visible={isModalVisible}
 
-
-      {/* Modal for task input */}
-      <Modal
-        title={`Add Task for ${currentTaskStudent?.proposalTitle}`}
-        visible={isModalVisible}
-        onOk={handleAddTask}
-        onCancel={() => setIsModalVisible(false)}
-        okText="Add Task"
+  onCancel={() => setIsModalVisible(false)}  // Ensures modal can close
+  footer={[
+    <Button key="close" onClick={() => setIsModalVisible(false)}>
+      Close
+    </Button>,
+    <Button key="add" type="primary" onClick={handleAddTask}>
+      Add Task
+    </Button>,
+  ]}
+ 
+>
+  <Input
+    placeholder="Enter a task"
+    value={taskInput}
+    onChange={handleTaskInputChange}
+    onKeyDown={(e) => {
+      if (e.key === 'Enter') handleAddTask();
+    }}
+  />
+  <br /><br />
+  <List
+    dataSource={tasks}
+    renderItem={(task, index) => (
+      <List.Item
+        key={index}
+        actions={[
+          <Checkbox checked={task.completed} onChange={() => handleCompleteTask(index)}>
+            {task.completed ? "Completed" : "Pending"}
+          </Checkbox>,
+          <Button
+            type="link"
+            icon={<DeleteOutlined />}
+            onClick={() => handleDeleteTask(index)}
+          />,
+        ]}
       >
-        <Input
-          placeholder="Enter a task"
-          value={taskInput}
-          onChange={handleTaskInputChange}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') handleAddTask();
-          }}
-        />
-      </Modal>
+        <Text delete={task.completed}>{task.title}</Text>
+      </List.Item>
+    )}
+  />
+</Modal>
+</ConfigProvider>
     </div>
   );
 }

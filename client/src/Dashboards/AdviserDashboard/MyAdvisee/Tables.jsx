@@ -116,7 +116,7 @@ const ListManuscript = () => {
       position: 'fixed',
       borderBottom: 1,
       borderColor: 'divider',
-      marginLeft: '25px',
+     
       width: '27.7%',
       marginTop: '-36px',
       marginLeft: '740px',

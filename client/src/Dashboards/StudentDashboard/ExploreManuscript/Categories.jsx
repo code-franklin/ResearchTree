@@ -41,16 +41,17 @@ const CategoryComponent = () => {
       theme={{
         components: {
           Select: {
+            
             colorTextBase: 'white',
             colorPrimary: '#222222',
             colorBgBase: '#313131',
-            controlOutline: '#1E1E1E',
-            colorBorder: '#1E1E1E',
-            colorPrimaryBorder: '#222222',
+            controlOutline: 'none',
+            colorBorder: 'none',
+            colorPrimaryBorder: 'none',
             colorBgContainer: '#222222',
             borderRadius: 7,
             colorPrimaryHover: '#1E1E1E',
-            boxShadow: '0px 12px 5.7px -4 rgba(0, 0, 0, 0)',
+     
             algorithm: true, // Enable algorithm
           },
         },
@@ -61,7 +62,7 @@ const CategoryComponent = () => {
         labelInValue
         value={selectedValue}
         style={{
-          position: 'absolute', zIndex: '10', width: 280, marginLeft: 650, marginTop: 13,
+          position: 'absolute', zIndex: '10', width: '280px', marginLeft: 760, marginTop: 13,
         }}
         onChange={handleChange}
         dropdownRender={(menu) => (
@@ -72,6 +73,7 @@ const CategoryComponent = () => {
                   justify="space-between"
                   align="middle"
                   style={{
+                    
                     cursor: 'pointer',
                     color: 'white',
                     padding: '8px 16px',
@@ -82,7 +84,7 @@ const CategoryComponent = () => {
                 >
                   <Col>{category}</Col>
                   <Col>
-                    <Typography.Text style={{ fontSize: '12px', color: '#0BF677' }}>
+                    <Typography.Text style={{ fontSize: '12px', color: '#0BF677', width: '200px'}}>
                       {groupedData[category].count}
                     </Typography.Text>
                   </Col>

@@ -140,7 +140,7 @@ export default function GradingTable() {
 
       {/* Display Percentage Result */}
       {percentageResult && (
-        <div className="mt-4 p-2 bg-green-300 text-black rounded">
+        <div className="mt-4 p-2 text-white rounded">
           <span className="font-bold">Percentage Result:</span> {percentageResult}%
         </div>
       )}

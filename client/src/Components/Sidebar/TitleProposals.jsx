@@ -145,7 +145,7 @@ export default function BasicModal() {
           <Typography
             sx={{
               position: "absolute",
-              marginLeft: "223px",
+              marginLeft: "253px",
               top: "111px",
               fontWeight: "bold"
             }}
@@ -276,7 +276,7 @@ export default function BasicModal() {
                       alt={panelist.name}
                       className=" w-[80px] h-[80px] rounded-full mr-[53px] "
                     />
-                    <p className="text-sm ml-[-6px] mt-[6px]">{panelist.name}</p> 
+                    <p className="text-sm ml-[-5px] mt-[6px]">{panelist.name}</p> 
                   </li>
                 ))}
               </ul>

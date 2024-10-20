@@ -58,6 +58,7 @@ const App = () => (
       },
 
       Input: {
+        
         colorPrimary: '#222222', 
         colorBgBase: '#222222',
         colorTextBase: 'white',
@@ -82,7 +83,7 @@ const App = () => (
     popupMatchSelectWidth={980}
    
     style={{
-      width: 1003,
+      width: 1080,
       
     }}
     options={options}

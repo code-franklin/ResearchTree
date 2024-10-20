@@ -1,97 +1,85 @@
 // src/Sidebar.js
-import React from 'react';
-import "./Sidebar.css";
-import { Link } from 'react-router-dom';
-import UserAvatar from './Avatar'
-import HeaderTools from './TitleProposals'
-const Sidebar = ({ onSelect }) => {
+import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import UserAvatar from './Avatar';
+import HeaderTools from './TitleProposals';
+import './Sidebar.css';
 
+const Sidebar = () => {
+  const location = useLocation(); // Get current location
   const user = JSON.parse(localStorage.getItem('user'));
+
+  // Determine the current path to set the active link
+  const [activeLink, setActiveLink] = useState(location.pathname);
+
+  // Function to handle the active link
+  const handleLinkClick = (path) => {
+    setActiveLink(path); // Set the active link when clicked
+  };
 
   return (
     <div className="sidebar z-1 h-screen w-[313px] bg-[#1E1E1E] text-white flex flex-col fixed">
-
-        <div>
-        <img className="" src="/src/assets/rstreelogo.png"/>
-        </div>
-        
-      <div className='flex ml-[9px] '>
-        <div className="myName ml-[50px] mt-[20px] p-4 text-center">
-
-      <UserAvatar/>
-
-        <span className="text-[21px] font-semibold ml-2">{user.name}</span>
-        
-        <p className="font-light text-[#4B4B4B]">{user.role}</p>
-        </div>
-       
-        </div>
+      <div>
+        <img className="" src="/src/assets/rstreelogo.png" />
+      </div>
       
-      <div className="mr-5 mt-[30px] space-y-2 text-[20px] ">
-        
-        <Link  to="StudentDashboard/MyManuscript"
-          className="myManuscript mx-10 whitespace-nowrap
-                     focus:font-semibold 
-                     focus:ml-[4rem] focus:bg-gradient-to-r from-[#0BF677] to-[#079774] 
-                     hover:font-medium hover:ml-[4rem] 
-                     text-white px-2 "
-          
+      <div className='flex ml-[9px]'>
+        <div className="myName ml-[50px] mt-[20px] p-4 text-center">
+          <UserAvatar />
+          <span className="text-[21px] font-semibold ml-2">{user.name}</span>
+          <p className="font-light text-[#4B4B4B]">{user.role}</p>
+        </div>
+      </div>
+      
+      <div className="mr-5 mt-[30px] space-y-2 text-[20px]">
+        {/* My Manuscript */}
+        <Link
+          to="StudentDashboard/MyManuscript"
+          className={`myManuscript mx-10 whitespace-nowrap px-2 ${
+            activeLink === '/StudentDashboard/MyManuscript'
+              ? 'font-semibold ml-[4rem] bg-gradient-to-r from-[#0BF677] to-[#079774]'
+              : 'hover:font-medium hover:ml-[4rem] text-white'
+          }`}
+          onClick={() => handleLinkClick('/StudentDashboard/MyManuscript')}
         >
-        <img className="inline-block mr-2 mb-1" src="/src/assets/my-manuscript.png"/>
+          <img className="inline-block mr-2 mb-1" src="/src/assets/my-manuscript.png" alt="My Manuscript" />
           My Manuscript
         </Link>
 
-
-        <Link to="StudentDashboard/ExploreManuscript" 
-          className="exploreManuscript mx-10 
-                     
-                     focus:font-semibold 
-                     hover:mr-auto focus:mr-auto focus:ml-[4rem] focus:bg-gradient-to-r from-[#0BF677] to-[#079774] 
-                     hover:font-medium hover:ml-[4rem] 
-                     text-white px-2 "
-         
+        {/* Explore Manuscript */}
+        <Link
+          to="StudentDashboard/ExploreManuscript"
+          className={`exploreManuscript mx-10 px-2 ${
+            activeLink === '/StudentDashboard/ExploreManuscript'
+              ? 'font-semibold ml-[4rem] bg-gradient-to-r from-[#0BF677] to-[#079774]'
+              : 'hover:font-medium hover:ml-[4rem] text-white'
+          }`}
+          onClick={() => handleLinkClick('/StudentDashboard/ExploreManuscript')}
         >
-        <img className="inline-block mr-2 mb-1" src="/src/assets/explore-manuscript.png"/>
+          <img className="inline-block mr-2 mb-1" src="/src/assets/explore-manuscript.png" alt="Explore Manuscript" />
           Explore Manuscript
         </Link>
 
-        
-
-        <Link to="StudentDashboard/ViewAnalytics"
-          className="viewAnalytics mx-10 
-                     focus:font-semibold 
-                     hover:ml-[4rem]
-                     focus:ml-[4rem] focus:bg-gradient-to-r from-[#0BF677] to-[#079774] 
-                     hover:font-medium 
-                     
-                     text-white  px-2 "
-     
+        {/* View Analytics */}
+        <Link
+          to="StudentDashboard/ViewAnalytics"
+          className={`viewAnalytics mx-10 px-2 ${
+            activeLink === '/StudentDashboard/ViewAnalytics'
+              ? 'font-semibold ml-[4rem] bg-gradient-to-r from-[#0BF677] to-[#079774]'
+              : 'hover:font-medium hover:ml-[4rem] text-white'
+          }`}
+          onClick={() => handleLinkClick('/StudentDashboard/ViewAnalytics')}
         >
-         
-          <img className="inline-block mr-2 mb-1" src="/src/assets/User.png"/>
-          <span className="text">View Analytics</span>
-          
-          
+          <img className="inline-block mr-2 mb-1" src="/src/assets/User.png" alt="View Analytics" />
+          View Analytics
         </Link>
 
-        <Link to="StudentDashboard/Revision"
-          className="revision mx-10 
-                     focus:font-semibold 
-                     focus:ml-[4rem] focus:bg-gradient-to-r from-[#0BF677] to-[#079774] 
-                     hover:font-medium hover:ml-[4rem] 
-                     text-white px-2 "
-          
-        >
-        <img className="inline-block mr-2 mb-1" src="/src/assets/revision-icon.png"/>
-          Revision
-        </Link>
+      
+
       
       </div>
 
-       
-
-      <HeaderTools/>
-     
+      <HeaderTools />
     </div>
   );
 };

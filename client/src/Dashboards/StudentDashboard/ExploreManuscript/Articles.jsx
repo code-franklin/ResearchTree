@@ -56,10 +56,10 @@ const ArticleList = () => {
   
       <header className="header justify-between items-center fixed">
        
-        <div className="items-center space-x-2 mr-[20px] mt-[25px] ">
+        <div className="items-center space-x-2 mr-[100px] mt-[25px] ">
         
       
-      <div className="ml-[600px]">
+      <div className="ml-[200px]">
       <h1 className="text-[38px] font-bold mt-[20px] ml-2 ">Manuscript</h1>
      <br></br>
       <CategoryComponent />
@@ -110,25 +110,7 @@ const ArticleList = () => {
         </div>
       </div>
     </div>
-    <Box sx={{ position: 'fixed', top: 45, left: 1200, width: '16%', zIndex: 9999 }}>
-                <Collapse in={open}>
-                    <Alert
-                        action={
-                            <IconButton
-                                aria-label="close"
-                                color="inherit"
-                                size="small"
-                                onClick={() => setOpen(false)} // Close the alert when the close button is clicked
-                            >
-                                <CloseIcon fontSize="inherit" />
-                            </IconButton>
-                        }
-                        sx={{ mb: 2, color: 'white', backgroundColor: 'green' }}
-                    >
-                        Download Complete
-                    </Alert>
-                </Collapse>
-            </Box>
+    
     </div>
   );
 };

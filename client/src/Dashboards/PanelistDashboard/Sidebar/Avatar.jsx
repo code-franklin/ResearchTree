@@ -16,15 +16,24 @@ import './Sidebar.css';
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+
+  // Define handleLogout function
+  const handleLogout = () => {
+    // Logic for handling logout can go here
+    console.log('Logging out...');
+    // Redirect to login page, clear tokens, etc.
+  };
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   return (
     <React.Fragment>
-      <Box  sx={{  display: 'flex', alignItems: 'center', textAlign: 'center' }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
         <Tooltip title="Account settings">
           <IconButton 
             onClick={handleClick}
@@ -89,11 +98,11 @@ export default function AccountMenu() {
           </ListItemIcon>
           Settings
         </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon onClick={handleLogout}>
+        <MenuItem onClick={handleLogout}> {/* Use handleLogout for onClick */}
+          <ListItemIcon>
             <Logout fontSize="small" sx={{ color: 'red' }} /> {/* Set icon color to red */}
           </ListItemIcon>
-          <span onClick={handleLogout} style={{ color: 'red' }}>Logout</span> {/* Set text color to red */}
+          <span style={{ color: 'red' }}>Logout</span> {/* Set text color to red */}
         </MenuItem>
       </Menu>
     </React.Fragment>

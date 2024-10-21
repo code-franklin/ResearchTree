@@ -130,7 +130,7 @@ export default function BasicModal() {
 
   return (
     <div>
-      <button onClick={handleOpen} className="bg-black w-[230px] h-[50px]  mt-[20px] ml-[36px] text-[20px]"> </button>
+     <button onClick={handleOpen} > <img  className="mt-[420px] ml-[25px]" src="/src/assets/title-proposal-button.png"></img>  </button>  
       <Modal
         sx={{border: "none"}}
         open={open}

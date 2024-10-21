@@ -1,39 +1,61 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
-import { Input, Tag, theme } from 'antd';
+import { Input, Tag, Button, theme } from 'antd';
 import { TweenOneGroup } from 'rc-tween-one';
+
 const App = () => {
   const { token } = theme.useToken();
-  const [tags, setTags] = useState(['Tag 1', 'Tag 2', 'Tag 3']);
+  
+  // Store tags as objects with both the tag name and a color
+  const [tags, setTags] = useState([{ name: 'Tag 1', color: '#f50' }, { name: 'Tag 2', color: '#2db7f5' }, { name: 'Tag 3', color: '#87d068' }]);
+  
   const [inputVisible, setInputVisible] = useState(false);
   const [inputValue, setInputValue] = useState('');
+  const [showTag, setShowTag] = useState(false); // State to control visibility of the "New Tag"
   const inputRef = useRef(null);
+
   useEffect(() => {
     if (inputVisible) {
       inputRef.current?.focus();
     }
   }, [inputVisible]);
+
+  // Function to generate a random color
+  const getRandomColor = () => {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  };
+
   const handleClose = (removedTag) => {
-    const newTags = tags.filter((tag) => tag !== removedTag);
-    console.log(newTags);
+    const newTags = tags.filter((tag) => tag.name !== removedTag.name);
     setTags(newTags);
   };
+
   const showInput = () => {
     setInputVisible(true);
   };
+
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
   };
+
   const handleInputConfirm = () => {
-    if (inputValue && tags.indexOf(inputValue) === -1) {
-      setTags([...tags, inputValue]);
+    if (inputValue && tags.findIndex(tag => tag.name === inputValue) === -1) {
+      const newTag = { name: inputValue, color: getRandomColor() }; // Add new tag with random color
+      setTags([...tags, newTag]);
     }
     setInputVisible(false);
     setInputValue('');
+    setShowTag(false); // Hide the "New Tag" after confirming the input
   };
+
   const forMap = (tag) => (
     <span
-      key={tag}
+      key={tag.name}
       style={{
         display: 'inline-block',
       }}
@@ -44,16 +66,19 @@ const App = () => {
           e.preventDefault();
           handleClose(tag);
         }}
+        style={{ border: 'none',backgroundColor: tag.color, color: 'white', }} // Apply the random color to the tag
       >
-        {tag}
+        {tag.name}
       </Tag>
     </span>
   );
+
   const tagChild = tags.map(forMap);
   const tagPlusStyle = {
     background: token.colorBgContainer,
     borderStyle: 'dashed',
   };
+
   return (
     <>
       <div
@@ -84,25 +109,37 @@ const App = () => {
           {tagChild}
         </TweenOneGroup>
       </div>
-      {inputVisible ? (
-        <Input
-          ref={inputRef}
-          type="text"
-          size="small"
-          style={{
-            width: 78,
-          }}
-          value={inputValue}
-          onChange={handleInputChange}
-          onBlur={handleInputConfirm}
-          onPressEnter={handleInputConfirm}
-        />
-      ) : (
-        <Tag onClick={showInput} style={tagPlusStyle}>
-          <PlusOutlined /> New Tag
-        </Tag>
+
+      {/* Button to show the "New Tag" tag */}
+      <Button onClick={() => setShowTag(true)} type="primary" style={{ marginBottom: 16 }}>
+        Add New Tag
+      </Button>
+
+      {/* Show the "New Tag" input if showTag is true */}
+      {showTag && (
+        <>
+          {inputVisible ? (
+            <Input
+              ref={inputRef}
+              type="text"
+              size="small"
+              style={{
+                width: 78,
+              }}
+              value={inputValue}
+              onChange={handleInputChange}
+              onBlur={handleInputConfirm}
+              onPressEnter={handleInputConfirm}
+            />
+          ) : (
+            <Tag onClick={showInput} style={tagPlusStyle}>
+              <PlusOutlined /> New Tag
+            </Tag>
+          )}
+        </>
       )}
     </>
   );
 };
+
 export default App;

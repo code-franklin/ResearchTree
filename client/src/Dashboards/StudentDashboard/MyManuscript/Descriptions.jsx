@@ -1,7 +1,7 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import CkEditorDocuments from '../../../CKeditorDocuments'
 import './Styles/descriptions.css';
-
+import Progresss from './Progress'
 import Categories from './Categories'
 
 import { Tooltip } from '@mui/material';
@@ -113,7 +113,7 @@ const ResearchCard = () => {
   
     return (
       <span style={{ color: 'white' }}>
-        <span className="font-bold text-white ml-[81px]">Panelists: {panelists.map((panelist) => panelist.name).join(', ')} </span>
+        <span className="font-bold text-white ml-[81px]">Panelists: <span className='font-normal'> {panelists.map((panelist) => panelist.name).join(', ')}</span>  </span>
       </span>
     );
   };
@@ -128,6 +128,7 @@ const ResearchCard = () => {
           <span className="bg-[#868686] text-white px-2 py-0 mr-2">Research Title</span>
           <span className="bg-[#1E1E] text-white px-2 py-0 mr-2">{user.course}</span>
           <div className="absolute ml-[920px]"></div>
+          <div className='absolute mt-[500px] ml-[1050px]'><Progresss/></div>
         </div>
 
 {/* details for student */}
@@ -147,7 +148,13 @@ const ResearchCard = () => {
                 proposal?.proposalTitle
               )}
             </h1>
-        <button type="button" onClick={handleEditProposalTitle} className='absolute mt-[-110px] ml-[1220px] cursor-pointer '><Tooltip title="Edit Title"><EditRoundedIcon/></Tooltip></button>
+        <button 
+                type="button" 
+                onClick={handleEditProposalTitle} 
+                className='absolute mt-[-110px] ml-[1220px] cursor-pointer '>
+                <Tooltip title="Edit Title"><EditRoundedIcon/></Tooltip>
+        </button>
+
             <p className="text-gray-500 font-bold mb-4">
               {user.groupMembers
                 .map(member => member.replace(/([a-z])([A-Z])/g, '$1 $2')) // Insert space between lowercase and uppercase letters
@@ -202,22 +209,30 @@ const ResearchCard = () => {
 {/* <p><strong>Text:</strong> {proposal?.proposalText}</p>  */}
         {/* Advisor */}
         <p className="text-gray-400 mb-2">
-          <span className="font-bold text-white ">Advisor: {getStatusMessage(advisorStatus, advisorInfo)}</span>
-          {advisorStatus === 'accepted' && <PanelistList panelists={panelists} />}
+          <span className="font-bold text-white ">Advisor: <span className='font-normal'>{getStatusMessage(advisorStatus, advisorInfo)}</span> </span>
+          <span>{advisorStatus === 'accepted' && <PanelistList panelists={panelists} />}</span>
         </p>
 
 {/* Panelist */}
         {advisorInfo && advisorStatus === 'accepted' && panelists.length > 0 && (
           <p className="text-gray-400 mb-2">
-         
+
           </p>
         )}
         
         <div className="text-gray-400 mb-4">
-        <span><span className="font-bold text-white">Date of Uploaded:</span> <span className="mr-5">{proposal?.submittedAt && new Date(proposal?.submittedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span></span>
-          <span><span className="font-bold text-white">Date of Published: </span><span>Pending to Publish</span></span>
+        <span>
+          <span className="font-bold text-white">Date of Uploaded:</span> 
+          <span className="mr-10">{proposal?.submittedAt && new Date(proposal?.submittedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+          </span></span>
+
+        <span>
+          <span className="font-bold text-white">Date of Published: </span>
+          <span>Pending to Publish</span> </span>
+
           <br />
-          {user.channelId}
+
+          <span className='hidden'>{user.channelId}</span>
         </div>
         <div className="flex justify-between items-center">
           <div>
@@ -226,21 +241,23 @@ const ResearchCard = () => {
           </div>
           
           <div className="flex items-center">
-            <a onClick={() => setIsEditorOpen(true)} className="rounded-full text-center text-white mr-4 cursor-pointer w-[120px] h-[37px] border 1px solid #6A6A6A " >
-            <span className='absolute bottom-[67px] ml-[-20px]'>Open</span></a>
-            {isEditorOpen && (
-              
-            <div className="w-[50rem] -mt-[100px] ">
+            {/* <a onClick={() => setIsEditorOpen(true)} className="rounded-full text-center text-white ml-[-600px] cursor-pointer w-[120px] h-[37px] border 1px solid #6A6A6A " > */}
+            <button 
+                type="button" 
+                cursor-pointer onClick={() => setIsEditorOpen(true)} 
+                className=' absolute mt-[-400px]'>
+                <Tooltip title="Edit Title"><EditRoundedIcon/></Tooltip>
+            </button>
 
-             <CkEditorDocuments 
-            
-             width={800}
-             userId={user._id} channelId={user.channelId}/> 
+            {isEditorOpen && (
+            <div 
+                className="w-[50rem] -mt-[100px] ">
+                <CkEditorDocuments 
+                width={800}
+                userId={user._id} channelId={user.channelId}/> 
             </div>
 
             )}
-
-
           </div>
         </div>
       </div>

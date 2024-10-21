@@ -66,7 +66,7 @@ const App = () => {
           e.preventDefault();
           handleClose(tag);
         }}
-        style={{ border: 'none',backgroundColor: tag.color, color: 'white', }} // Apply the random color to the tag
+        style={{ border: 'none',backgroundColor: tag.color, color: 'white', width: 'auto', }} // Apply the random color to the tag
       >
         {tag.name}
       </Tag>
@@ -81,6 +81,20 @@ const App = () => {
 
   return (
     <>
+      {/* Icon Button and Categories Text */}
+      <div className="flex items-center mb-4">
+      <h2>Categories</h2> {/* Categories text */}
+        {/* Icon Button for adding new tags */}
+     
+        <Button
+          type="primary"
+          icon={<PlusOutlined />}
+          onClick={() => setShowTag(true)}
+          style={{marginLeft: '5px' }} // Add margin between the button and "Categories" text
+        />
+        
+      </div>
+
       <div
         style={{
           marginBottom: 16,
@@ -109,11 +123,6 @@ const App = () => {
           {tagChild}
         </TweenOneGroup>
       </div>
-
-      {/* Button to show the "New Tag" tag */}
-      <Button onClick={() => setShowTag(true)} type="primary" style={{ marginBottom: 16 }}>
-        Add New Tag
-      </Button>
 
       {/* Show the "New Tag" input if showTag is true */}
       {showTag && (

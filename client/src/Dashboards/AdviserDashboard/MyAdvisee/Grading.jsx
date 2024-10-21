@@ -3,7 +3,6 @@ import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import RubricButton from '../MyAdvisee/RubricsPercentage';
 
 export default function GradingTable() {
-  // Helper function to generate random content
   const getRandomContent = () => {
     const randomTexts = [
       'The project shows evidence of adequate research. It includes relevant sources to support the topic.',
@@ -15,7 +14,6 @@ export default function GradingTable() {
     return randomTexts[Math.floor(Math.random() * randomTexts.length)];
   };
 
-  // Set initial state with random content in each cell
   const [grades, setGrades] = useState({
     research: { 4: getRandomContent(), 3: getRandomContent(), 2: getRandomContent(), 1: getRandomContent() },
     presentation: { 4: getRandomContent(), 3: getRandomContent(), 2: getRandomContent(), 1: getRandomContent() },
@@ -42,6 +40,7 @@ export default function GradingTable() {
 
   const [isEditing, setIsEditing] = useState(false);
   const [percentageResult, setPercentageResult] = useState(null);
+  const [showCheckboxes, setShowCheckboxes] = useState(false); // New state for checkbox visibility
 
   const handleEdit = (category, score, value) => {
     setGrades((prevGrades) => ({
@@ -83,14 +82,17 @@ export default function GradingTable() {
   };
 
   const handleToggleEdit = () => {
-    setIsEditing((prev) => !prev); // Toggle editing mode
+    setIsEditing((prev) => !prev);
+  };
+
+  const handleShowCheckboxes = () => {
+    setShowCheckboxes((prev) => !prev); // Toggle checkbox visibility
   };
 
   const calculatePercentage = () => {
     let totalScore = 0;
     let count = 0;
 
-    // Iterate over categories and scores, sum up the checked scores and their percentage values
     Object.keys(checkBoxes).forEach((category) => {
       Object.keys(checkBoxes[category]).forEach((score) => {
         if (checkBoxes[category][score]) {
@@ -109,7 +111,7 @@ export default function GradingTable() {
   };
 
   useEffect(() => {
-    calculatePercentage(); // Calculate percentage on initial render
+    calculatePercentage();
   }, [checkBoxes]);
 
   const categories = ['research', 'presentation', 'content', 'design', 'function'];
@@ -129,65 +131,61 @@ export default function GradingTable() {
     <div className="p-4 w-[1600px] h-[600px] ml-[320px] mt-[20px]">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-white text-[40px] font-bold">Grading</h1>
-        <RubricButton/>
+        <RubricButton />
         <button
           onClick={handleToggleEdit}
           className="bg-blue-500 text-white p-2 rounded hover:bg-blue-700 transition"
         >
-          {isEditing ? 'Save' : 'Edit'} {/* Toggle button text */}
+          {isEditing ? 'Save' : 'Edit Criteria'}
+        </button>
+        <button
+          onClick={handleShowCheckboxes}
+          className="bg-green-500 text-white p-2 rounded hover:bg-green-700 transition"
+        >
+          {showCheckboxes ? 'Save Grade' : 'Set Grading'}
         </button>
       </div>
 
-      {/* Display Percentage Result */}
       {percentageResult && (
         <div className="mt-4 p-2 text-white rounded">
           <span className="font-bold">Percentage Result:</span> {percentageResult}%
         </div>
       )}
 
-      {/* Message to inform the user they are in edit mode */}
       {isEditing && (
         <div className="absolute top-[50px] left-[500px] w-[520px] bg-yellow-300 text-black p-2 mb-4 rounded">
-          <span className="font-bold ">Edit Mode</span> You can now edit/change the content of each categories
+          <span className="font-bold">Edit Mode</span> You can now edit/change the content of each category
         </div>
       )}
 
       <div className="grid grid-cols-5 gap-2 text-white text-center">
-        {/* Header */}
         <div className="bg-gray-700 font-bold p-4">Category</div>
         {scores.map((score) => (
-          <div
-            key={score}
-            className={`p-4 font-bold ${getScoreBgColor(score)}`}
-          >
+          <div key={score} className={`p-4 font-bold ${getScoreBgColor(score)}`}>
             {score}
           </div>
         ))}
 
-        {/* Categories and Editable Scores */}
         {categories.map((category) => (
           <React.Fragment key={category}>
-            <div className="bg-[#2B2B2B] text-[25px] font-bold p-10 capitalize ">{category}</div>
+            <div className="bg-[#2B2B2B] text-[25px] font-bold p-10 capitalize">{category}</div>
             {scores.map((score) => (
-              <div
-                key={score}
-                className={`p-4 ${selectedColors[category][score]} cursor-pointer relative`}
-              >
-                {/* Editable Textarea */}
+              <div key={score} className={`p-4 ${selectedColors[category][score]} cursor-pointer relative`}>
                 <textarea
                   className="bg-transparent text-white border-none outline-none w-[286px] h-[110px] resize-none focus:outline-none"
                   value={grades[category][score]}
                   onChange={(e) => handleEdit(category, score, e.target.value)}
-                  disabled={!isEditing} // Disable the textarea if not in editing mode
+                  disabled={!isEditing}
                 />
-                {/* Checkbox to toggle color */}
-                <div className="absolute bottom-2 right-2">
-                  {checkBoxes[category][score] ? (
-                  <img onClick={() => handleCheckBoxChange(category, score)} className="text-3xl text-white border-[#303f9f]" src="/src/assets/checkFilled.png"/>
+                {showCheckboxes && ( // Render checkboxes based on visibility state
+                  <div className="absolute bottom-2 right-2">
+                    {checkBoxes[category][score] ? (
+                      <img onClick={() => handleCheckBoxChange(category, score)} className="text-3xl text-white cursor-pointer" src="/src/assets/checkFilled.png" />
                     ) : (
-                  <img onClick={() => handleCheckBoxChange(category, score)} className="text-3xl text-white border-[#303f9f]" src="/src/assets/checkOutlined.png"/>
+                      <img onClick={() => handleCheckBoxChange(category, score)} className="text-3xl text-white cursor-pointer" src="/src/assets/checkOutlined.png" />
                     )}
-                </div>
+                  </div>
+                )}
               </div>
             ))}
           </React.Fragment>

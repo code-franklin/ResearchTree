@@ -163,7 +163,7 @@ export default function BasicModal() {
           {(!advisorInfo || advisorStatus === 'declined') && (
             <div>
               <Tag 
-              style={{position: 'absolute', marginLeft: '100px', marginTop: '80px'}}
+              style={{position: 'absolute', marginLeft: '100px', marginTop: '50px'}}
               icon={<CloseCircleOutlined />} 
               color="#cd201f">
                Your Title Proposals is Declined 

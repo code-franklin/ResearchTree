@@ -3,9 +3,9 @@ import CkEditorDocuments from '../../../CKeditorDocuments'
 import './Styles/descriptions.css';
 import Progresss from './Progress'
 import Categories from './Categories'
-
+import { SyncOutlined } from '@ant-design/icons';
 import { Tooltip } from '@mui/material';
-import EditRoundedIcon from '@mui/icons-material/EditRounded';
+
 
 
 
@@ -85,7 +85,7 @@ const ResearchCard = () => {
     } else if (advisorStatus === 'pending') {
       return (
         <span style={{ color: 'orange' }}>
-          Waiting for advisor to accept your proposal.
+          Waiting <SyncOutlined spin />
         </span>
       );
     } else if (advisorStatus === 'declined') {
@@ -128,12 +128,31 @@ const ResearchCard = () => {
           <span className="bg-[#868686] text-white px-2 py-0 mr-2">Research Title</span>
           <span className="bg-[#1E1E] text-white px-2 py-0 mr-2">{user.course}</span>
           <div className="absolute ml-[920px]"></div>
-          <div className='absolute mt-[500px] ml-[1050px]'><Progresss/></div>
+          
         </div>
 
 {/* details for student */}
         {advisorStatus === 'accepted' && (
           <div>
+            <div className='fixed mt-[200px] ml-[1050px]'><Progresss/></div>
+        <button 
+                type="button" 
+                cursor-pointer onClick={() => setIsEditorOpen(true)} 
+                className=' absolute mt-[-60px] ml-[1140px]'>
+                <Tooltip title="NoteList"><img src="/src/assets/note-list-icon.png"/></Tooltip>
+        </button>
+        <button 
+                type="button" 
+                cursor-pointer onClick={() => setIsEditorOpen(true)} 
+                className=' absolute mt-[-60px] ml-[1180px]'>
+                <Tooltip title="Open Manuscript"><img src="/src/assets/word-editor.png"/></Tooltip>
+        </button>
+        <button 
+                type="button" 
+                onClick={handleEditProposalTitle} 
+                className='absolute mt-[-59px] ml-[1220px] cursor-pointer '>
+                <Tooltip title="Edit Title"><img src="/src/assets/edit-title-icon.png"/></Tooltip>
+        </button>
             
             <h1 className="text-2xl font-bold mb-2">
               {isEditingProposalTitle ? (
@@ -148,12 +167,7 @@ const ResearchCard = () => {
                 proposal?.proposalTitle
               )}
             </h1>
-        <button 
-                type="button" 
-                onClick={handleEditProposalTitle} 
-                className='absolute mt-[-110px] ml-[1220px] cursor-pointer '>
-                <Tooltip title="Edit Title"><EditRoundedIcon/></Tooltip>
-        </button>
+    
 
             <p className="text-gray-500 font-bold mb-4">
               {user.groupMembers
@@ -166,8 +180,8 @@ const ResearchCard = () => {
 
         {advisorStatus === 'pending' && (
           <div>
-            <h1 className="text-2xl font-bold mb-2">
-              Loading title proposal...
+            <h1 className="text-2xl font-bold mb-2 text-[orange]">
+              Title Proposal is in progress <SyncOutlined spin />
             </h1>
             <p className="text-gray-500 font-bold mb-4">
               {user.groupMembers
@@ -228,26 +242,21 @@ const ResearchCard = () => {
 
         <span>
           <span className="font-bold text-white">Date of Published: </span>
-          <span>Pending to Publish</span> </span>
+          <span></span> </span>
 
           <br />
 
           <span className='hidden'>{user.channelId}</span>
         </div>
         <div className="flex justify-between items-center">
-          <div>
-            <h1 className="mb-2 mt-4">Categories:</h1>
+         
+          <div name="Categories">
             <Categories/>
           </div>
           
           <div className="flex items-center">
             {/* <a onClick={() => setIsEditorOpen(true)} className="rounded-full text-center text-white ml-[-600px] cursor-pointer w-[120px] h-[37px] border 1px solid #6A6A6A " > */}
-            <button 
-                type="button" 
-                cursor-pointer onClick={() => setIsEditorOpen(true)} 
-                className=' absolute mt-[-400px]'>
-                <Tooltip title="Edit Title"><EditRoundedIcon/></Tooltip>
-            </button>
+           
 
             {isEditorOpen && (
             <div 

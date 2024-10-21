@@ -173,7 +173,7 @@ export default function NewTables() {
 
       <List
         grid={{ gutter: 16, column: 1 }}
-        dataSource={filteredStudents.filter(student => student.manuscriptStatus === "reviseOnAdvicer")}
+        dataSource={filteredStudents.filter(student => student.manuscriptStatus === "reviseOnPanelist")}
         renderItem={(student) => (
           <List.Item key={student._id}>
             <div
@@ -237,7 +237,7 @@ export default function NewTables() {
                 />
                 <Button
                   icon={<LoadingOutlined />}  
-                  onClick={() => updateManuscriptStatus(student._id, 'reviseOnAdvicer')}
+                  onClick={() => updateManuscriptStatus(student._id, 'reviseOnPanelist')}
                   style={{ marginBottom: "20px", width: "100px" }}
                 />
                 <Button

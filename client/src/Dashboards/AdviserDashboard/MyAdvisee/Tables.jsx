@@ -117,7 +117,7 @@ const ListManuscript = () => {
       borderBottom: 1,
       borderColor: 'divider',
      
-      width: '27.7%',
+      width: '33.7%',
       marginTop: '-36px',
       marginLeft: '740px',
     }}
@@ -146,6 +146,7 @@ const ListManuscript = () => {
         label="List Manuscript"
         {...a11yProps(0)}
       />
+      
       <Tab
         sx={{
           marginLeft: '5px',
@@ -180,7 +181,26 @@ const ListManuscript = () => {
         label="Ready for Defense"
         {...a11yProps(2)}
       />
+
+<Tab
+      
+      sx={{
+        borderRadius: '20px',
+        color: 'green', // Default color
+        '&:hover': {
+          color: 'white', // Customize active text color
+          backgroundColor: 'green', // Customize active background color
+        },
+        '&.Mui-selected': {
+          color: 'white', // Customize active text color
+          backgroundColor: 'green', // Customize active background color
+        },
+      }}
+      label="Monitoring"
+      {...a11yProps(0)}
+    />
     </Tabs>
+
   </Box>
 </Box>
 

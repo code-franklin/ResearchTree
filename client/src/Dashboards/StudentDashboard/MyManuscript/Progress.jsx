@@ -18,10 +18,7 @@ function Demo() {
   return (
     <DonutChart
       data={data || []}
-      title={{
-        visible: true,
-        text: "Donut Chart",
-      }}
+      
       autoFit
       legend={false}  // Set legend to false to remove it
       width={200}

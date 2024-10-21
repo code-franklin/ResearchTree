@@ -9,17 +9,23 @@ function MyManuscriptComponent() {
     <div className="h-[1400px]">
 
       <div>
-      
       </div>
-      <div className=" absolute">
+
+    <div className=" absolute">
       <Grading  />
-      </div>
+    </div>
 
-
+<<<<<<< Updated upstream
    
     <Description  />
 
 
+=======
+    <div className=" absolute mt-[-1440px] ml-[1420px]">
+          <Progress/>
+    </div>
+      <Description  />
+>>>>>>> Stashed changes
     </div>
   
   )

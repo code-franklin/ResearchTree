@@ -222,6 +222,7 @@ export default function NewTables() {
                 </Text>
                 <br /><br />
                 <p style={{ color: "#ffffff" }}>Course: {student.course}</p>
+                <p style={{ color: "#ffffff" }}>USer: {student.name}</p>
                 <br />
 
                 <Text style={{ color: "#ffffff" }}>

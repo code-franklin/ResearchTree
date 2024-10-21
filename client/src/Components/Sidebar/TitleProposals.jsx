@@ -241,11 +241,10 @@ export default function BasicModal() {
             />
             <p className="text-[20px] font-bold ml-[245px] mt-[10px]">{advisorInfo.name}</p>
 
-            <Flex style={{marginLeft: '132px', marginTop: '10px'}} gap="4px 0" wrap>
-                <Tag color="#4E4E4E">Machine Learning</Tag>
-                <Tag color="#4E4E4E">Mobile App</Tag>
-                <Tag color="#4E4E4E">Arduino</Tag>
-                <Tag color="#4E4E4E">Cybersecurity</Tag>
+            <Flex style={{ marginLeft: '132px', marginTop: '10px' }} gap="4px 0" wrap>
+              {advisorInfo.specializations.map((specialization) => (
+                <Tag key={specialization} color="#4E4E4E">{specialization}</Tag>
+              ))}
             </Flex>
 
             </div>

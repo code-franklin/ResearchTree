@@ -8,7 +8,7 @@ const { Text } = Typography;
 const { Option } = Select;
 
 export default function NewTables() {
-  const [acceptedStudents, setAcceptedStudents] = useState([]);
+  const [panelistStudents, setPanelistStudents] = useState([]);
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [selectedStudentId, setSelectedStudentId] = useState(null);
   const [selectedChannelId, setSelectedChannelId] = useState(null);
@@ -24,65 +24,41 @@ export default function NewTables() {
   const [tasks, setTasks] = useState([]); // To store tasks
 
   
-  const [panelistStudents, setPanelistStudents] = useState([]);
 
   const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
+    const fetchPanelistStudents = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/api/advicer/panelist-students/${user._id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setPanelistStudents(data.panelistStudents);
+          setFilteredStudents(data.panelistStudents);
+          // Extract unique courses from the students data
+          const uniqueCourses = [
+            ...new Set(data.panelistStudents.map(student => student.course))
+          ];
+          setCourses(uniqueCourses);
+
+        } else {
+          console.error('Error fetching panelist students');
+        }
+      } catch (error) {
+        console.error('Error fetching panelist students:', error.message);
+      }
+    };
+
+    
     fetchPanelistStudents();
   }, []);
 
-  const fetchPanelistStudents = async () => {
-    try {
-      const response = await fetch(`http://localhost:5000/api/advicer/panelist-students/${user._id}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setPanelistStudents(data.panelistStudents);
-      } else {
-        console.error('Error fetching panelist students');
-      }
-    } catch (error) {
-      console.error('Error fetching panelist students:', error.message);
-    }
-  };
 
-  // Fetch students
-  const fetchStudents = async () => {
-    try {
-      const response = await fetch(
-        `http://localhost:5000/api/advicer/advisor-students/${user._id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      if (response.ok) {
-        const data = await response.json();
-        setAcceptedStudents(data.acceptedStudents);
-        setFilteredStudents(data.acceptedStudents);
 
-        // Extract unique courses from the students data
-        const uniqueCourses = [
-          ...new Set(data.acceptedStudents.map(student => student.course))
-        ];
-        setCourses(uniqueCourses);
-      } else {
-        const errorData = await response.json();
-        console.error("Error fetching students:", errorData.message);
-      }
-    } catch (error) {
-      console.error("Error fetching students:", error.message);
-    }
-  };
-
-  useEffect(() => {
-    fetchStudents();
-  }, [user._id]);
 
   const handleViewManuscript = (studentId, channelId) => {
     setSelectedStudentId(studentId);
@@ -133,10 +109,12 @@ export default function NewTables() {
   
   
   
-  const openTaskModal = (student) => {
-    setCurrentTaskStudent(student);
-    setIsModalVisible(true);
-  };
+const openTaskModal = (student) => {
+  setCurrentTaskStudent(student);
+  setIsModalVisible(true);
+  console.log("Selected student tasks: ", student.tasks); // Check if tasks exist here
+};
+
 
   const handleTaskInputChange = (e) => {
     setTaskInput(e.target.value);
@@ -167,10 +145,10 @@ export default function NewTables() {
     const handleCourseChange = (value) => {
       setSelectedCourse(value);
       if (value === "") {
-        setFilteredStudents(acceptedStudents); // Show all students if no course is selected
+        setFilteredStudents(panelistStudents); // Show all students if no course is selected
       } else {
         setFilteredStudents(
-          acceptedStudents.filter(student => student.course === value)
+            panelistStudents.filter(student => student.course === value)
         );
       }
     };
@@ -180,7 +158,6 @@ export default function NewTables() {
   return (
     <div style={{ flex: 1, overflowX: 'hidden', padding: "20px", width: '1263px' }}>
 
-            {/* Dropdown for course filtering */}
       <Select
         value={selectedCourse}
         onChange={handleCourseChange}
@@ -197,7 +174,7 @@ export default function NewTables() {
 
       <List
         grid={{ gutter: 16, column: 1 }}
-        dataSource={panelistStudents.filter(student => student.manuscriptStatus === 'approvedOnPanel' )}
+        dataSource={filteredStudents.filter(student => student.manuscriptStatus === "approvedOnPanel" )}
         renderItem={(student) => (
           <List.Item key={student._id}>
             <div
@@ -246,6 +223,7 @@ export default function NewTables() {
                 </Text>
                 <br /><br />
                 <p style={{ color: "#ffffff" }}>Course: {student.course}</p>
+                <p style={{ color: "#ffffff" }}>USer: {student.name}</p>
                 <br />
 
                 <Text style={{ color: "#ffffff" }}>
@@ -322,12 +300,12 @@ export default function NewTables() {
   <br /><br />
   <List
     dataSource={tasks}
-    renderItem={(task, index) => (
+    renderItem={(tasks, index) => (
       <List.Item
         key={index}
         actions={[
           <Checkbox checked={task.completed} onChange={() => handleCompleteTask(index)}>
-            {task.completed ? "Completed" : "Pending"}
+            {tasks.completed ? "Completed" : "Pending"}
           </Checkbox>,
           <Button
             type="link"
@@ -336,7 +314,7 @@ export default function NewTables() {
           />,
         ]}
       >
-        <Text delete={task.completed}>{task.title}</Text>
+        <Text delete={tasks.completed}>{student.tasks}</Text>
       </List.Item>
     )}
   />

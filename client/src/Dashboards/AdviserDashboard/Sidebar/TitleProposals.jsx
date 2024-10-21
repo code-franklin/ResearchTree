@@ -54,20 +54,28 @@ export default function TabsPricingExample() {
         },
         body: JSON.stringify({ studentId, advisorId: user._id, status }),
       });
+  
       if (response.ok) {
+        const responseData = await response.json();
+  
         if (status === 'accepted') {
-          fetchPanelistStudents(); // Refresh the list of panelist students
+          alert(responseData.message);
+          // Refresh the tab to update the UI
+          window.location.reload();
         } else {
           // Optionally clear the panelist students list if necessary
-          clearPanelistStudents();
+          alert(responseData.message || 'An error occurred. Please try again later.');
+          window.location.reload();
         }
-        fetchStudents(); // Refresh the list of students
+  
       } else {
         const errorData = await response.json();
         console.error('Error responding to student:', errorData.message);
+        alert(errorData.message || 'An error occurred. Please try again later.');
       }
     } catch (error) {
       console.error('Error responding to student:', error.message);
+      alert('An error occurred. Please try again later.');
     }
   };
 

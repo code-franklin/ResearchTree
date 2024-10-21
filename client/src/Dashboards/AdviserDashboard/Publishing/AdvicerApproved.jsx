@@ -109,10 +109,12 @@ export default function NewTables() {
   
   
   
-  const openTaskModal = (student) => {
-    setCurrentTaskStudent(student);
-    setIsModalVisible(true);
-  };
+const openTaskModal = (student) => {
+  setCurrentTaskStudent(student);
+  setIsModalVisible(true);
+  console.log("Selected student tasks: ", student.tasks); // Check if tasks exist here
+};
+
 
   const handleTaskInputChange = (e) => {
     setTaskInput(e.target.value);
@@ -221,6 +223,7 @@ export default function NewTables() {
                 </Text>
                 <br /><br />
                 <p style={{ color: "#ffffff" }}>Course: {student.course}</p>
+                <p style={{ color: "#ffffff" }}>USer: {student.name}</p>
                 <br />
 
                 <Text style={{ color: "#ffffff" }}>
@@ -297,12 +300,12 @@ export default function NewTables() {
   <br /><br />
   <List
     dataSource={tasks}
-    renderItem={(task, index) => (
+    renderItem={(tasks, index) => (
       <List.Item
         key={index}
         actions={[
           <Checkbox checked={task.completed} onChange={() => handleCompleteTask(index)}>
-            {task.completed ? "Completed" : "Pending"}
+            {tasks.completed ? "Completed" : "Pending"}
           </Checkbox>,
           <Button
             type="link"
@@ -311,7 +314,7 @@ export default function NewTables() {
           />,
         ]}
       >
-        <Text delete={task.completed}>{task.title}</Text>
+        <Text delete={tasks.completed}>{student.tasks}</Text>
       </List.Item>
     )}
   />

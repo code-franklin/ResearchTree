@@ -4,6 +4,8 @@ import jwt from 'jsonwebtoken';
 import User from '../models/User';
 import Specialization from '../models/Specialization';
 import { ObjectId } from 'mongodb';
+import dotenv from 'dotenv';
+dotenv.config(); // This loads the variables from your .env file
 
 export const registration = async (req: Request, res: Response) => {
   const { name, email, password, role, course, year, handleNumber, groupMembers } = req.body;
@@ -79,12 +81,16 @@ export const login = async (req: Request, res: Response) => {
 
 export const getToken = async (req: Request, res: Response) => {
 
-  const accessKey = 'S39CqUk66cOWo112MpqhlfMjR6qDUlNfRCfs84o2WfIr6v8DQBJ6WK6qHfXe';
-  const environmentId = 'ow71fdmlwFekVF3udAQA';
+  const accessKey = 'Wpung94G477QYTOHnekNJRaFwqwidLblAg5TH3TwhHhP7Kyr3vL00cepfjEs';
+  const environmentId = 'fHHPZIrfIML2dQHco1XV';
 
     try {
         const userId = req.params.userId;
         console.log('Fetching user with ID:', userId);
+
+        console.log('Environment ID:', process.env.environmentId);
+        console.log('Access Key:', process.env.accessKey);
+
 
         const user = await User.findById(userId).exec();
         if (!user) {
@@ -92,7 +98,7 @@ export const getToken = async (req: Request, res: Response) => {
         }
 
         const payload = {
-            aud: environmentId,
+            aud: process.env.environmentId || environmentId,
             sub: (user._id as string).toString(),
             user: {
                 email: user.email,
@@ -263,7 +269,7 @@ export const getPanelistStudents = async (req: Request, res: Response) => {
     // Fetch students where the advisor is a panelist and their advisorStatus is 'accepted'
     const panelistStudents = await User.find(
       { panelists: advisorId, advisorStatus: 'accepted' },
-      'name groupMembers channelId course profileImage chosenAdvisor manuscriptStatus proposals panelists'
+      'name groupMembers channelId course profileImage chosenAdvisor manuscriptStatus proposals panelists tasks'
     )
     .populate('chosenAdvisor', 'name profileImage') // Populate advisor's name and profile image
     .populate('panelists', 'name'); // Fetch names of panelists
@@ -290,6 +296,7 @@ export const getPanelistStudents = async (req: Request, res: Response) => {
           panelists: panelistNameList, // Return panelist names instead of IDs
           proposalTitle: latestProposal ? latestProposal.proposalTitle : 'No proposal submitted',
           submittedAt: latestProposal ? latestProposal.submittedAt : null,
+          tasks: student.tasks,
         };
       })
     );

@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/language": "^6.5.0",
     "@headlessui/react": "^2.1.10",
     "@nlpjs/basic": "^4.27.0",
     "@nlpjs/core": "^4.26.1",

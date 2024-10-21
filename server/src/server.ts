@@ -5,10 +5,15 @@ import path from 'path';
 import advicerRoutes from './routes/advicerRoutes';
 import adminRoutes from './routes/adminRoutes';
 import studentRoutes from './routes/studentRoutes';
+
+import { LanguageServiceClient } from '@google-cloud/language';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
 const app = express();
+const client = new LanguageServiceClient({
+  keyFilename: process.env.GOOGLE_API_KEY,
+});
 
 // Middleware
 app.use(cors());
@@ -22,6 +27,9 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
+
+// Routes for Users
+
 app.use('/api/student', studentRoutes);
 app.use('/api/advicer', advicerRoutes);
 app.use('/api/admin', adminRoutes);
@@ -33,7 +41,7 @@ mongoose.connect(MONGO_URI)
   .then(() => {
     console.log('Connected to MongoDB');
     app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
+      console.log(`Server is running on port http://localhost:${PORT}`);
     });
   })
   .catch(err => {

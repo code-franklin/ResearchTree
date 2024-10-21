@@ -221,11 +221,14 @@ export default function NewTables() {
                 </Text>
                 <br /><br />
                 <p style={{ color: "#ffffff" }}>Course: {student.course}</p>
+                <p style={{ color: "#ffffff" }}>USer: {student.name}</p>
                 <br />
 
                 <Text style={{ color: "#ffffff" }}>
                   <strong>Manuscript Status:</strong> {student.manuscriptStatus}
                 </Text>
+
+
               </div>
 
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginRight: "10px" }}>
